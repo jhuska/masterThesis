@@ -100,23 +100,6 @@
 \FrontMatter
 \ThesisTitlePage
 
-% BEGINNING OF THESIS ASSIGNEMENT
-% % \begin{alwayssingle}
-% % 	\afterpage{
-% % 	\clearpage
-% % 	\begin{figure*}[ht!]
-% 	\begin{center}
-% 	\leavevmode
-% 	\scalebox{1.00}{\includegraphics[trim=100 100 100 40]{bpThesisAssignement_corr.pdf}}
-% 	\end{center}
-% % 	\caption{Pôdorys študovne so vzdialenosťami objektov \cite{img_skm_studyroom}}
-% % 	\label{fig:studyroom_distances}
-% % 	\end{figure*}
-% %  	}
-% %  	\afterpage{\clearpage}
-% % \end{alwayssingle}
-% END OF THESIS ASSIGNEMENT
-
 \begin{ThesisDeclaration}
 \DeclarationText
 \AdvisorName
@@ -139,8 +122,93 @@ key word1, and so on
 \tableofcontents
 
 \chapter{Introduction}    
-    There is a big demand for this thesis.
+There is a big demand for this thesis.
+Need and cost of manual testing, space for improvement.
+    
+\chapter{Visual testing of software}    
+    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
+    It can be done either manually by actual using of an application or automatically by executing testing scripts.
+    
+    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of an application under test.
 
+  \section{Visual testing in release testing process}
+  Nowadays software is often released for general availability in repetitive cycles, which are defined according to a particular software development process such as Waterfall [2], or Scrum [3].
+      
+  \section{Need for automation}
+  comparison of hiring people to do manual testing vs. automated testing cost
+    
+\chapter{Analysis of existing solutions}
+How the process of testing with these tools looks like, its advantages and disadvantages.
+  
+  \section{Mogo}
+  
+  \section{BBC Wraith}
+  
+  \section{PhantomCSS}
+  
+  \section{Facebook Huxley}
+  
+  \section{Rusheye}
+  
+  \section{Drawbacks}
+  Conclusion of drawbacks, and why we try to propose another approach
+  
+\chapter{New approach}
+  
+  \section{Hypothesis}
+  Simply: reuse of functional tests of the application for visual testing
+  
+  \section{Process}
+  How one would use my tool and where in testing stack such visual testing has its place, written in business process notation
+  
+  \section{Analysis of useful tool output}
+  Requirements for useful output of such a tool based on questionnaire for RichFaces team, or maybe I will ask all JBoss employees
+  
+\chapter{Implemented tool}
+An answer to the new process, requirements: CI viable, reusing what can be reused, extensible, cloud ready, multiple users
+
+  \section{Client part}
+  
+    \subsection{Arquillian}
+    Integration testing, starting containers, event based machine
+  
+    \subsection{Arquillian Graphene}
+    Functional testing of Web UI, screenshooter
+  
+    \subsection{Rusheye}
+    Screenshots comparison, rewritten to Arquillian core
+  
+    \subsection{Graphene visual testing}
+    An adaptor between Rusheye and Arquillian Graphene
+  
+  \section{Server part}
+  
+    \subsection{Web application to view results}
+    Its architecture, reasoning for chosen solutions, screenshots of app, key functionality
+    
+    \subsection{Storage of patterns}
+    Description of solution, reasoning
+    
+\chapter{Deployment of tool and process}
+
+  \section{Deployment on production application}
+  Deployment on stable app
+  
+  \section{Deployment on development application}
+  Deployment sooner on application which is in Alpha phase, my hypothesis is that it will not be worth to deploy it on such a app, due to too many changes
+  
+  \section{Usage with CI}
+  Jenkins job and its cooperation with the tool, more particullary tool ability to handle multiple jobs, apps, versions, etc.
+  
+  \section{Cloud ready}
+  The app can be easily deployed on Openshift
+  
+  \section{Results}
+  The percentage of improvement of QA effectiveness
+  
+\chapter{Conclusion}
+What I developed, What I improved, What can be better, Possible ways of extensions: Openshift cartridge
+    
     % bibtex here
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}

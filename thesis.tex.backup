@@ -27,14 +27,12 @@
 \DeclareGraphicsExtensions{.pdf,.png,.jpg,.gif}
 
 \thesislang{en}
-\thesistitle{Visual testing shits}
-%\thesistitle{Cryptography in an untrusted environment}
+\thesistitle{Visual testing something catchy}
 \thesissubtitle{Diploma thesis}
 \thesisstudent{Juraj Húska}
 \thesiswoman{false}
 \thesisfaculty{fi}
-% \thesisstudentuco{UČO: 359345}
-\thesisyear{2014}
+\thesisyear{2015}
 \thesisadvisor{Mgr.\,Marek Grác,\,Ph.D.}
 
 \newcommand{\reci}[1]{\frac{1}{#1}}
@@ -45,7 +43,6 @@
 \newcommand{\comproto}[1]{\emph{#1}}
 \newcommand{\protocommand}[1]{\emph{\uppercase{#1}}}
 \newcommand{\protoparam}[1]{\emph{#1}}
-%\underset{x}{\operatorname{argmin}}
 
 % some math & modulo
 \newtheorem{mydef}{Definition}
@@ -103,23 +100,6 @@
 \FrontMatter
 \ThesisTitlePage
 
-% BEGINNING OF THESIS ASSIGNEMENT
-% % \begin{alwayssingle}
-% % 	\afterpage{
-% % 	\clearpage
-% % 	\begin{figure*}[ht!]
-% 	\begin{center}
-% 	\leavevmode
-% 	\scalebox{1.00}{\includegraphics[trim=100 100 100 40]{bpThesisAssignement_corr.pdf}}
-% 	\end{center}
-% % 	\caption{Pôdorys študovne so vzdialenosťami objektov \cite{img_skm_studyroom}}
-% % 	\label{fig:studyroom_distances}
-% % 	\end{figure*}
-% %  	}
-% %  	\afterpage{\clearpage}
-% % \end{alwayssingle}
-% END OF THESIS ASSIGNEMENT
-
 \begin{ThesisDeclaration}
 \DeclarationText
 \AdvisorName
@@ -143,7 +123,20 @@ key word1, and so on
 
 \chapter{Introduction}    
     There is a big demand for this thesis.
+    
+\chapter{Visual testing of software}    
+    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
+    It can be done either manually by actual using of an application or automatically by executing testing scripts.
+    
+    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of an application under test.
 
+    \section{Visual testing in release testing process}
+    Nowadays software is often released for general availability in repetitive cycles, which are defined according to a particular software development process such as Waterfall [2], or Scrum [3].
+    
+      \subsection{Subsection1}
+      
+    \section{Need for automation}
+    
     % bibtex here
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
