@@ -1,0 +1,151 @@
+% fithesis2 with modifications used, please use local fithesis.cls file, not system-wide installed.
+\documentclass[11pt,oneside,final]{fithesis2}
+% \documentclass[oneside,final]{fithesis2}
+% \usepackage[resetfonts]{cmap}
+\usepackage{lmodern}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{afterpage}
+\usepackage{calc}
+\usepackage{subfig}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{float}
+\restylefloat{figure}
+
+\usepackage{fixltx2e}
+
+\def\R{\mbox{\sffamily\bfseries R}}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.gif}
+
+\thesislang{en}
+\thesistitle{Visual testing shits}
+%\thesistitle{Cryptography in an untrusted environment}
+\thesissubtitle{Diploma thesis}
+\thesisstudent{Juraj Húska}
+\thesiswoman{false}
+\thesisfaculty{fi}
+% \thesisstudentuco{UČO: 359345}
+\thesisyear{2014}
+\thesisadvisor{Mgr.\,Marek Grác,\,Ph.D.}
+
+\newcommand{\reci}[1]{\frac{1}{#1}}
+\newcommand{\hypot}[2]{\sqrt{#1^2+#2^2}}
+\newcommand{\cbrt}[1]{\sqrt[3]{#1}}
+
+% protocols & commands
+\newcommand{\comproto}[1]{\emph{#1}}
+\newcommand{\protocommand}[1]{\emph{\uppercase{#1}}}
+\newcommand{\protoparam}[1]{\emph{#1}}
+%\underset{x}{\operatorname{argmin}}
+
+% some math & modulo
+\newtheorem{mydef}{Definition}
+\newtheorem{myprop}{Proposition}
+\newtheorem{mytheorem}{Theorem}
+\makeatletter
+\def\imod#1{\allowbreak\mkern10mu({\operator@font mod}\,\,#1)}
+\makeatother
+
+\newcommand{\gfe}{\ensuremath{\text{GF}\left(2^8\right)}}
+\newcommand{\gf}{\ensuremath{\text{GF}\left(2\right)}}
+
+% bibtex
+% Czech bibtex citation norms
+% http://www.abclinuxu.cz/blog/Drobnosti/2007/3/csplainnat.bst-nbsp-cesky-styl-pro-bibtex-dle-iso-nbsp-690
+% svn://kraken.pedf.cuni.cz/csplainnat/
+% http://www.fit.vutbr.cz/~martinek/latex/czechiso.html.cs.iso-8859-2
+% http://repo.or.cz/w/csplainnat.git
+% http://www.root.cz/clanky/odborny-text-v-lyx-matematika-a-bibliografie/nazory/418552/
+\usepackage{url}
+\usepackage[numbers]{natbib}
+\bibliographystyle{unsrtnat}
+%\bibliographystyle{plain}
+
+\usepackage{fancyhdr}
+\pagestyle{plain}
+
+% multi-row
+%\usepackage{multirow}
+\usepackage{color, colortbl}
+
+\definecolor{Gray}{gray}{0.85}
+\newcommand{\clg}{\cellcolor{Gray}}
+\newcommand{\eal}{\emph{et~al.}}
+
+% \fancyhead[LE,RO]{\slshape \rightmark}
+% \fancyhead[LO,RE]{\slshape \leftmark}
+% \fancyfoot[C]{\thepage}
+
+
+\hyphenation{how-to}
+
+\begin{document}
+
+
+\newenvironment{atribut_description}
+{\begin{description}
+  \renewcommand{\makelabel}[1]{\texttt{\hspace{6pt}##1 $-$}}%
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}}
+{\end{description}}
+\renewcommand{\tiny}{\fontsize{7.7}{9.7}\selectfont}
+
+\FrontMatter
+\ThesisTitlePage
+
+% BEGINNING OF THESIS ASSIGNEMENT
+% % \begin{alwayssingle}
+% % 	\afterpage{
+% % 	\clearpage
+% % 	\begin{figure*}[ht!]
+% 	\begin{center}
+% 	\leavevmode
+% 	\scalebox{1.00}{\includegraphics[trim=100 100 100 40]{bpThesisAssignement_corr.pdf}}
+% 	\end{center}
+% % 	\caption{Pôdorys študovne so vzdialenosťami objektov \cite{img_skm_studyroom}}
+% % 	\label{fig:studyroom_distances}
+% % 	\end{figure*}
+% %  	}
+% %  	\afterpage{\clearpage}
+% % \end{alwayssingle}
+% END OF THESIS ASSIGNEMENT
+
+\begin{ThesisDeclaration}
+\DeclarationText
+\AdvisorName
+\end{ThesisDeclaration}
+
+\begin{ThesisThanks}
+Some people helped me a lot and some not at all. Nevertheless, I would like to thank all.
+\end{ThesisThanks}
+
+\begin{ThesisAbstract}
+This thesis is very important!
+\end{ThesisAbstract}
+ 
+\begin{ThesisKeyWords}
+key word1, and so on
+\end{ThesisKeyWords}
+\MainMatter
+\renewcommand{\contentsname}{Table of contents}
+
+\tableofcontents
+
+\chapter{Introduction}    
+    There is a big demand for this thesis.
+
+    % bibtex here
+    \addcontentsline{toc}{chapter}{Bibliography}
+    \pagestyle{plain}
+    \bibliography{thesis}
+\end{document}
