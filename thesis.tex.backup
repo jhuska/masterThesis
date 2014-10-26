@@ -73,6 +73,7 @@
 % multi-row
 %\usepackage{multirow}
 \usepackage{color, colortbl}
+\usepackage{enumerate}
 
 \definecolor{Gray}{gray}{0.85}
 \newcommand{\clg}{\cellcolor{Gray}}
@@ -117,28 +118,148 @@ This thesis is very important!
 key word1, and so on
 \end{ThesisKeyWords}
 \MainMatter
+
+
+
 \renewcommand{\contentsname}{Table of contents}
 
 \tableofcontents
 
 \chapter{Introduction}    
-    There is a big demand for this thesis.
+There is a big demand for this thesis.
+Need and cost of manual testing, space for improvement.
     
 \chapter{Visual testing of software}    
     Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
     It can be done either manually by actual using of an application or automatically by executing testing scripts.
     
-    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of an application under test.
-
-    \section{Visual testing in release testing process}
-    Nowadays software is often released for general availability in repetitive cycles, which are defined according to a particular software development process such as Waterfall [2], or Scrum [3].
+    If the application under test has also a graphical user interface (GUI), then one has to verify whether it is not broken. 
+    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of the application under test.
     
-      \subsection{Subsection1}
+    Typical example can be a web application, which GUI is programmed usually with combination of HyperText Markup Language (HTML) and Cascading Style Sheets (CSS). 
+    HTML is often used to define a content of the web application (such as page contains table, pictures, etc.), while CSS defines a structure and appearance of the 
+    web application (such as color of the font, absolute positioning of web page elements, and so on).
+    
+    The resulting web application is a set of rules (CSS and HTML) applied to a static content (e.g. pictures, videos, text). The combination of rules is crucial, and a minor change
+    can completely change the visual state of the web application. Such changes are very difficult, sometimes even not possible to find out by functional tests of the application. 
+    It is because functional tests verify a desired functionality of the web application, and do not consider web page characteristics such as red color of heading, 
+    space between two paragraphs, and similar.
+    
+    That is why a visual testing has to take a place. Again, it is done either manually, when a tester by working with an application, is going through all of its use cases, and verifies, that
+    the application has not broken visually. Or automatically, by e.g. comparing screen captures (also known as screenshots) of new and older versions of the application.
+
+  \section{Visual testing in release testing process}
+  Nowadays software is often released for general availability in repetitive cycles, which are defined according to a particular software development process such as Waterfall [2], or Scrum [3].
+  
+  Testing of software has an immense role in this release process. While automated tests are often executed continuously, as they are quicker to run than manual tests, 
+  which are carried out at a specific stage of the release process.
+  
+  For example in RichFaces\footnote{RichFaces is a component based library for Java Server Faces, owned and developed by Red Hat} Quality Engineering 
+  team\footnote{Quality Engineering team is among the other things responsible for assuring a quality of a product} visual testing was done manually, before releasing 
+  the particular version of RichFaces library to a community. In practice it involves building all example applications with new RichFaces libraries, and to go 
+  through its use cases with a particular set of web browsers. 
+  
+  To be more specific, consider please a web page with a chart elements showing a gross domestic product sector composition in USA (as figure \ref{fig:richfaces_chart} demonstrates).
+  Verifying its visual state is not broken, would involve e.g.:
+  \begin{enumerate}
+   \item Checking the size, overflowing and transparency of all elements in charts.
+   \item Checking colors, margins between bars.
+   \item Checking putting of mouse over a specific places in the chart, and verifying whether a popup with more detailed info renders in a correct place.
+   \item Do this for all major browsers\footnote{Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
+   and with all supported application containers.
+  \end{enumerate}
+  
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics{figures/RichFacesShowcaseChartComponent.png}}}
+    \end{center}
+    \caption{RichFaces chart component shown in Showcase application}
+    \label{fig:richfaces_chart}
+    \end{figure*}
       
-    \section{Need for automation}
+  \section{Need for automation}
+  comparison of hiring people to do manual testing vs. automated testing cost
+    
+\chapter{Analysis of existing solutions}
+How the process of testing with these tools looks like, its advantages and disadvantages.
+  
+  \section{Mogo}
+  
+  \section{BBC Wraith}
+  
+  \section{PhantomCSS}
+  
+  \section{Facebook Huxley}
+  
+  \section{Rusheye}
+  
+  \section{Drawbacks}
+  Conclusion of drawbacks, and why we try to propose another approach
+  
+\chapter{New approach}
+  
+  \section{Hypothesis}
+  Simply: reuse of functional tests of the application for visual testing
+  
+  \section{Process}
+  How one would use my tool and where in testing stack such visual testing has its place, written in business process notation
+  
+  \section{Analysis of useful tool output}
+  Requirements for useful output of such a tool based on questionnaire for RichFaces team, or maybe I will ask all JBoss employees
+  
+\chapter{Implemented tool}
+An answer to the new process, requirements: CI viable, reusing what can be reused, extensible, cloud ready, multiple users
+
+  \section{Client part}
+  
+    \subsection{Arquillian}
+    Integration testing, starting containers, event based machine
+  
+    \subsection{Arquillian Graphene}
+    Functional testing of Web UI, screenshooter
+  
+    \subsection{Rusheye}
+    Screenshots comparison, rewritten to Arquillian core
+  
+    \subsection{Graphene visual testing}
+    An adaptor between Rusheye and Arquillian Graphene
+  
+  \section{Server part}
+  
+    \subsection{Web application to view results}
+    Its architecture, reasoning for chosen solutions, screenshots of app, key functionality
+    
+    \subsection{Storage of patterns}
+    Description of solution, reasoning
+    
+\chapter{Deployment of tool and process}
+
+  \section{Deployment on production application}
+  Deployment on stable app
+  
+  \section{Deployment on development application}
+  Deployment sooner on application which is in Alpha phase, my hypothesis is that it will not be worth to deploy it on such a app, due to too many changes
+  
+  \section{Usage with CI}
+  Jenkins job and its cooperation with the tool, more particullary tool ability to handle multiple jobs, apps, versions, etc.
+  
+  \section{Cloud ready}
+  The app can be easily deployed on Openshift
+  
+  \section{Results}
+  The percentage of improvement of QA effectiveness
+  
+\chapter{Conclusion}
+What I developed, What I improved, What can be better, Possible ways of extensions: Openshift cartridge
     
     % bibtex here
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
     \bibliography{thesis}
+    %[1] Hetzel, William C., The Complete Guide to Software Testing, 2nd ed. Publication info: Wellesley, Mass. : QED Information Sciences, 1988. ISBN: 0894352423.Physical description: ix, 280 p. : ill ; 24 cm.
+    %[2] http://en.wikipedia.org/wiki/Waterfall_model
+    %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
+    %[4] http://www.w3schools.com/browsers/browsers_stats.asp
+
 \end{document}

@@ -73,6 +73,7 @@
 % multi-row
 %\usepackage{multirow}
 \usepackage{color, colortbl}
+\usepackage{enumerate}
 
 \definecolor{Gray}{gray}{0.85}
 \newcommand{\clg}{\cellcolor{Gray}}
@@ -117,6 +118,9 @@ This thesis is very important!
 key word1, and so on
 \end{ThesisKeyWords}
 \MainMatter
+
+
+
 \renewcommand{\contentsname}{Table of contents}
 
 \tableofcontents
@@ -129,10 +133,52 @@ Need and cost of manual testing, space for improvement.
     Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
     It can be done either manually by actual using of an application or automatically by executing testing scripts.
     
-    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of an application under test.
+    If the application under test has also a graphical user interface (GUI), then one has to verify whether it is not broken. 
+    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of the application under test.
+    
+    Typical example can be a web application, which GUI is programmed usually with combination of HyperText Markup Language (HTML) and Cascading Style Sheets (CSS). 
+    HTML is often used to define a content of the web application (such as page contains table, pictures, etc.), while CSS defines a structure and appearance of the 
+    web application (such as color of the font, absolute positioning of web page elements, and so on).
+    
+    The resulting web application is a set of rules (CSS and HTML) applied to a static content (e.g. pictures, videos, text). The combination of rules is crucial, and a minor change
+    can completely change the visual state of the web application. Such changes are very difficult, sometimes even not possible to find out by functional tests of the application. 
+    It is because functional tests verify a desired functionality of the web application, and do not consider web page characteristics such as red color of heading, 
+    space between two paragraphs, and similar.
+    
+    That is why a visual testing has to take a place. Again, it is done either manually, when a tester by working with an application, is going through all of its use cases, and verifies, that
+    the application has not broken visually. Or automatically, by e.g. comparing screen captures (also known as screenshots) of new and older versions of the application.
 
   \section{Visual testing in release testing process}
-  Nowadays software is often released for general availability in repetitive cycles, which are defined according to a particular software development process such as Waterfall [2], or Scrum [3].
+  Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process. 
+  Such as Waterfall [2], or Scrum [3].
+  
+  Testing of software has an immense role in this release process. While automated tests are often executed continuously, as they are quicker to run than manual tests, 
+  which are carried out at a specific stage of the release process.
+  
+  For example in RichFaces\footnote{RichFaces is a component based library for Java Server Faces, owned and developed by Red Hat} Quality Engineering 
+  team\footnote{Quality Engineering team is among the other things responsible for assuring a quality of a product} visual testing was done manually, before releasing 
+  the particular version of RichFaces library to a community. In practice it involves building all example applications with new RichFaces libraries, and to go 
+  through its use cases with a particular set of web browsers. 
+  
+  To be more specific, consider please a web page with a chart elements showing a gross domestic product sector composition in the USA (as figure \ref{fig:richfaces_chart} demonstrates).
+  Verifying its visual state is not broken, would involve e.g.:
+  \begin{enumerate}
+   \item Checking the size, overflowing and transparency of all elements in charts.
+   \item Checking colors, margins between bars.
+   \item Checking putting of mouse over a specific places in the chart, and verifying whether a popup with more detailed info is rendered in a correct place.
+   \item Repeat this for all major browsers\footnote{Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
+   and with all supported application containers\footnote{Application containers are special programs 
+   dedicated to provide a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
+  \end{enumerate}
+  
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.9\textwidth]{figures/RichFacesShowcaseChartComponent.png}}}
+    \end{center}
+    \caption{RichFaces chart component shown in Showcase application}
+    \label{fig:richfaces_chart} 
+  \end{figure*}
       
   \section{Need for automation}
   comparison of hiring people to do manual testing vs. automated testing cost
@@ -213,4 +259,9 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
     \bibliography{thesis}
+    %[1] Hetzel, William C., The Complete Guide to Software Testing, 2nd ed. Publication info: Wellesley, Mass. : QED Information Sciences, 1988. ISBN: 0894352423.Physical description: ix, 280 p. : ill ; 24 cm.
+    %[2] http://en.wikipedia.org/wiki/Waterfall_model
+    %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
+    %[4] http://www.w3schools.com/browsers/browsers_stats.asp
+
 \end{document}
