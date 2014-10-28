@@ -131,7 +131,7 @@ Need and cost of manual testing, space for improvement.
     
 \chapter{Visual testing of software}    
     Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
-    It can be done either manually by actual using of an application or automatically by executing testing scripts.
+    It can be done either manually by actual using of an application, or automatically by executing testing scripts.
     
     If the application under test has also a graphical user interface (GUI), then one has to verify whether it is not broken. 
     Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of the application under test.
@@ -146,9 +146,17 @@ Need and cost of manual testing, space for improvement.
     space between two paragraphs, and similar.
     
     That is why a visual testing has to take a place. Again, it is done either manually, when a tester by working with an application, is going through all of its use cases, and verifies, that
-    the application has not broken visually. Or automatically, by e.g. comparing screen captures (also known as screenshots) of new and older versions of the application.
-
+    the application has not broken visually. Or automatically, by executing scripts which assert a visual state of an application.
+    
+    In this thesis we are going to focus on the visual testing of web applications only. As we mentioned above, the way how web page looks like is mainly determined by CSS script.
+    There are two ways of automated testing used:
+    \begin{enumerate}
+      \item asserting the CSS script
+      \item or comparing screen captures (also known as screenshots) of new and older versions of the application.
+    \end{enumerate}
+     
   \section{Visual testing in release testing process}
+  \label{sec:visual-testing-in-release-process}
   Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process. 
   Such as Waterfall [2], or Scrum [3].
   
@@ -160,12 +168,12 @@ Need and cost of manual testing, space for improvement.
   the particular version of RichFaces library to a community. In practice it involves building all example applications with new RichFaces libraries, and to go 
   through its use cases with a particular set of web browsers. 
   
-  To be more specific, consider please a web page with a chart elements showing a gross domestic product sector composition in the USA (as figure \ref{fig:richfaces_chart} demonstrates).
-  Verifying its visual state is not broken, would involve e.g.:
+  To be more specific, consider please a web page with a chart elements showing a sector composition of gross domestic product in the USA (as figure \ref{fig:richfaces_chart} demonstrates).
+  To verify its visual state is not broken, would involve e.g.:
   \begin{enumerate}
    \item Checking the size, overflowing and transparency of all elements in charts.
    \item Checking colors, margins between bars.
-   \item Checking putting of mouse over a specific places in the chart, and verifying whether a popup with more detailed info is rendered in a correct place.
+   \item Putting a mouse cursor over a specific places in the chart, and verifying whether a popup with more detailed info is rendered in a correct place.
    \item Repeat this for all major browsers\footnote{Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
    and with all supported application containers\footnote{Application containers are special programs 
    dedicated to provide a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
@@ -179,9 +187,70 @@ Need and cost of manual testing, space for improvement.
     \caption{RichFaces chart component shown in Showcase application}
     \label{fig:richfaces_chart} 
   \end{figure*}
-      
+  
   \section{Need for automation}
-  comparison of hiring people to do manual testing vs. automated testing cost
+  The chapter \ref{sec:visual-testing-in-release-process} tried to outline how tedious and error prone might manual visual testing be. From our experience in the RichFaces QE team, any activity
+  which needs to be repeated, and does not challenge tester's intellect enough, become a mundane activity. The more one repeats the mundane activity, the more likely an mistake is introduced:
+  one forgets to try some use cases of an application, overlooks some minor errors, etc.
+  
+  Automated visual testing addresses this shortcomings, as it would unburden human resources from mundane activities such as manual testing, and would allow spending their
+  time on intellectually more demanding problems. However, it introduces another kind of challenges, and needs to be implemented wisely. Following are minimal requirements 
+  for a successful deployment of an automated visual testing.
+      
+  \section{Requirements for automation}
+  An overall cost of the automation has to be taken into consideration. It is necessary to take into account higher initial cost of automation, and consequences it brings: 
+  such as increased time to process relatively huge results of testing, cost of test suite maintenance.
+  
+  Therefore, to foster an effectiveness in quality assurance teams, while keeping the cost of automation reasonable low, automated visual testing would require:
+  \begin{enumerate}
+   \item A low cost of a test suite maintenance;
+   \item a low percentage of false negative or false positive tests results;
+   \item a reasonable time to execute the test suite;
+   \item a concise yet useful test suite output;
+   \item a support for Continuous Integration systems\footnote{Continuous Integration (CI) system is software to facilitate a practice of CI, which in short is about merging 
+	  all developer copies with a shared mainline several times a day [5].}.
+  \end{enumerate}
+  
+    \subsection{Low cost of test suite maintenance}
+    A test suite needs to reflect a development of an application under test. Therefore, with each change in the application, it is usual that the test suite has to be changed as well.
+    Making a change in the test suite can often introduce a bug, and cause false negative or false positive tests results.
+    
+    To keep this cost as low as possible, the test suite script has to be readable and meaningful, so when the change is about to be introduced, it is clear where and how it should be done.
+    
+    A test framework in which the test suite is developed should provide high enough abstraction. That would enable better re-usability for various parts of the test suite, 
+    while lowering the overall cost of maintenance.
+    
+    Specifically for visual testing, when done by comparing screen captures, it is very important how well a repository of screen captures is maintainable. Secondly, 
+    how reference (those correct ones, other screen captures will be compared with) screen captures are made.
+    
+    \subsection{Low percentage of false negative or false positive results}
+    False negative test results incorrectly indicate a bug in an application under test, while it is a bug in the test suite itself. They are unwanted phenomenon as they take time to process
+    and assess correctly.
+    
+    False positive tests results hide actual bugs in an application. They provide an incorrect feedback by showing the tests as passing, even when there is a bug in the application.
+    
+    Specifically for visual testing, when it is done by comparison of screen captures, it is very easily to be broken by small changes on a page. For example if the page outputs a current
+    date, then it would break with every different date. There has to exist techniques, which would prevent these situations.
+    
+    \subsection{Reasonable time to execute a test suite}
+    Reasonable time is quite subjective matter, but in general, it depends on how many times e.g. per day one needs to run whole test suite. Nowadays trend is a Continuous Integration,
+    when a developer or a tester commits changes of an application several times per day to a shared source code mainline. Each such commit should trigger the test suite, which verifies 
+    whether the change did not introduced an error to the application.
+    
+    According to creators of Continuous Integration practice, the whole point of CI is to provide a rapid feedback. A reasonable time for them is 10 minutes. If the build
+    takes more time, every minute less is a huge improvement (considering a developer/tester runs test suite several times a day).
+    
+    \subsection{Concise yet useful test suite output}
+    One of drawbacks of automated testing is its ability to produce huge amount of logs, test results etc. The output therefore needs to be as concise as possible, while still providing
+    an useful information. A tester needs to be able to quickly recognize where the issue might be. The best situation would be if the tester does not need to run the test again in order
+    to spot the issue. The output should give him a clear message where the issue is.
+    
+    For visual testing specifically, this can be achieved by providing a tester with screen captures together with difference of old and new version.
+    
+    \subsection{Support for Continuous Integration systems}
+    This is quite easily to be achieved, but still, a developer of a tool for visual testing should has this in mind beforehand. Todays CI systems support variety of build systems, for
+    various platforms, and languages. For example Jenkins supports build systems like Maven or Gradle, but it can run also shell scripts.
+    
     
 \chapter{Analysis of existing solutions}
 How the process of testing with these tools looks like, its advantages and disadvantages.
@@ -263,5 +332,6 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[2] http://en.wikipedia.org/wiki/Waterfall_model
     %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
     %[4] http://www.w3schools.com/browsers/browsers_stats.asp
+    %[5] http://en.wikipedia.org/wiki/Continuous_integration
 
 \end{document}
