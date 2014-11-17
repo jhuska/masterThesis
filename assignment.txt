@@ -1,0 +1,5 @@
+A student is liable to create a tool and to define a process which will enable visual testing of a web application. The process should improve the effectiveness of the QA team. The student is obliged to make a research to find out what output of such a tool would be most useful.
+
+The visual testing will be based on picture comparison. It is essential to find out the most effective way of storing and defining the picture base, which all the other pictures will be compared with. Usage of such tool in Continuous Integration environment is vital. An analysis of already made solutions will precede the tool creation itself. One of the thesis part will consist of deployment of the tool and the process on a particular web application.
+
+In cooperation with Red Hat Czech, s.r.o.

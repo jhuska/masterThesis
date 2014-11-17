@@ -20,6 +20,7 @@
 \usepackage{float}
 \restylefloat{figure}
 
+\usepackage{listings}
 \usepackage{fixltx2e}
 
 \def\R{\mbox{\sffamily\bfseries R}}
@@ -35,33 +36,6 @@
 \thesisyear{2015}
 \thesisadvisor{Mgr.\,Marek Grác,\,Ph.D.}
 
-\newcommand{\reci}[1]{\frac{1}{#1}}
-\newcommand{\hypot}[2]{\sqrt{#1^2+#2^2}}
-\newcommand{\cbrt}[1]{\sqrt[3]{#1}}
-
-% protocols & commands
-\newcommand{\comproto}[1]{\emph{#1}}
-\newcommand{\protocommand}[1]{\emph{\uppercase{#1}}}
-\newcommand{\protoparam}[1]{\emph{#1}}
-
-% some math & modulo
-\newtheorem{mydef}{Definition}
-\newtheorem{myprop}{Proposition}
-\newtheorem{mytheorem}{Theorem}
-\makeatletter
-\def\imod#1{\allowbreak\mkern10mu({\operator@font mod}\,\,#1)}
-\makeatother
-
-\newcommand{\gfe}{\ensuremath{\text{GF}\left(2^8\right)}}
-\newcommand{\gf}{\ensuremath{\text{GF}\left(2\right)}}
-
-% bibtex
-% Czech bibtex citation norms
-% http://www.abclinuxu.cz/blog/Drobnosti/2007/3/csplainnat.bst-nbsp-cesky-styl-pro-bibtex-dle-iso-nbsp-690
-% svn://kraken.pedf.cuni.cz/csplainnat/
-% http://www.fit.vutbr.cz/~martinek/latex/czechiso.html.cs.iso-8859-2
-% http://repo.or.cz/w/csplainnat.git
-% http://www.root.cz/clanky/odborny-text-v-lyx-matematika-a-bibliografie/nazory/418552/
 \usepackage{url}
 \usepackage[numbers]{natbib}
 \bibliographystyle{unsrtnat}
@@ -198,6 +172,7 @@ Need and cost of manual testing, space for improvement.
   for a successful deployment of an automated visual testing.
       
   \section{Requirements for automation}
+  \label{sec:requirementsForAutomation}
   An overall cost of the automation has to be taken into consideration. It is necessary to take into account higher initial cost of automation, and consequences it brings: 
   such as increased time to process relatively huge results of testing, cost of test suite maintenance.
   
@@ -248,24 +223,90 @@ Need and cost of manual testing, space for improvement.
     For visual testing specifically, this can be achieved by providing a tester with screen captures together with difference of old and new version.
     
     \subsection{Support for Continuous Integration systems}
-    This is quite easily to be achieved, but still, a developer of a tool for visual testing should has this in mind beforehand. Todays CI systems support variety of build systems, for
+    This is quite easily to be achieved, but still, a developer of a tool for visual testing should have this in mind beforehand. Todays CI systems support variety of build systems, for
     various platforms, and languages. For example Jenkins supports build systems like Maven or Gradle, but it can run also shell scripts.
     
     
 \chapter{Analysis of existing solutions}
-How the process of testing with these tools looks like, its advantages and disadvantages.
+As we introduced in \ref{sec:requirementsForAutomation}, there are many aspects which need to be taken into consideration when automating visual
+testing. Following analysis is going to compare existing solutions to automated testing with those requirements in mind. We also focused on introducing
+different approaches to visual testing.
+
+The representative list of tools for comparison was made also according to an ability to be used in enterprise context. In enterprise there
+is a stress on stability and reliability of employed solutions. It is quite vague requirement, and it is usually hard to find out which tools
+are a good fit for an enterprise, however, some indicators, which we used as well, might be helpful:
+\begin{itemize}
+ \item Is a project actively developed? When was the last release of the project, or how old is the last commit to a source code mainline?
+ \item How many opened issues the project has? When was the last activity with those issues ?
+ \item What is the quality of the source code? Is it well structured? Does it employ best development practices?
+ \item Does the project have a user forum? How active are the users?
+ \item Is a big enterprise behind the solution, or otherwise sponsoring it ?
+ \item What are the references if the project is commercialized ?
+\end{itemize}
+
+For each tool in following sections we are going to show an example usage and its main drawbacks together with some basic description.
   
   \section{Mogo}
+  Mogo [6] approach to visual testing can be in short described like: 
+  \begin{enumerate}
+   \item One provides set of URLs of an application under test to a cloud based system.
+   \item Application URLs are loaded in various browsers, detection of broken links is done.
+   \item Screenshots are made and are compared with older screenshots from the same URL to avoid CSS regressions.
+  \end{enumerate}
+  
+  There is no programming script required, therefore it can be used by less skilled human resources.
+  
+  Drawbacks of this approach are evident when testing dynamic pages, which content is changed easily. Applications which provide rich interaction options to an end user, and which state
+  changes by interacting with various web components (calendar widget, table with sorting mechanism etc.), require more subtle way of configuring what actions need to be done before the
+  testing itself. Mogo is suitable for testing static web applications, not modern AJAX enabled applications full of CSS transitions.
+  
+  Above mentioned drawbacks might lead to a bigger number of false negative test results when used with real data (any change, e.g. showing actual date may break testing), or to a bigger 
+  number of false positive tests results when such a tool is used to test mocked data \footnote{Mocked data is made up data for purpose of testing, so it is consistent and does not change
+  }.
   
   \section{BBC Wraith}
+  Wraith is a screenshot comparison tool, created by developers at BBC News [7]. Their approach to visual testing can be described like:
+  \begin{enumerate}
+   \item Take screenshots of two versions of web application with use of either PhantomJS \ref{subsec:phantomCSS}, or with use of SlimerJS\footnote{SlimerJS is 
+   very similar to PhantomJS \ref{subsec:phantomCSS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]}.
+   \item One version is the one currently developed (which run on localhost\footnote{In computer networking, localhost means this computer. [11]}), and the other one is a live site.
+   \item Once screenshots of web page from these two different environments are captured a command line tool \texttt{imagemagic} is executed to compare screenshots.
+   \item Any difference is marked with blue color in a created picture, which is the result of comparing two pictures (It can be seen at Figure \ref{fig:bbcWraithDiff}).
+  \end{enumerate}
   
-  \section{PhantomCSS}
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
+    \end{center}
+    \caption{BBC Wraith picture showing difference in comparison of two web page versions}
+    \label{fig:bbcWraithDiff} 
+  \end{figure*}
+
+  
+    \subsection{PhantomCSS}
+    \label{subsec:phantomCSS}
+    PhantomCSS [8] is stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
+    WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
+    interacted with by using of its JavaScript API.
+    
+    For the sake of simplicity we can say that it is a browser which does not make any graphical output, which makes it a bit faster and less computer resource demanding tool.
+    
+    One can instruct PhantomCSS to take a screenshot of a web page with following script:
+  
+    \begin{verbatim}
+      var page = require('webpage').create();
+      page.open('http://google.com/', function() {
+        page.render('google.png');
+        phantom.exit();
+      });
+    \end{verbatim}
   
   \section{Facebook Huxley}
   
   \section{Rusheye}
   
-  \section{Drawbacks}
+  \section{Conclusion of analysis}
   Conclusion of drawbacks, and why we try to propose another approach
   
 \chapter{New approach}
@@ -333,5 +374,12 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
     %[4] http://www.w3schools.com/browsers/browsers_stats.asp
     %[5] http://en.wikipedia.org/wiki/Continuous_integration
+    %[6] http://mogotest.com/
+    %[7] https://github.com/BBC-News/wraith 
+    %[8] http://phantomjs.org/
+    %[9] http://en.wikipedia.org/wiki/WebKit
+    %[10] http://slimerjs.org/
+    %[11] http://en.wikipedia.org/wiki/Localhost
+    %[12] http://media.tumblr.com/c5bf7caefde043ee7532b641c7f0e157/tumblr_inline_moaf774b5i1qz4rgp.jpg
 
 \end{document}
