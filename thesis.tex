@@ -148,7 +148,7 @@ Need and cost of manual testing, space for improvement.
    \item Checking the size, overflowing and transparency of all elements in charts.
    \item Checking colors, margins between bars.
    \item Putting a mouse cursor over a specific places in the chart, and verifying whether a popup with more detailed info is rendered in a correct place.
-   \item Repeat this for all major browsers\footnote{Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
+   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
    and with all supported application containers\footnote{Application containers are special programs 
    dedicated to provide a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
   \end{enumerate}
@@ -229,18 +229,18 @@ Need and cost of manual testing, space for improvement.
     
 \chapter{Analysis of existing solutions}
 As we introduced in \ref{sec:requirementsForAutomation}, there are many aspects which need to be taken into consideration when automating visual
-testing. Following analysis is going to compare existing solutions to automated testing with those requirements in mind. We also focused on introducing
+testing. Following analysis is going to compare existing solutions to automated testing with those requirements in mind, while introducing
 different approaches to visual testing.
 
-The representative list of tools for comparison was made also according to an ability to be used in enterprise context. In enterprise there
+The representative list of tools for comparison was made also according to an ability to be used in enterprise context. In an enterprise company, there
 is a stress on stability and reliability of employed solutions. It is quite vague requirement, and it is usually hard to find out which tools
-are a good fit for an enterprise, however, some indicators, which we used as well, might be helpful:
+are a good fit for enterprise companies, however, some indicators, which we used as well, might be helpful:
 \begin{itemize}
  \item Is a project actively developed? When was the last release of the project, or how old is the last commit to a source code mainline?
- \item How many opened issues the project has? When was the last activity with those issues ?
+ \item How many opened issues the project has? When was the last activity \\* with those issues ?
  \item What is the quality of the source code? Is it well structured? Does it employ best development practices?
  \item Does the project have a user forum? How active are the users?
- \item Is a big enterprise behind the solution, or otherwise sponsoring it ?
+ \item Is a big enterprise company behind the solution, or otherwise sponsoring it ?
  \item What are the references if the project is commercialized ?
 \end{itemize}
 
@@ -254,60 +254,215 @@ For each tool in following sections we are going to show an example usage and it
    \item Screenshots are made and are compared with older screenshots from the same URL to avoid CSS regressions.
   \end{enumerate}
   
-  There is no programming script required, therefore it can be used by less skilled human resources.
+  There is no programming script required, therefore it can be used by less skilled human resources. It can be configured in shorter time, and thus is less expensive.
+  
+  \subsection{Mogo drawbacks}
   
   Drawbacks of this approach are evident when testing dynamic pages, which content is changed easily. Applications which provide rich interaction options to an end user, and which state
   changes by interacting with various web components (calendar widget, table with sorting mechanism etc.), require more subtle way of configuring what actions need to be done before the
   testing itself. Mogo is suitable for testing static web applications, not modern AJAX enabled applications full of CSS transitions.
   
   Above mentioned drawbacks might lead to a bigger number of false negative test results when used with real data (any change, e.g. showing actual date may break testing), or to a bigger 
-  number of false positive tests results when such a tool is used to test mocked data \footnote{Mocked data is made up data for purpose of testing, so it is consistent and does not change
-  }.
+  number of false positive tests results when such a tool is used to test mocked data \footnote{Mocked data is made up data for purpose of testing, so it is consistent and does not 
+  change over time}.
   
   \section{BBC Wraith}
   Wraith is a screenshot comparison tool, created by developers at BBC News [7]. Their approach to visual testing can be described like:
   \begin{enumerate}
-   \item Take screenshots of two versions of web application with use of either PhantomJS \ref{subsec:phantomCSS}, or with use of SlimerJS\footnote{SlimerJS is 
-   very similar to PhantomJS \ref{subsec:phantomCSS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]}.
-   \item One version is the one currently developed (which run on localhost\footnote{In computer networking, localhost means this computer. [11]}), and the other one is a live site.
+   \item Take screenshots of two versions of web application by scripting either PhantomJS \ref{subsec:phantomJS}, or SlimerJS\footnote{SlimerJS is 
+   very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]} by another JavaScript framework called 
+   CasperJS \ref{subsec:casperJS} [20].
+   \item One version is the one currently developed (which run on localhost\footnote{In computer networking, \texttt{localhost} means this computer. [11]}), and the other one is a live site.
    \item Once screenshots of web page from these two different environments are captured a command line tool \texttt{imagemagic} is executed to compare screenshots.
    \item Any difference is marked with blue color in a created picture, which is the result of comparing two pictures (It can be seen at Figure \ref{fig:bbcWraithDiff}).
+   \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen at Figure \ref{fig:bbcGallery}).
   \end{enumerate}
   
-  \begin{figure*}[!htb]
+  To instruct BBC Wraith tool to take screenshots from the web application, one has to firstly script PhantomJS or SlimerJS to interact with the page, and secondly, creates a 
+  configuration file, which will tell the PhantomJS instance which URLs need to be loaded and tested. PhantomJS script is one source of distrust to this tool, and therefore is
+  introduced furthermore.
+  
+    \subsection{PhantomJS}
+    \label{subsec:phantomJS}
+    PhantomJS [8] is stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
+    WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
+    interacted with by using of its JavaScript API.
+    
+    For the sake of simplicity we can say that it is a browser which does not make any graphical output, which makes testing with such a engine a bit faster and less computer resources 
+    demanding.
+    
+    One can instruct PhantomJS to take a screenshot of a web page with following script:
+  
+    \begin{verbatim}
+      var page = require('webpage').create();
+      page.open('http://google.com/', function(status) {
+        if(status === 'success') {
+          window.setTimeout(function() {
+            console.log('Taking screenshot');
+            page.render('google.png');
+            phantom.exit();
+          }, 3000);
+        } else {
+          console.log('Error with page ');
+          phantom.exit();
+        }
+      });
+    \end{verbatim}
+    
+    When executing such a script it will effectively load \texttt{http://google.com/} web page, waits 3000 milliseconds, and after that, creates a screenshot to the file \texttt{google.png}.
+    
+    In most environments it will be sufficient to wait those 3000 milliseconds in order to have the \texttt{www.google.com} fully loaded. However, in some resource limited environments, 
+    such as virtual machines\footnote{Virtual machines are created to act as real computer systems, run on top of a real hardware}, it does not have to be enough. 
+    It will result in massive number of false negative tests. There is a need for more deterministic way of finding out whether the page was loaded fully in given time, and 
+    taking of the screenshots itself can take place.
+    
+    PhantomJS API is wrapped by CasperJS, which is furthermore described below.
+    
+    \subsection{CasperJS}
+    \label{subsec:casperJS}
+    CasperJS is navigation scripting and testing utility written in JavaScript for the PhantomJS and SlimerJS headless browsers. It eases the process of defining a full navigation scenario 
+    and provides useful high-level functions for doing common tasks [20].
+    
+    Following code snippet shows a simple navigation on Google search web page. It will load \textit{http://google.com} in a browser session, 
+    will type into the query input string \textit{MUNI}, and will submit it.
+    
+    \begin{verbatim}
+    casper.start('http://google.com/', function() {
+      // search for 'MUNI' from google form
+      this.fill('form[action="/search"]', { q: 'MUNI' }, true);
+    });
+   
+    casper.run(function() {
+      this.exit();
+    });
+    \end{verbatim}
+    
+    The problem with this script, which we identified, is its low-level abstraction of the browser interactions. It makes tests less readable, and thus more error prone when a change
+    is needed to be introduced.
+    
+    \begin{figure*}[!htb]
     \begin{center}
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
     \end{center}
-    \caption{BBC Wraith picture showing difference in comparison of two web page versions}
+    \caption{BBC Wraith picture showing difference in comparison of two web page versions [12]}
     \label{fig:bbcWraithDiff} 
   \end{figure*}
 
   
-    \subsection{PhantomCSS}
-    \label{subsec:phantomCSS}
-    PhantomCSS [8] is stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
-    WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
-    interacted with by using of its JavaScript API.
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/wraithGalleryExample.png}}}
+    \end{center}
+    \caption{BBC Wraith gallery example [13]}
+    \label{fig:bbcGallery} 
+  \end{figure*}
+
+    \subsection{BBC Wraith drawbacks}
+    Two of the drawback were described in the previous sections, \ref{subsec:phantomJS} and \ref{subsec:casperJS}.
     
-    For the sake of simplicity we can say that it is a browser which does not make any graphical output, which makes it a bit faster and less computer resource demanding tool.
-    
-    One can instruct PhantomCSS to take a screenshot of a web page with following script:
+    Another problem which might occur when testing with BBC Wraith, is cross browser compatibility. As it supports only PhantomJS, and therefore, one can not assure that the page will be 
+    looking the same in all major browsers. The incompatibility comes from the fact, that browsers interpret CSS rules differently, and because they have different JavaScript engines. 
+    Thus for example web page might look differently in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not catch this issues.
+
+  \section{Facebook Huxley}
+  Another visual testing tool [15], supported by a big company Facebook, Inc. [14], uses similar approach in terms of comparing taken screenshots. The process of taking them, and the process
+  of reviewing results is different though.
+  
+  \begin{enumerate}
+   \item One creates a script which would instruct Huxley tool, what web pages screenshots should be taken from. Such a script might look like:
   
     \begin{verbatim}
-      var page = require('webpage').create();
-      page.open('http://google.com/', function() {
-        page.render('google.png');
-        phantom.exit();
-      });
+      [test-page1]
+      url=http://localhost:8000/page1.html
+
+      [test-page2]
+      url=http://localhost:8000/page2.html
+   
+      [test-page3]
+      url=http://localhost:8000/page3.html
     \end{verbatim}
-  
-  \section{Facebook Huxley}
-  
+    
+    \item One runs Huxley in the Record mode. That is the mode when Huxley loads the pages automatically in a fresh browser session, and a tester by hitting Enter keyboard button instructs 
+    Huxley to take a screenshot. Screenshots are stored in a folder with test name (one given in the square brackets in the example above), together with a 
+    JSON\footnote{JSON stands for JavaScript Object Notation, a standard format that uses human readable format to transmit data objects [16]} file describing mainly how long should 
+    Huxley wait, when doing visual comparison, to have a tested web page fully loaded. Time is measured during this record mode.
+    
+    \item To start visual testing, one has to run Huxley in the Playback mode. Huxley will start fresh browser session, and will playback loading of the pages, with waiting for the pages
+    to be fully loaded.
+    
+    \item When there is a change in an application, Huxley will log a warning, and takes a new screenshot automatically. In continuous integration environments, one can instruct Huxley
+    to finish with error, in case screenshots are different. In that case, one can run Huxley again with an option to take new screenshots (if the change is desired, and is not an error).
+   \end{enumerate}
+    
+   Main drawback of Facebook Huxley we can see, is similar to BBC Wraith, and that is its non deterministic approach to waiting for a fully loaded web page. It is again a fixed amount of time,
+   which can be different from environment to environment. The time to wait can be configured, however, it is still quite error prone, as for first visual testing run
+   e.g 4 seconds can be would be enough, and for another run would not.
+    
+   Secondly it lacks a proper way of viewing results of comparisons, leaving with only one option to check the command line output, together with manual opening of the screenshots. This would degrade
+   cooperation among various QA team members, and it is harder to deploy in a software as a service cloud solutions\footnote{Software as a service is on demand software, centrally hosted, 
+   accessed typically by using a thin client via web browser [17].}, where such a cooperation might take a place.
+
   \section{Rusheye}
+  Rusheye [18] is a command line tool, which is focused on automated bulk or on-the-fly inspecting of browser screenshots and comparison with predefined image suite. It enables automated
+  visual testing when used together with Selenium 1 project [19].
+  
+  The process has subtle differences in comparison with previous solutions. It consists from these steps:
+  
+  \begin{enumerate}
+   \item Screenshots are generated, for example by Selenium 1 tool, while functional tests of web application are executed.
+   \item First screenshots are claimed to be correct (are controlled manually), they are called patterns.
+   \item After a change in web application under test, another run of Selenium 1 tests generates new screenshots. They are called samples.
+   \item Patterns and samples are compared, its visual difference is created, and result is saved in an XML file.
+   \item The results can be viewed in a desktop application, Rusheye manager [22].
+  \end{enumerate}
+  
+  Rusheye has one very important feature, which another tools lack. It is a possibility to add masks on particular parts of the screenshots. Those parts are ignored when two screenshots are
+  compared. It is a huge improvement to protect from false negative tests, as some all the time changing parts (such as actual date, etc.) can be masked from comparison, and thus their change
+  will not break testing.
+  
+  \subsection{Rusheye drawbacks}
+  Core of the Rusheye is only able to compare screenshots generated by some other tool. Integration with Selenium 1 is advised, however, functional tests written in Selenium 1 suffer
+  from the same problems [21] as scripts written for BBC Wraith \ref{subsec:casperJS}. And that is bad readability caused by their low level coupling with HTML and lack of higher abstraction.
+  
+  Another problem we can see is only desktop version of the tool for viewing results (Rusheye Manager). Cooperation on some test suite among QE team members and developers would be 
+  more difficult. As they would need to solve persistence of patterns, samples and descriptor of the test suite.
   
   \section{Conclusion of analysis}
-  Conclusion of drawbacks, and why we try to propose another approach
+  All previously listed tools have some nice features, which we would like to be inspired with. However, all of the solutions lack something, what we suppose to be an inevitable part of 
+  an effective automated visual testing.
+  
+  Figure \ref{fig:existingSolutionComparison} summarizes requirements we have for a visual testing tool, and the fact whether the tool satisfies the particular requirement.
+  
+  Tests readability is a problem we discussed with a particular tool description. It is a level of abstraction over underlaying HTML, in which the application is written. It is quite subjective
+  matter, however, there are some clues by which it can be made more objective. For example the way how tests are coupled with the HTML or CSS code. Because the more they are, the less they 
+  are readable [21]. A scale we used for evaluation supposes insufficient as lowest readability, which in long term run of the test suite might cause lot of issues.
+  
+  By tests robustness we suppose a level of stability running of the tests with particular tool has. 
+  It means how likely there are false positive and false negative tests, whether are caused by not fully loaded page, or by dynamic data rendered on the page. If the robustness is low,
+  you can find a red mark in a particular cell. Green one otherwise.
+  
+  Cross browser compatibility issue deals with ability to test web application across all major browsers \ref{footnote:majorBrowsers}.
+  
+  By cloud ready features we suppose whether tool has web based system for reviewing results, and thus enables cooperation across QA team members and developers of the particular software.
+  
+  Continuous Integration friendliness in this context means the fact whether tool is suitable for usage in such systems. It actually means whether output of the tool is clear enough,
+  how much work a tester would be required to do manually to deploy such a tool in a test suite. Whether testers would need to review just logs to find visual testing failure, or
+  whether it will be somehow visible, e.g. whole test would fail.
+  
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/existingSolutionsTableComparison.png}}}
+    \end{center}
+    \caption{Existing solutions features comparison}
+    \label{fig:existingSolutionComparison} 
+  \end{figure*}
+  
+  As Figure \ref{fig:existingSolutionComparison} shows, none of the tools met our requirements fully. Therefore, we decided to proceed with developing of a new tool, which would address
+  all issues, and which would integrate existing parts of the solutions when it is feasible as well as reasonable. Creation of a new process which would enable effective usage of such
+  tool by QA team members is inevitable. Following chapters describe this new tool and the new process.
   
 \chapter{New approach}
   
@@ -381,5 +536,15 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[10] http://slimerjs.org/
     %[11] http://en.wikipedia.org/wiki/Localhost
     %[12] http://media.tumblr.com/c5bf7caefde043ee7532b641c7f0e157/tumblr_inline_moaf774b5i1qz4rgp.jpg
+    %[13] http://hop.ie/images/posts/wraith/example.png
+    %[14] http://en.wikipedia.org/wiki/Facebook
+    %[15] https://github.com/facebook/huxley
+    %[16] http://en.wikipedia.org/wiki/JSON
+    %[17] http://en.wikipedia.org/wiki/Software_as_a_service
+    %[18] https://github.com/arquillian/arquillian-rusheye
+    %[19] http://www.seleniumhq.org/docs/05_selenium_rc.jsp
+    %[20] http://casperjs.org/
+    %[21] https://is.muni.cz/auth/th/359345/fi_b/
+    %[22] https://github.com/jjamrich/arquillian-rusheye
 
 \end{document}
