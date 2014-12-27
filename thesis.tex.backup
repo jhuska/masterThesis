@@ -22,6 +22,7 @@
 
 \usepackage{listings}
 \usepackage{fixltx2e}
+\usepackage{hyperref}
 
 \def\R{\mbox{\sffamily\bfseries R}}
 
@@ -100,8 +101,35 @@ key word1, and so on
 \tableofcontents
 
 \chapter{Introduction}    
-There is a big demand for this thesis.
-Need and cost of manual testing, space for improvement.
+To be sure that released software is bug free, one has to test it properly. Testing of software is the only
+assurance of quality.
+
+In a testing process for application with user interface, one of the last steps is to ensure that all 
+promised functionality, and a design of the user interface is not broken.
+
+Many software developing companies are ensuring this by manually checking all possible use cases, which
+their developed software's UI provides. This mundane activity is very time consuming and error prone,
+thus quite expensive.
+
+The focus of this thesis is to mitigate a need for manual testing of user interfaces by introducing a tool
+which would automate the major part of it. Which would enable so called automated visual testing. 
+The goal of such tool is to increase effectiveness of quality assurance team.
+
+The thesis consists from five main parts: a broad introduction to automated visual testing, and reasoning
+a motivation behind it.
+
+Second part analyses already existing solutions, summarizes their drawbacks as well as advantages.
+
+Third part formulates a hypothesis, which we are trying to prove or disprove by deploying the tool on
+a particular web application. It also introduces a process, which is inevitable to adhere in order to
+be effective with the created tool.
+
+Fourth part describes implementation details of developed tool, list of components we reused
+or developed to obtain a final result, as well as a reasoning why we choose particular component 
+to integrate with.
+
+The last part deals with particular deployment of the tool on a real web application, its example usage
+within Continuous Integration systems, and within cloud environment.
     
 \chapter{Visual testing of software}    
     Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
@@ -228,6 +256,7 @@ Need and cost of manual testing, space for improvement.
     
     
 \chapter{Analysis of existing solutions}
+\label{chap:analysis}
 As we introduced in \ref{sec:requirementsForAutomation}, there are many aspects which need to be taken into consideration when automating visual
 testing. Following analysis is going to compare existing solutions to automated testing with those requirements in mind, while introducing
 different approaches to visual testing.
@@ -500,15 +529,17 @@ For each tool in following sections we are going to show an example usage and it
   with manual testing.
   
   \section{Process}
-  The whole picture of visual testing would need to include reaction on two problems:
+  The whole picture of visual testing would need to include reaction on these problems:
   \begin{enumerate}
-   \item Executing a visual test suite for the first time to generate patterns, which new screenshots in subsequent tests execution will be compared with.
+   \item Executing a visual test suite for the first time to generate patterns, which new screenshots in subsequent tests executions will be compared with.
    \item Executing the visual test suite second and more times, to generate new screenshots, which are called samples in this thesis, for comparison with patterns generated in the fist run.
+   \item Executing the visual test suite when a new test is added, deleted, or otherwise changed.
   \end{enumerate}
 
   Therefore, overall process can be described with following subprocesses.
   
   \subsection{First execution of functional tests}
+  \label{chap:firstRunProc}
   
   Figure \ref{fig:FirstTestsRunBMPN} denotes steps needed to generate patterns. It is a prerequisite for the visual testing.
   
@@ -521,15 +552,6 @@ For each tool in following sections we are going to show an example usage and it
   An optional part is reviewing of the screenshots. If there is any issue with patterns, they should be thrown away, and tests will be rerun.
   
   If patterns are correct, a tester can proceed with subsequent runs of the test suite to start the actual visual testing.
-  
-  \begin{figure*}[!htb]
-    \begin{center}
-    \leavevmode
-    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/FirstTestsRunBMPN.png}}}
-    \end{center}
-    \caption{Process to generate patterns during first execution of functional tests.}
-    \label{fig:FirstTestsRunBMPN}
-  \end{figure*}
   
   \subsection{Subsequent execution of visual testing}
   
@@ -549,6 +571,15 @@ For each tool in following sections we are going to show an example usage and it
   it is in user responsibility to file such a bug in a corresponding issue tracker. Generated pattern, sample and difference can be used as a useful attachment to a issue report, which
   would better describe actual and expected result.
   
+   \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/FirstTestsRunBMPN.png}}}
+    \end{center}
+    \caption{Process to generate patterns during first execution of functional tests.}
+    \label{fig:FirstTestsRunBMPN}
+  \end{figure*}
+  
   \begin{figure*}[!htb]
     \begin{center}
     \leavevmode
@@ -558,32 +589,244 @@ For each tool in following sections we are going to show an example usage and it
     \label{fig:NextTestsRunsBMPN}
   \end{figure*}
   
+  \newpage
   \section{Analysis of useful tool output}
-  Requirements for useful output of such a tool based on questionnaire for RichFaces team, or maybe I will ask all JBoss employees
+  To create a tool, which is widely accepted by a community of testers, who are interested in a visual testing, we have to take usefulness of the tool as a priority. Such tool has to show results
+  of the visual comparison in a way, that it is a pleasure to use it. In the end of the day, the amount of time spent with using of the tool has to be dramatically less than doing the manual
+  visual testing.
+   
+  Therefore, we conducted a research among IT experts, which took a form of brainstorming on the visual testing web application user interface. Purpose of such a web application is to show
+  results and allow a tester to take an immediate action over them.
+  
+  The brainstorming took place on Arquillian developer forum [24], which is daily accessed by hundreds of users. By the time of writing of this thesis, it has more than 355 views, 
+  and 11 replies. We can say that there are users interested in such a tool, and we have gained a valuable feed back, together with many interesting ideas what features such a web application
+  for reviewing results should have.
+  
+  We started with description of tool together with proposals for graphical user interface design (mockups), and asked IT community for their
+  opinions, what they miss on such interface, what is on the other hand redundant.
+  
+  You can see created mockups in appendix \ref{appendeix:a}. The web application is logically divided into
+  three screens. First one (can be seen in appendix \ref{fig:frontPageMock}) is showing front page of the application. Its purpose
+  is to show test suites, which are groups of tests written for a particular application under test.
+  Together with a web browser they are tested on, represent a test suite for visual comparison testing.
+  
+  Second screen (can be seen at \ref{fig:particularRunMock}) shows a particular executions of the test suite. These test
+  suite runs are unambiguously named according to a time and date, they were executed.
+  
+  Third created mockup shows comparison results for a particular tests suite run. The comparison result
+  consists from three screenshots. A pattern, created during first run of the test suite. A sample, which
+  was taken during this particular test execution, and a picture called diff, which denotes differences
+  between the pattern and the sample.
+  
+  On the third mockup you can also see two buttons. They purpose is to allow a tester to take an immediate
+  action upon results. Pattern is correct button, is used when the result of the comparison is
+  a false negative, or when the result denotes a bug in the application. Sample is correct button, is used
+  when there is an anticipated change in the application under test. 
+  In that case the new created sample should be used as the pattern in next comparisons.
+  
+  Based on users insight, we complemented the final web application with following features:
+  
+  \begin{itemize}
+   \item Indicate number of failures versus total number of tests.
+   \item Revision number of application under test. For example Git\footnote{Git is source code version system, http://git-scm.com/}
+   commit id.
+   \item Display together with screenshots also the name of the functional test, and a name of the test class
+   the test resides in.
+   \item The triple pattern, sample, diff should be displayed in a way that it is not hard to spot the
+   actual difference. Putting them side by side is not a good option. We had to think out some different
+   approach.
+   \item Together with time stamp of the run, we should also show an order number of the run.
+  \end{itemize}
+
   
 \chapter{Implemented tool}
-An answer to the new process, requirements: CI viable, reusing what can be reused, extensible, cloud ready, multiple users
+To support our hypothesis and the process we figured out, a set of tools needed to be created. As we did
+not want to reinvent a wheel, where it is feasible we used already existing tool, and integrated it to the
+final result.
 
-  \section{Client part}
+Figure \ref{fig:componentDiagramOfImpl} depicts component diagram of implemented solution. It is only a high
+level picture of overall solution. Particular components are described in detail in following chapters.
+
+\begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.7\textwidth]{figures/VisualTestingComponentDiagram.png}}}
+    \end{center}
+    \caption{Component diagram of implemented solution for visual testing.}
+    \label{fig:componentDiagramOfImpl}
+\end{figure*}
   
-    \subsection{Arquillian}
-    Integration testing, starting containers, event based machine
+\section{Arquillian}
+Arquillian\footnote{More information about Arquillian at http://arquillian.org/} is a testing framework, which facilitates integration testing. It automatizes various parts
+of the integration testing, which allows testers to develop actual tests.
+
+It can for example: start application container before testing, and to stop it after tests execution 
+is done, can deploy application under test to that container, populate database with testing data, 
+start web browsers, test on mobile devices, and to provide useful output with videos and screenshots 
+from testing.
+
+In other words, it manages life cycle of all integration components your application integrate with.
+
+It has very nice architecture, which resembles an event based machine. It is easily extensible, as it
+supports Service provider interface pattern [25]. It can cooperate with all major browsers, which makes
+it a cross browser solution. 
+
+All these features made it a good candidate to integrate our solution with. We did not need to develop any
+feature for this project.
   
-    \subsection{Arquillian Graphene}
-    Functional testing of Web UI, screenshooter
+\section{Arquillian Graphene}
+Arquillian Graphene is an extension to Arquillian, thus fully supports its life cycle of test. Its main
+purpose in integration tests is to control a web browser. By using its API, a tester is able to for example
+click on the button on the web page, write some characters into text inputs or otherwise interact with
+a web application under test.
+
+Its core is a wrapper over well known project Selenium (also known as WebDriver) 
+\footnote{More information about Selenium project at http://www.seleniumhq.org/}. It is a W3C 
+standard\footnote{WebDriver working draft standard available at http://www.w3.org/TR/webdriver/},
+which guarantees stability, making it a good candidate to build our solution with.
+
+Graphene's type safe API\footnote{Type safe API in Java programming language enforces obeying various rules
+before compilation of source code, thus decreases a change to introduce an error.} supports design patterns
+such as Page Object\footnote{Page Object pattern encapsulates a web page into object, makes tests
+more readable [26].} or Page Fragment\footnote{Page Fragments pattern divides a web page further into reusable 
+components which encapsulates a web widget functionality, making tests more reusable and readable [27].}.
+
+Those features form an API with hight abstraction level, and encourage a tester to develop more readable
+tests. Those are attributes, which already existing solutions lack (see \ref{chap:conclusion} for more
+information).
+
+\section{Graphene screenshooter}
+For the purpose of visual testing, we needed to implement one addition to Arquillian Graphene. 
+A component which would facilitate taking of screenshots of application under test in a uniform manner.
+Developed addition implement a common interfaces defined in Arquillian Recorder extension
+\footnote{Arquillian Recorder is an extension which among the other things defines interfaces 
+for screenshot taking, and video recording from tests executions. We have cooperated on defining this
+common interfaces as well. More information at https://github.com/arquillian/arquillian-recorder}.
+
+We had two main requirements on this screenshots taking extension, which came directly from the analysis of
+already existing solutions (see chapter \ref{chap:analysis}):
+
+\begin{enumerate}
+ \item A tester should be able to configure this extension so it takes screenshots automatically. A script
+ for functional test should be unaware of such screenshots taking behavior. It will stay clean and more 
+ readable (see chapter \ref{chap:conclusion} to see more background information for this requirement).
+ The configuration should be done on a global level, in other words for the whole test suite.
+ \item The tester on the other hand should be able to explicitly enforce taking of screenshot at any place
+ in the functional test script. This should be just an optional feature, used rather sporadically.
+\end{enumerate}
+
+Second point is developed in all existing solutions, to enhance readability we required from our solution
+to have implemented also point number one.
+
+The global configuration is done where all configuration take place for Arquillian framework. 
+It is in \texttt{arquillian.xml} file.
+
+\begin{lstlisting}[caption=Example of screenshooter configuration in arquillian.xml,label=lis:screenshooterconf,language=xml]
+<extension qualifier="screenshooter">
+  <property name="takeBeforeTest">true</property>
+  <property name="takeAfterTest">true</property>
+  <property name="screenshotType">PNG</property>
+</extension>
+\end{lstlisting}
+
+In the example configuration \ref{lis:screenshooterconf}, you can see, that screenshots are automatically 
+made after two events: before test, which is effectively just after the web application is loaded in 
+a browser, and after the test. 
+
+We also started with an experimental feature, which is not fully available, and that is an option
+to take screenshots after every action made by Selenium in browser\footnote{See more information 
+about \texttt{takeOnEveryAction} at https://github.com/arquillian/arquillian-graphene/tree/master/extension/screenshooter}.
   
-    \subsection{Rusheye}
-    Screenshots comparison, rewritten to Arquillian core
+\section{Rusheye}
+We have already described some of the Rusheye features in chapter \ref{sec:rusheye}. Its important that it
+is only a command line tool, so integration with such a tool would require either executing its binary,
+packaged in a \texttt{.jar} file, or calling its main\footnote{Java main method is an entry point
+to the program.} method. That is not a good software design, because it is hardly extensible, and error prone,
+when there is a change introduced in either of the integrated parts.
+
+Therefore, we decided to introduce an integration layer in Rusheye, which would cooperate with Arquillian event based system.
+It is mostly realization of Observer pattern\footnote{Observer pattern - \url{http://en.wikipedia.org/wiki/Observer_pattern}}.
+
+Rusheye observes to events like: \texttt{StartCrawlingEvent}, or \texttt{StartParsingEvent}, and reacts according to it. It starts
+crawling of patterns, and creates a test suite descriptor (XML file which describes where are the particular screenshoots for a particular
+functional test stored). This is done after first run only (see chapter \ref{chap:firstRunProc}). In subsequent runs \texttt{StartParsingEvent}
+is fired, and Rusheye starts actual visual comparison, it compares patterns with samples on pixel to pixel basis.
+
+After crawling or parsing is done, it fires \texttt{CrawlingDoneEvent} or \texttt{ParsingDoneEvent} events respectfully, so other integrated
+modules can wire up.
+
+In result, such event based architecture, makes a loosely coupled system, which is easily extensible.
+
+\begin{lstlisting}[caption=Example of StartParsingEvent observer,label=lis:startParsingObserver,language=java]
+public void parse(@Observes StartParsingEvent event) {
+     // Initialization code ommited
+     parser.parseFile(suiteDescriptor, event.getFailedTestsCollection());
+     parsingDoneEvent.fire(new ParsingDoneEvent());
+}
+\end{lstlisting}
   
-    \subsection{Graphene visual testing}
-    An adaptor between Rusheye and Arquillian Graphene
-  
-  \section{Server part}
-  
+\section{Graphene visual testing}
+    It is a project, which has two purposes.
+    \begin{itemize}
+     \item to integrate and control Rusheye with Arquillian;
+     \item and to provide a way for reviewing results of visual comparison.
+    \end{itemize}
+
+    For those two purposes, two sub-projects were created, and are described bellow.
+    
+    \subsection{Arquillian extension}
+    As it was written previously, this extension is focused on controlling Rusheye, and storing or retrieving of created screenshots.
+    
+    As listings \ref{lis:afterSuiteObserverObserver} shows, it wires up to Arquillian life-cycle, as it listens to \texttt{AfterSuite} event. 
+    If it is a first execution of test suite, then it just fires \texttt{StartCrawlingEvent} event, which is observed by Rusheye. 
+    After crawling is done, it stores created suite descriptor, and screenshots to a Java Content Repository 
+    (JCR - see chapter \ref{chap:storage}).
+    
+    If it is not a first run, it firstly downloads screenshots and the suite descriptor, and then fires a \texttt{StartParsingEvent}, 
+    which is again observed by Rusheye.
+    
+    The result of parsing (XML file describing what patterns and what samples were different, and a path to created diffs) are also uploaded
+    to a JCR.
+    
+    \begin{lstlisting}[caption=AfterSuite observer to controll Rusheye,label=lis:afterSuiteObserverObserver,language=java]
+     public void listenToAfterSuite(@Observes AfterSuite event) {
+        
+        String samplesPath = scrConf.get().getRootDir().getAbsolutePath();
+        
+        if (visualTestingConfiguration.get().isFirstRun()) {
+            crawlEvent.fire(new StartCrawlinglEvent(samplesPath));
+        } else {
+            String descAndPtrDir = serviceLoader.get()
+                    .onlyOne(DescriptorAndPatternsHandler.class)
+                    .retrieveDescriptorAndPatterns();
+            startParsingEvent
+	      .fire(new StartParsingEvent(
+		      descAndPtrDir,
+		      samplesPath, failedTestsCollection.get()));
+        }
+     }
+    \end{lstlisting}
+    
+    A communication between this extension and a JCR is done via JCR Rest API. To issue a http request, we are using Apache HttpComponents
+    project\footnote{Apache HttpComponents - \url{http://hc.apache.org/}}.
+    
+    Listing \ref{lis:jcrRestApiCall} shows an example of such RESTful API call to JCR.
+    
+    \begin{lstlisting}[caption=Example of JCR REST API call,label=lis:jcrRestApiCall,language=java]
+        //UPLOADING TEST SUITE DESCRIPTOR
+        HttpPost postSuiteDescriptor = new HttpPost(gVC.getJcrContextRootURL() + "/upload/" + suiteName + "/suite.xml");
+        FileEntity descriptorEntity = new FileEntity(suiteDescriptor, ContentType.APPLICATION_XML);
+        postSuiteDescriptor.setEntity(descriptorEntity);
+        RestUtils.executePost(postSuiteDescriptor, httpclient,
+                String.format("Suite descriptor for %s uploaded!", suiteName),
+                String.format("Error while uploading test suite descriptor for test suite: %s", suiteName));
+    \end{lstlisting}
+    
     \subsection{Web application to view results}
     Its architecture, reasoning for chosen solutions, screenshots of app, key functionality
-    
-    \subsection{Storage of patterns}
+        
+\section{Storage of patterns}
+\label{chap:storage}
     Description of solution, reasoning
     
 \chapter{Deployment of tool and process}
@@ -605,7 +848,39 @@ An answer to the new process, requirements: CI viable, reusing what can be reuse
   
 \chapter{Conclusion}
 What I developed, What I improved, What can be better, Possible ways of extensions: Openshift cartridge
-    
+   
+   
+\appendix
+\chapter{Appendix A}
+\label{appendeix:a}
+
+\begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/frontPage.png}}}
+    \end{center}
+    \caption{GUI mockup for result viewer web application - front page.}
+    \label{fig:frontPageMock}
+\end{figure*}
+
+\begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/particularJob.png}}}
+    \end{center}
+    \caption{GUI mockup for result viewer web application - particular test suite run.}
+    \label{fig:particularRunMock}
+\end{figure*}
+
+\begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/patternsSamplesDiffsAltered.png}}}
+    \end{center}
+    \caption{GUI mockup for result viewer web application - actual comparison results.}
+    \label{fig:comparisonResultMock}
+\end{figure*}
+
     % bibtex here
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
@@ -633,5 +908,9 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[21] https://is.muni.cz/auth/th/359345/fi_b/
     %[22] https://github.com/jjamrich/arquillian-rusheye
     %[23] http://richfaces.jboss.org/
+    %[24] https://developer.jboss.org/thread/248301
+    %[25] http://docs.oracle.com/javase/tutorial/sound/SPI-intro.html
+    %[26] https://code.google.com/p/selenium/wiki/PageObjects
+    %[27] https://docs.jboss.org/author/display/ARQGRA2/Page+Fragments
 
 \end{document}
