@@ -505,6 +505,7 @@ For each tool in following sections we are going to show an example usage and it
   https://github.com/richfaces/richfaces-qa} for RichFaces project \footnote{RichFaces is component library for Java Server Faces web framework [23]}.
   
   \section{Hypothesis}
+  \label{sec:hypothesis}
   It should be enough to have just a functional test suite for a end to end testing of an application. Scripts from functional testing interacts with the application sufficiently, 
   therefore, another script which during such interactions take screenshots is redundant.
   
@@ -529,14 +530,16 @@ For each tool in following sections we are going to show an example usage and it
   with manual testing.
   
   \section{Process}
-  The whole picture of visual testing would need to include reaction on these problems:
+  \label{sec:process}
+  The whole solution for visual testing would need to include reaction on these problems:
   \begin{enumerate}
-   \item Executing a visual test suite for the first time to generate patterns, which new screenshots in subsequent tests executions will be compared with.
-   \item Executing the visual test suite second and more times, to generate new screenshots, which are called samples in this thesis, for comparison with patterns generated in the fist run.
+   \item Executing a visual test suite for the first time to generate patterns, which are new screenshots in subsequent tests executions will be compared with.
+   \item Executing the visual test suite for second and more times, to generate new screenshots, which are called samples in this thesis, for comparison with patterns generated in the fist run.
+   \item Review results, and take an action when there is a false negative result, or bug in the application.
    \item Executing the visual test suite when a new test is added, deleted, or otherwise changed.
   \end{enumerate}
 
-  Therefore, overall process can be described with following subprocesses.
+  Overall process can be described with following subprocesses.
   
   \subsection{First execution of functional tests}
   \label{chap:firstRunProc}
@@ -591,6 +594,7 @@ For each tool in following sections we are going to show an example usage and it
   
   \newpage
   \section{Analysis of useful tool output}
+  \label{sec:analysisUsefulOutput}
   To create a tool, which is widely accepted by a community of testers, who are interested in a visual testing, we have to take usefulness of the tool as a priority. Such tool has to show results
   of the visual comparison in a way, that it is a pleasure to use it. In the end of the day, the amount of time spent with using of the tool has to be dramatically less than doing the manual
   visual testing.
@@ -775,6 +779,7 @@ public void parse(@Observes StartParsingEvent event) {
     For those two purposes, two sub-projects were created, and are described bellow.
     
     \subsection{Arquillian extension}
+    \label{sec:arqExt}
     As it was written previously, this extension is focused on controlling Rusheye, and storing or retrieving of created screenshots.
     
     As listings \ref{lis:afterSuiteObserverObserver} shows, it wires up to Arquillian life-cycle, as it listens to \texttt{AfterSuite} event. 
@@ -799,57 +804,192 @@ public void parse(@Observes StartParsingEvent event) {
             String descAndPtrDir = serviceLoader.get()
                     .onlyOne(DescriptorAndPatternsHandler.class)
                     .retrieveDescriptorAndPatterns();
-            startParsingEvent
-	      .fire(new StartParsingEvent(
+            
+            startParsingEvent.fire(new StartParsingEvent(
 		      descAndPtrDir,
-		      samplesPath, failedTestsCollection.get()));
+		      samplesPath, failedTestsCollection.get())
+		      );
         }
      }
     \end{lstlisting}
     
     A communication between this extension and a JCR is done via JCR Rest API. To issue a http request, we are using Apache HttpComponents
     project\footnote{Apache HttpComponents - \url{http://hc.apache.org/}}.
-    
-    Listing \ref{lis:jcrRestApiCall} shows an example of such RESTful API call to JCR.
-    
-    \begin{lstlisting}[caption=Example of JCR REST API call,label=lis:jcrRestApiCall,language=java]
-        //UPLOADING TEST SUITE DESCRIPTOR
-        HttpPost postSuiteDescriptor = new HttpPost(gVC.getJcrContextRootURL() + "/upload/" + suiteName + "/suite.xml");
-        FileEntity descriptorEntity = new FileEntity(suiteDescriptor, ContentType.APPLICATION_XML);
-        postSuiteDescriptor.setEntity(descriptorEntity);
-        RestUtils.executePost(postSuiteDescriptor, httpclient,
-                String.format("Suite descriptor for %s uploaded!", suiteName),
-                String.format("Error while uploading test suite descriptor for test suite: %s", suiteName));
-    \end{lstlisting}
-    
+ 
     \subsection{Web application to view results}
-    Its architecture, reasoning for chosen solutions, screenshots of app, key functionality
+    \label{sec:webManagerAppDesc}
+    It is a web application for reviewing for reviewing results, but also for an active changing
+    of the visual testing configuration.
+    
+    The application back-end is developed with use of Java Enterprise Edition\footnote{Java Enterprise Edition - 
+    \url{http://www.oracle.com/technetwork/java/javaee/overview/index.html}} stack.
+    It includes using of technologies like: Java Persistence API 
+    \footnote{JPA - \url{http://en.wikipedia.org/wiki/Java_Persistence_API}} plus 
+    PostgreSQL\footnote{PostgreSQL database - \url{http://www.postgresql.org/}} for a persistence
+    layer. Enterprise Java Beans\footnote{Enterprise Java Beans - \url{http://en.wikipedia.org/wiki/Enterprise_JavaBeans}} 
+    for controllers code (Model-Viewer-Controller 
+    pattern\footnote{Model-Viewer-Controller - \url{http://en.wikipedia.org/wiki/Model-view-controller}}).
+    It exposes Java API for RESTful Services (JAX-RS\footnote{JAX-RS - \url{https://jax-rs-spec.java.net/}}) endpoints to communicate
+    enable communication with Arquillian extension (see chapter \ref{sec:arqExt}), and with its client part (HTML front end) in a
+    RESTful way.
+    
+    The application is deployed on a WildFly application server\footnote{WildFly application server - \url{http://www.wildfly.org/}}.
+    We chose this server, because of its an open source software, backed with huge community of users, and by a big enterprise,
+    Red Hat\footnote{Red Hat - \url{http://www.redhat.com/en}}. Very important for us was also its fastness and availability in
+    cloud environments (see chapter \ref{sec:cloudReady}).
+    
+    The front end is developed with use of AngularJS, which is a MVC framework for creating a Single Page Applications 
+    (SPA\footnote{SPA - \url{http://en.wikipedia.org/wiki/Single-page_application}}. It is complemented with Twitter Bootstrap
+    framework, to provide a visually pleasant UI.
+    
+    The design of particular screens are in accordance with the analysis described in section \ref{sec:analysisUsefulOutput}.
+    You can find screenshots from the application in the [DOPLNIT APPENDIX].
+    
+    For better convenience, and to verify possibility to deploy application on the cloud, we have
+    deployed it on Platform as a Service, OpenShift by RedHat cloud\footnote{OpenShift by RedHat - \url{https://www.openshift.com/}}.
+    Application is available at URL:\\* \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}. 
+    \\* Please see chapter \ref{sec:cloudReady} for more information about the deployment (how to log in, etc.).
+    
+    Following figure \ref{fig:useCaseDiagramWebManApp} depicts possible use cases with the web application, to give a better picture what can be achieved
+    with this application.
+    
+    The most important here are \texttt{Reject Pattern} and \texttt{Reject Sample} functionalities, as they allow a tester to react
+    on results. \texttt{Reject Pattern} will change in the storage for all screenshots the pattern with sample. This functionality is
+    used when there is an expected change in the application, and we want to use the new sample as pattern in subsequent runs.
+    
+    \texttt{Reject sample} is used when the results is either false negative (in which case the sample is just deleted, or when
+    there is a bug in the application under test, in which case a tester is supposed to create a bug report. Created sample and diff
+    will serve as a good help when describing the bug. 
+    
+    There are planned extensions to this basic functionality, described in section \ref{sec:plannedExtensions}.
+    
+    \begin{figure*}[!htb]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=0.7\textwidth]{figures/WebManagerUseCaseDiagram.png}}}
+      \end{center}
+      \caption{Use case diagram for Web Manager web application.}
+      \label{fig:useCaseDiagramWebManApp}
+    \end{figure*}
         
-\section{Storage of patterns}
+\section{Storage for images}
 \label{chap:storage}
-    Description of solution, reasoning
+    As we had to think wisely when developing UI for Web Manager, to enable successful employing of the tool among community of 
+    testers, the same we had to think beforehand about storage for created images (screenshots). 
+    
+    We have these requirements for storing of the images:
+    
+    \begin{itemize}
+     \item The chosen solution has to provide way for storing large amount (hundreds) of pictures;
+     \item it should be a scalable solution;
+     \item it should provide a solid performance when uploading and downloading of stored pictures;
+     \item it should be capable to ensure a security for data, authentication and authorization when accessing pictures;
+     \item it should be a cloud friendly solution.
+    \end{itemize}
+ 
+    We were choosing from these options, which we choose by a careful analysis of patterns:
+    \begin{enumerate}
+     \item Store screenshots as Binary large objects (BLOBs 
+	   \footnote{BLOB - \url{http://en.wikipedia.org/wiki/Binary_large_object}}) in a relational
+	   database, such as PostgreSQL.
+     \item Store screenshots in a file hosting service such as Dropbox\footnote{Dropbox - available at \url{https://www.dropbox.com/}}, 
+     or Google Drive\footnote{Google Drive - available at \url{https://www.google.com/drive/}}. Store just URLs to relational database.
+     \item Store screenshots in a Java Content Repository (JCR\footnote{JCR - specification available at 
+	   \url{https://jcp.org/en/jsr/detail?id=283}}). Store just URLs to relational database.
+    \end{enumerate}
+
+    The number one option, has some obvious advantages. Databases are a superior solution where transactional integrity between the
+    image and metadata are important. Because, it is more complex to manage integrity between database metadata and file system data, 
+    and within context of a web application, it is difficult to guarantee that data has been flushed to disk on the file system [28].
+    
+    However, the way to store pictures in database as BLOBs, has some disadvantages too: database storage is usually more expensive
+    than file system storage; database access can not be accelerated for example by configuring a web server to use system call to
+    asynchronously send a file directly a network interface, as it can be done for file system access [28].
+    
+    Option number two seems to be a viable solution for smaller test suites. It does not suffer from the problems which database does.
+    In a later stage of development of our tool we would like to provide this option to users of our tool. For now, we would like to
+    provide more flexible solution, which does not vendor lock in to some providers. Which is free of charge when big storage
+    space is required.
+    
+    Therefore, we chose option number three as pilot way for storing screenshots. JCR is a specification, and also a Java
+    API, thus a best fit for our Java based application. We liked what kind of data and access
+    patterns JCR are very good at handling [29]:
+    
+    \begin{itemize}
+     \item Hierarchical data;
+     \item files;
+     \item navigation-based access;
+     \item flexible data structure;
+     \item and transactions, versioning, locking.
+    \end{itemize}
+    
+    Data we need to store is naturally hierarchical. See figure \ref{fig:ourJCRHierarchy} to 
+    see in what hierarchy we need to store generated screenshots, XML suite descriptor, and XML result descriptor (configuration
+    files for Rusheye module).
+    
+    JCR are good at storing files, this is exactly what we are looking for, as pictures will be the main artifacts which we need to
+    persist.
+    
+    Navigation based access is often used for application dealing with hierarchical data. In our application we need to work often 
+    only with subset of the hierarchy - for example display triplet pattern, sample, and diff for a particular test suite run.
+    
+    We wanted to provide flexible data structure. By this tool stays extensible to other approaches and new features for later
+    development (see section \ref{sec:plannedExtensions}).
+    
+    Transactions, versioning, and locking are sweet points which will be used in later development. They are important, as we want
+    our solution to be scalable 
+    (scale out\footnote{Horizontal scaling (scale out) - \url{http://en.wikipedia.org/wiki/Scalability}}),
+    and we want to allow cooperation of testers on a particular test suite (their actions on results will need to be transactional).
+    
+    \begin{figure*}[!htb]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/HierarchyJCR.png}}}
+      \end{center}
+      \caption{The hierarchy of nodes in our JCR deployment.}
+      \label{fig:ourJCRHierarchy}
+    \end{figure*}
+    
+    We chose JCR implementation ModeShape\footnote{JBoss ModeShape by Red Hat - \url{http://modeshape.jboss.org}}. There are number
+    of advantages we saw, when comparing this implementation with reference implementation of JCR, the Apache 
+    Jackrabbit\footnote{Apache Jackrabbit - \url{http://jackrabbit.apache.org}}: The development is backed by Red Hat, the same 
+    company we chose the application server from (see \ref{sec:webManagerAppDesc}). 
+    They cooperate well with each other, and there is plenty of documentation on how to integrate those two systems.
+    ModeShape also by default exposes a RESTful API for accessing and modifying the content of the repository. We are utilizing 
+    this feature in the Web Manager (see \ref{sec:webManagerAppDesc}), when screenshots we want to display in the client browser,
+    do not have to be firstly streamed to the WildFly application server, and then served to the client, but they are directly
+    streamed to the client browser, as it knows the URL of the screenshot.
+    
+    For the future development we like its support for 
+    WebDAV protocol\footnote{WebDAV protocol - \url{http://en.wikipedia.org/wiki/WebDAV}}, and possibility to cluster multiple
+    ModeShape instances.
     
 \chapter{Deployment of tool and process}
+After implementing the tool, to prove or disprove hypothesis from section \ref{sec:hypothesis} we need to deploy the tool and the
+process (see section \ref{sec:process}) on a real application. Following chapters describe such deployment, real world use cases
+and best practices.
 
-  \section{Deployment on production application}
-  Deployment on stable app
-  
-  \section{Deployment on development application}
-  Deployment sooner on application which is in Alpha phase, my hypothesis is that it will not be worth to deploy it on such a app, due to too many changes
+To have a better picture, in what systems (environments) and by whom, each part of the visual testing will be executed, following
+sequence diagram was created:
+
+  \section{Deployment on production ready application}
   
   \section{Usage with CI}
-  Jenkins job and its cooperation with the tool, more particullary tool ability to handle multiple jobs, apps, versions, etc.
   
   \section{Cloud ready}
-  The app can be easily deployed on Openshift
+  \label{sec:cloudReady}
+  Improvement of effectiveness of a quality assurance team was our primary goal, when developing the tool. This include easy 
+  deployment of the tool either in the organization infrastructure, or in a cloud environment. Particularly its web par, the
+  Web manager for reviewing results (see \ref{sec:webManagerAppDesc}).
   
   \section{Results}
-  The percentage of improvement of QA effectiveness
+  
+  \section{Possible extensions}
+  \label{sec:plannedExtensions}
   
 \chapter{Conclusion}
 What I developed, What I improved, What can be better, Possible ways of extensions: Openshift cartridge
-   
-   
+
 \appendix
 \chapter{Appendix A}
 \label{appendeix:a}
@@ -912,5 +1052,7 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[25] http://docs.oracle.com/javase/tutorial/sound/SPI-intro.html
     %[26] https://code.google.com/p/selenium/wiki/PageObjects
     %[27] https://docs.jboss.org/author/display/ARQGRA2/Page+Fragments
+    %[28] http://stackoverflow.com/a/3751
+    %[29] https://docs.jboss.org/author/display/MODE40/Why+use+a+repository
 
 \end{document}
