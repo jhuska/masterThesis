@@ -51,13 +51,19 @@
 \usepackage{enumerate}
 
 \definecolor{Gray}{gray}{0.85}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \newcommand{\clg}{\cellcolor{Gray}}
 \newcommand{\eal}{\emph{et~al.}}
 
 % \fancyhead[LE,RO]{\slshape \rightmark}
 % \fancyhead[LO,RE]{\slshape \leftmark}
 % \fancyfoot[C]{\thepage}
-
+\lstset{ %
+numbers=left,
+numbersep=5pt,
+numberstyle=\tiny\color{mygray},
+stepnumber=1
+}
 
 \hyphenation{how-to}
 
@@ -1117,7 +1123,47 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   \end{figure*}
 
   \section{Usage with CI}
-    
+  One of our requirement for the tool is, that it can be used with in Continuous Integration systems. This is quite easy condition to meet.
+  Only requirement is that process of visual testing need to be automatized, that it will not need user interaction.
+  
+  As we build our solution as a integration with Arquillian Graphene, this requirement is fulfilled automatically. The required way of running
+  Arquillian Graphene tests is via Apache Maven\footnote{Apache Maven - \url{http://maven.apache.org/}} build.
+  
+  Functional tests are executed in Continuous Integration environment (see figure \ref{fig:wholeSolutionSequenceDiagram}). During this testing,
+  screenshots are made. After testing, pixed to pixel comparison take place (in the same CI environment). When visual testing is done, created
+  diffs, and samples are uploaded into the JCR, and can be reviewed later via Web Manager. The tester is able to take an immediate action
+  over results. He can reject pattern or sample (it will change configuration files on server), which effectively change next executions of 
+  visual testing in CI environment, as all configuration files are downloaded before each execution of tests.
+  
+  Test suite and Web Manager are wired via Arquillian configuration file. Listing \ref{lis:arqConfVisTesting} shows what information is needed 
+  to be set, in order to pair your test suite and the web manager (description of all configuration values is included in the documentation
+  of source code, attached in CD attachment, see \ref{appendix:d}).
+  
+  \begin{lstlisting}[caption=Example of configuration for Graphene Visual Testing Extension,label=lis:arqConfVisTesting,breaklines=true, language=xml]
+  <extension qualifier="visual-testing">
+        <property name="testSuiteName">richfaces-showcase-firefox-whole</property>      
+        <property name="firstRun">false</property>
+        <property name="failBuild">false</property>
+        <property name="jcrContextRootURL">http://jbosswildfly-jhuska.rhcloud.com/modeshape-rest/graphene-visual-testing/default</property>
+        <property name="managerContextRootURL">http://jbosswildfly-jhuska.rhcloud.com/</property>
+        <property name="jcrUserName">msuser</property>
+        <property name="jcrPassword">CAus6Vj6QsX-</property>
+  </extension>
+  \end{lstlisting}
+  
+  Following text describes current setting for visual testing form listing \ref{lis:arqConfVisTesting}. 
+  On line number 2 is an unique value to distinguish this particular configuration in Web Manager (JCR and PostgreSQL data).
+  On line number 3, when visual testing is done first time this has to be true, patterns are created. In subsequent runs it should be set to
+  false. 
+  
+  On line 4, when visual testing fail, whole Maven build fails if this is true. This is a very important feature, because it enables
+  CI to indicate to the tester that visual testing has failed. Otherwise a tester would need to find it out from logs (very time consuming),
+  or to check Web Manager. For example Jenkins CI\footnote{Jenkins CI - \url{http://jenkins-ci.org/}}, when build fail, it is indicated to the
+  tester with red sign. When build passes it is blue. This provides instant information about build status, and save testers time.
+  
+  Line 5, 6, 7, 8 are information needed to wire test suite and JCR, as well as to wire it with Web Manager (see attachment \ref{appendix:e}
+  for more information how to obtain these values).
+  
   \section{Cloud ready}
   \label{sec:cloudReady}
   Improvement of effectiveness of a quality assurance team was our primary goal, when developing the tool. This include easy 
@@ -1129,12 +1175,31 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   
   To login into the application\footnote{Application is available at 
   \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}} one has to 
-  use \texttt{LOGINNAME}, and password \texttt{PASSWORD}.
+  use \texttt{msuser}, and password \texttt{CAus6Vj6QsX-}.
   
   Whole process of deploying Web Manager to OpenShift is described in Appendix \ref{appendix:e}. By following it, it is very easy
   to deploy the Web Manager application.
   
-\chapter{Possible extensions}
+\chapter{Known issues and future plans}
+We supposed created tools mainly as a proof of concept, which prove our hypothesis (see \ref{sec:hypothesis}). Therefore, we chose those features
+to the tool to implement as first, which were inevitable for proving or disproving the hypothesis.
+
+We are aware of the fact that there are lot of features missing to have a production ready tool. Implementation of such, however, is out
+of scope of this thesis. In the same time we do believe, that tools can be used right now to increase effectiveness of the quality assurance
+team. Following known issues (or in other words future plans to extend the tool) need to be in mind:
+
+\begin{enumerate}
+ \item Support for Rusheye feature of masking those parts of the web site, which need to be excluded from visual testing, has to be applied
+ right now manually. In the future developments, it will be able to be done from Web Manager during reviewing of results.
+ \item Web Manager application security need to be improved. Right now there is only Basic authentication employed. So in order to work
+ with the application securely, one has to work with it via SSL channels. REST API calls are not secured neither.
+ \item Performance of the application can be improved. Right now we are using eager fetches from databases, and we also do not optimize
+ client side of the Web Manager anyhow.
+ \item Small Web Manager UI improvements, such as identification of the particular runs with source code management ids (e.g. Git commit id of
+ particular commit in the application, which is tested).
+\end{enumerate}
+
+
 \label{sec:plannedExtensions}
   
 \chapter{Conclusion}
