@@ -156,6 +156,9 @@ within Continuous Integration systems, and within cloud environment.
       \item asserting the CSS script
       \item or comparing screen captures (also known as screenshots) of new and older versions of the application.
     \end{enumerate}
+    
+    In this thesis we are going to work with comparing of screenshots only, as it is a method, which more likely reveals a bug
+    in a visual state of an application under test.
      
   \section{Visual testing in release testing process}
   \label{sec:visual-testing-in-release-process}
@@ -846,7 +849,6 @@ public void parse(@Observes StartParsingEvent event) {
     
     For better convenience, and to verify possibility to deploy application on the cloud, we have
     deployed it on Platform as a Service, OpenShift by RedHat cloud\footnote{OpenShift by RedHat - \url{https://www.openshift.com/}}.
-    Application is available at URL:\\* \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}. 
     \\* Please see chapter \ref{sec:cloudReady} for more information about the deployment (how to log in, etc.).
     
     Following figure \ref{fig:useCaseDiagramWebManApp} depicts possible use cases with the web application, to give a better picture what can be achieved
@@ -949,6 +951,7 @@ public void parse(@Observes StartParsingEvent event) {
       \label{fig:ourJCRHierarchy}
     \end{figure*}
     
+    \label{sec:whyWeChooseJCR}
     We chose JCR implementation ModeShape\footnote{JBoss ModeShape by Red Hat - \url{http://modeshape.jboss.org}}. There are number
     of advantages we saw, when comparing this implementation with reference implementation of JCR, the Apache 
     Jackrabbit\footnote{Apache Jackrabbit - \url{http://jackrabbit.apache.org}}: The development is backed by Red Hat, the same 
@@ -966,7 +969,7 @@ public void parse(@Observes StartParsingEvent event) {
 \chapter{Deployment of tool and process}
 After implementing the tool, to prove or disprove hypothesis from section \ref{sec:hypothesis} we need to deploy the tool and the
 process (see section \ref{sec:process}) on a real application. Following chapters describe such deployment, real world use cases
-and best practices.
+and best practices when using our tool.
 
 To have a better picture, in what systems and environments, each part of the visual testing will be executed, following
 sequence diagram was created:
@@ -980,26 +983,165 @@ sequence diagram was created:
       \label{fig:wholeSolutionSequenceDiagram}
 \end{figure*}
 
-  \section{Deployment on production ready application}
+There are omitted processes which are not important for visual testing, or processes which describes how data is transported into
+the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   
+  \section{Actual visual testing}
+  We chose RichFaces Showcase 
+  application\footnote{RichFaces Showcase - Screenshot from application is shown by figure \ref{fig:richfaces_chart}. 
+  Source code is available at \url{https://github.com/richfaces/richfaces/tree/master/examples/showcase}. 
+  Application is hosted at \url{http://showcase.richfaces.org/}}, 
+  and its functional test suite\footnote{Test suite is written in Arquillian Graphene framework, and the source code is 
+  available in the same repository as the application itself.} to try our tool and process on. It is a Java EE application, with
+  many libraries needed to be deployed alongside with the application. One of them is RichFaces core library.
+  
+  We chose a real world use case to try the tool and the process. Verify visual state of the application after upgrade of 
+  the core RichFaces library, from version 4.5.0.Final to 4.5.1.Final. We proceed as follows:
+  
+  \begin{enumerate}
+   \item Web Manager were deployed to OpenShift cloud on a WildFly 8.2.0.Final cartridge (see chapter \ref{sec:cloudReady}).
+   \item Functional test suite was run. It tested RichFaces Showcase application with core libraries of 4.5.0.Final version.
+   \item During first execution of tests, patterns were created and uploaded to the cloud.
+   \item Test suite was run several times to stabilize visual testing.
+   \item When the visual testing was stable enough (there were no more than 4 differences), the test suite was run in a way that it
+   tested RichFaces Showcase with core libraries of version 4.5.1.Final.
+   \item Results were analyzed.
+  \end{enumerate}
+  
+  We deployed Web Manager to the cloud, as that would be its the most probable environment. It made conditions for testing more
+  difficult, because we run the test suite from Europe, and the servers where the Web Manager was deployed on, are located in the US.
+  Moreover, we chose servers with low RAM (512MB), and with reduced CPU performance. The speed of Internet was 1,1 Mbit/s
+  for download, and 0,6 Mbit/s for upload. These limited conditions were chosen on purpose, because if the tool would work 
+  sufficiently in such conditions, it would have even better performance on better conditions.
+  
+  After test suite was run first time, and patterns were created, we run it several times (10) to stabilize results. Initially, there
+  were many differences (about 30 out of about 400 visual comparisons) found by our tool. All of them were false negative results. 
+  The reason we got lot of false negative results, was hidden mainly in random data, by which was the application filled. 
+  Particularly, rows for tables consists from random data in the application (with each deployment on the server there is 
+  different data shown in tables 
+  components\footnote{RichFaces table component in Showcase - 
+  \url{http://showcase.richfaces.org/richfaces/component-sample.jsf?demo=dataTable&sample=arrangeableModel&skin=blueSky}}). 
+  Secondly, there were unstable tests results because of timing issues. For example there is a slightly different delay for RichFaces
+  tooltip\footnote{RichFaces tooltip component - 
+  \url{http://showcase.richfaces.org/richfaces/component-sample.jsf?demo=tooltip&skin=blueSky}} component to be shown.
+  
+  Therefore, we have decided to improve the stability of visual testing by introducing a way how to exclude some tests, or whole
+  test classes from visual testing (they are still run in functional tests, as there they are stable enough). We introduced
+  a JAVA annotation \texttt{@VisuallyUnstable} to the Graphene visual testing extension API (see \ref{sec:arqExt}). 
+  Listing \ref{lis:excludedTest} depicts how one particular test can be excluded from visual testing, 
+  and listing \ref{lis:excludedWholeTestClass} shows how whole test class, and all its testing methods can be excluded at once
+  from visual testing.
+  
+  \begin{lstlisting}[caption=Exclude functional test from visual testing by annotating it with @VisuallyUnstable,label=lis:excludedTest,language=java]
+  @Test
+  @VisuallyUnstable
+  public void testClientTooltipWithDelayComponent() {
+    //actual testing code ommited
+  }
+  \end{lstlisting}
+
+  \begin{lstlisting}[caption=Exclude whole test class from visual testing by annotating it with @VisuallyUnstable,label=lis:excludedWholeTestClass,language=java]
+  @VisuallyUnstable
+  public class ITestExtendedDataTable {
+    
+    @Test
+    public void testFiltering() {
+    }
+    
+    @Test
+    public void testSorting() {
+    }
+    
+    //and other tests ommited
+  }
+  \end{lstlisting}
+  
+  The main part of the real world use case, we wanted to test, was upgrading of the RichFaces core library to 4.5.1.Final version.
+  We chose this use case, because it was mainly in release testing process (see chapter \ref{sec:visual-testing-in-release-process}),
+  when manual testing was conducted. When there was a new version of RichFaces core library available.
+  
+  The test suite was run in a way, that it tested RichFaces application with 4.5.1.Final libraries. Initially as we expected we
+  got many differences (more than 200). The reason was that Showcase application shows on the bottom, in footer its version. 
+  The version is visible on all screens, thus there were so many differences. Secondly, there were some expected changes, due to
+  fixes in the application\footnote{These changes are available in an online repository:\\*
+  1. \url{https://github.com/richfaces/richfaces/commit/203a7421f7daa594ce8d16c810a379a75dafa805}\\* 
+  2. \url{https://github.com/richfaces/richfaces/commit/715607080a4c15bff90af6546353e4b21a8391ee}}.
+  
+  Figures \ref{fig:chartComponentRenamed}, \ref{fig:rfVersionChanged} show generated diffs for these expected changes. Because they
+  affect lot of visual comparisons, we had to do something to decrease the number of false negative tests. We used Arquillian Rusheye 
+  (see section \ref{sec:rusheye}) feature of masks to do it. It is a way, how to make arbitrary parts of the web page excluded from
+  visual comparison. Currently, Rusheye support so called selective alpha masks, which are pictures with a transitive (alpha) layer,
+  and also with non transitive parts which covers the parts of the patterns and samples, we would like to exclude from pixel to
+  pixed comparison [30]. Our tool is not currently supporting feature of masks, as we did not recognized as a inevitable part of
+  proving/disproving of our hypothesis (see chapter \ref{sec:hypothesis}). It is indeed a very useful feature, which we will
+  add to the tool in next development stages (see section \ref{sec:plannedExtensions}).
+  
+  \subsection{Results}
+  
+  Finally, after applying all previously mentioned methods for decreasing number of false negative test results, we came to acceptable
+  number of generated diffs (4). Reviewing of such results would take minimum time (5 min maximum) for a tester which is familiar with the application.
+  
+  Indeed we had to add to the final result the time which we spend with applying masks, and excluding unstable tests from visual
+  testing (30 min). However, this most of these activities need to be done only once for the test suite. It can be reused in subsequent
+  releases of the RichFaces framework (mask to cover changing version of RichFaces will remain same, the same for mask for covering
+  menu with components).
+  
+  It is a very good result when taking into consideration following facts:
+  
+  \begin{itemize}
+   \item Visual testing was done automatically, so during this time the human resources (testers) were able to do some more 
+   intellectually demanding testing, than just exploratory manual testing, which means clicking through the application.
+   \item This manual testing needs to be done for all major browsers separately. Each manual testing takes approximately 30 min.
+         If there is 5 major browsers currently used (see section \ref{footnote:majorBrowsers}), it is about 150 min of manual testing.
+   \item If we suppose that reviewing of automatized jobs would take 25 min (5 min for each), we can say that we have safe
+	 125 min of time for a quality assurance team human resources. It is improvement of about 83.33 \%.
+  \end{itemize}
+
+  
+  \begin{figure*}[!htb]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/chartComponentRenamed.png}}}
+      \end{center}
+      \caption{RichFaces chart component renamed in application menu.}
+      \label{fig:chartComponentRenamed}
+  \end{figure*}
+  
+  \begin{figure*}[!htb]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/rchFacesVersionChanged.png}}}
+      \end{center}
+      \caption{RichFaces version changed after it was upgraded.}
+      \label{fig:rfVersionChanged}
+  \end{figure*}
+
   \section{Usage with CI}
-  
+    
   \section{Cloud ready}
   \label{sec:cloudReady}
   Improvement of effectiveness of a quality assurance team was our primary goal, when developing the tool. This include easy 
-  deployment of the tool either in the organization infrastructure, or in a cloud environment. Particularly its web par, the
+  deployment of the tool either in the organization infrastructure, or in a cloud environment. Particularly its web part, the
   Web manager for reviewing results (see \ref{sec:webManagerAppDesc}).
   
-  \section{Results}
+  We chose OpenShift open hybrid cloud by Red Hat, to proof the concept, that our solution is deployable to a cloud. One of the
+  reasons is that it supports WildFly application server, which integrates well with ModeShape JCR repository \ref{chap:storage}.
   
-  \section{Possible extensions}
-  \label{sec:plannedExtensions}
+  To login into the application\footnote{Application is available at 
+  \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}} one has to 
+  use \texttt{LOGINNAME}, and password \texttt{PASSWORD}.
+  
+  Whole process of deploying Web Manager to OpenShift is described in Appendix \ref{appendix:e}. By following it, it is very easy
+  to deploy the Web Manager application.
+  
+\chapter{Possible extensions}
+\label{sec:plannedExtensions}
   
 \chapter{Conclusion}
-What I developed, What I improved, What can be better, Possible ways of extensions: Openshift cartridge
+What I developed, What I improved, What can be better, Possible ways of extensions: OpenShift cartridge
 
 \appendix
-\chapter{Appendix A}
+\chapter{Appendix A - GUI mockups of Web Manager UI}
 \label{appendeix:a}
 
 \begin{figure*}[!htb]
@@ -1028,6 +1170,57 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     \caption{GUI mockup for result viewer web application - actual comparison results.}
     \label{fig:comparisonResultMock}
 \end{figure*}
+
+\chapter{Appendix B - List of contributions to opensource projects}
+\label{appendix:b}
+\begin{enumerate}
+ \item Graphene visual testing arquillian extension
+ \item Web Manager
+ \item ESTE DOKONCIT: RUSHEYE to Arquillian, not merged yet
+ \item RICHFACEs showcase test suite, not merged yet
+ \item Graphene screenshooter, an extension to Graphene, which enables taking of the screenshots during functional testing.
+       Available at: \url{https://github.com/arquillian/arquillian-graphene/tree/master/extension/screenshooter}.
+ \item Add to Graphene Interceptors feature way to intercept in order. Feature request tracked with this issue:\\*
+       \url{https://issues.jboss.org/browse/ARQGRA-423}.
+\end{enumerate}
+
+
+\chapter{Appendix C - Screenshots from Web Manager UI}
+\label{appendix:c}
+Screenshoty z web manazera.
+
+\chapter{Appendix D - CD Attachment}
+\label{appendix:d}
+CD attachment popis
+
+\chapter{Appendix E - How to deploy Web manager on OpenShift}
+\label{appendix:e}
+\begin{enumerate}
+ \item Create an account at \url{https://www.openshift.com}
+ \item Add application, under Java category, choose WildFly Application Server 8.2.0.Final
+ \item Choose public URL, wished gear size (we used small), scaling options (we did not used scaling), region of your choice.
+ \item Click in the created application from Applications menu.
+ \item Add PostgreSQL database.
+ \item Under remote access, find out the address to ssh into the application from command line.
+ \item Run \texttt{wget \url{http://downloads.jboss.org/modeshape/4.1.0.Final/modeshape-4.1.0.Final-jboss-wf8-dist.zip}}
+ \item Unzip the downloaded artifacts, and follow this 
+    \url{https://docs.jboss.org/author/display/MODE40/Installing+ModeShape+into+Wildfly} tutorial to 
+    enable Modeshape in WildFly installation.
+ \item Clone the GIT repository of your application.
+ \item Remove pre-generated \texttt{pom.xml}.
+ \item Build and put \texttt{graphene-visual-testing-app.war} into deployments directory of the cloned repository.
+ \item Alter the \texttt{standalone.xml} file, so it combines \texttt{standalone-modeshape.xml} and original \texttt{standalone.xml}.
+ \item It should contains all necessary configurations for ModeShape. More information in the tutorial referenced in step 8.
+ \item Commit and Push the changes into the remote Git repository.
+ \item Your application should be available at the public URL of the application you created in OpenShift + add the end of the path:
+ graphene-visual-testing-webapp
+ \item The login and password to the application should be same as the ones for create WildFly user in step 8.
+\end{enumerate}
+
+
+\chapter{Appendix F}
+\label{appendix:f}
+Ako spustit samotne vizualne testovanie.
 
     % bibtex here
     \addcontentsline{toc}{chapter}{Bibliography}
@@ -1062,5 +1255,6 @@ What I developed, What I improved, What can be better, Possible ways of extensio
     %[27] https://docs.jboss.org/author/display/ARQGRA2/Page+Fragments
     %[28] http://stackoverflow.com/a/3751
     %[29] https://docs.jboss.org/author/display/MODE40/Why+use+a+repository
+    %[30] https://is.muni.cz/auth/th/207442/fi_b/
 
 \end{document}

@@ -1,0 +1,2077 @@
+          Masaryk                University
+        Faculty            of     Informatics
+
+
+          "wΔΘΛΞΠΣΥΦΩ↑↓'¡ıj`´ˇ˘¯˚¸ßæØ􏿸!”#$%&’()+,-./012345<yA—
+
+
+
+
+Visual testing             something                             catchy
+
+
+                Diploma               thesis
+
+               Juraj              H?ska
+
+
+
+
+
+
+
+
+
+
+                      Brno,         2015
+
+
+Declaration
+
+Hereby I declare, that this paper  is my   original authorial work, which I have worked  out  by
+my own.  All sources, references  and   literature used or excerpted  during elaboration of this
+work are properly  cited and listed  in complete  reference to the due source.
+
+
+
+                                                                                    Juraj H?ska
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   Advisor:   Mgr.Marek     Gr?c,Ph.D.
+
+                                                                                               ii
+
+
+Acknowledgement
+
+Some people helped me a lot and some not at all. Nevertheless, I would like to thank all.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                        iii
+
+
+Abstract
+
+This thesis is very important!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                          iv
+
+
+Keywords
+
+key word1, and so on
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                v
+
+
+Table  of  contents
+
+
+
+1 Introduction     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+2 Visual testing   of software     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+
+  2.1 Visual testing  in release  testing process    . . . . . . . . . . . . . . . . . . . . .  4
+  2.2 Need  for automation     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
+
+  2.3 Requirements    for automation     . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
+      2.3.1   Low  cost  of test suite maintenance     . . . . . . . . . . . . . . . . . . . .  7
+
+      2.3.2   Low  percentage   of false negative   or false positive results  . . . . . . . .  7
+      2.3.3   Reasonable    time to  execute  a test suite   . . . . . . . . . . . . . . . . .  7
+      2.3.4   Concise  yet  useful test suite  output  . . . . . . . . . . . . . . . . . . . .  8
+
+      2.3.5   Support   for Continuous    Integration  systems   . . . . . . . . . . . . . . .  8
+3 Analysis  of existing   solutions    . . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
+
+  3.1 Mogo  . . .  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
+      3.1.1   Mogo   drawbacks     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+  3.2 BBC   Wraith   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+      3.2.1   PhantomJS      . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+
+      3.2.2   CasperJS     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+      3.2.3   BBC   Wraith   drawbacks     . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+  3.3 Facebook   Huxley    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+
+  3.4 Rusheye   .  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+      3.4.1   Rusheye   drawbacks    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+
+  3.5 Conclusion   of analysis   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+4 New  approach      . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+
+  4.1 Hypothesis     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+  4.2 Process   .  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+
+      4.2.1   First execution   of functional  tests . . . . . . . . . . . . . . . . . . . . . 19
+      4.2.2   Subsequent    execution  of visual  testing  . . . . . . . . . . . . . . . . . . 19
+  4.3 Analysis  of useful tool  output   . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+
+5 Implemented     tool   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+  5.1 Arquillian   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+
+  5.2 Arquillian  Graphene     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+  5.3 Graphene   screenshooter     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+
+  5.4 Rusheye   .  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+  5.5 Graphene   visual  testing   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+      5.5.1   Arquillian  extension    . . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+
+      5.5.2   Web   application  to view   results . . . . . . . . . . . . . . . . . . . . . . 28
+  5.6 Storage  for images    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+
+6 Deployment    of  tool  and   process    . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+
+                                                                                                1
+
+
+   6.1 Actual  visual testing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+   6.2 Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+   6.3 Usage  with  CI . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+   6.4 Cloud  ready  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+
+7  Possible extensions     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+
+8  Conclusion    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+A  Appendix   A  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+
+B  Appendix   B  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+
+C  Appendix   C  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42
+
+D  Appendix   D  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+
+E  Appendix   E  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+F  Appendix   F  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+
+Bibliography . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                2
+
+
+1   Introduction
+
+To  be sure  that released  software  is bug  free, one   has to test  it properly.   Testing  of  software
+is the only  assurance  of quality.
+    In a testing  process  for application   with  user  interface, one   of the  last steps  is to  ensure
+that all promised   functionality,  and  a design  of  the  user interface  is not  broken.
+    Many   software  developing   companies    are ensuring   this  by  manually    checking   all possible
+use cases,  which  their developed   software’s   UI  provides.  This   mundane     activity  is very  time
+consuming    and  error prone,  thus  quite expensive.
+    The   focus of  this thesis is to  mitigate   a need   for manual     testing  of  user  interfaces  by
+introducing   a tool which  would   automate    the major   part  of it. Which    would  enable   so called
+automated    visual testing. The  goal of such  tool is to increase  eœectiveness    of quality  assurance
+team.
+    The  thesis consists from  øve  main  parts:  a broad  introduction    to automated     visual testing,
+and  reasoning   a motivation   behind  it.
+    Second   part  analyses  already  existing  solutions,   summarizes     their  drawbacks     as well as
+advantages.
+    Third  part  formulates  a hypothesis,   which  we  are  trying to  prove  or disprove   by  deploying
+the tool  on  a particular  web  application.  It also  introduces   a  process,  which   is inevitable  to
+adhere  in order  to be  eœective  with  the created   tool.
+    Fourth   part  describes  implementation     details  of developed     tool, list of  components     we
+reused  or developed   to obtain  a  ønal  result, as well  as a reasoning    why   we  choose   particular
+component    to integrate  with.
+    The  last part  deals with  particular   deployment    of the  tool  on  a real  web  application,   its
+example   usage  within  Continuous    Integration   systems,   and  within   cloud  environment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                          3
+
+
+2    Visual      testing       of  software
+
+Testing  of  software   in  general is any  activity  aimed    at evaluating     an  attribute  or  capability
+of a  program    and   determining    that  it meets   its required    results  [1]. It can  be   done   either
+manually    by  actual  using  of an  application,  or  automatically     by   executing  testing   scripts.
+    If the  application    under  test has  also  a graphical    user  interface   (GUI),   then   one  has   to
+verify whether   it is not  broken.  Visual  testing  of an  application    is an eœort  to ønd   out  its non-
+functional   errors,  which   expose  themselves    by  changing    a graphical    state  of the  application
+under   test.
+    Typical   example    can  be a web  application,  which    GUI   is programmed      usually  with   combi-
+nation  of HyperText      Markup    Language    (HTML)     and   Cascading     Style  Sheets  (CSS).   HTML
+is often used  to  deøne   a content  of the web   application   (such   as  page  contains  table,  pictures,
+etc.), while  CSS   deønes   a  structure  and  appearance     of the  web    application  (such   as  color  of
+the  font, absolute   positioning   of web  page   elements,   and  so  on).
+    The   resulting   web   application   is a  set of  rules  (CSS    and    HTML)     applied   to  a  static
+content  (e.g.  pictures,  videos,  text). The   combination     of rules  is crucial,  and  a minor    change
+can  completely   change    the visual state  of the web   application.   Such   changes   are very   diŒcult,
+sometimes    even   not  possible  to ønd   out  by functional    tests  of the  application.   It is because
+functional   tests verify  a desired  functionality  of the  web   application,    and  do not  consider   web
+page  characteristics    such as red  color of heading,   space   between    two  paragraphs,    and   similar.
+    That  is why   a  visual testing  has to take  a place.  Again,   it is done   either manually,    when    a
+tester by  working    with  an  application,  is going  through    all of  its use  cases, and  veriøes,   that
+the  application   has  not  broken   visually. Or  automatically,     by  executing    scripts which    assert
+a visual  state  of an  application.
+    In this  thesis  we  are  going to  focus  on  the visual  testing   of  web  applications    only.  As  we
+mentioned    above,   the way  how   web  page  looks  like is mainly   determined     by CSS   script.  There
+are two  ways   of automated     testing  used:
+     1. asserting   the  CSS  script
+
+     2. or comparing      screen  captures  (also  known    as  screenshots)    of  new  and   older  versions
+        of the  application.
+    In this  thesis we   are going  to work   with  comparing    of  screenshots    only, as it is a  method,
+which   more   likely reveals  a bug  in a  visual state  of  an application     under  test.
+
+2.1     Visual    testing     in  release   testing    process
+Nowadays     software   is often  released  for a general   availability   in  repetitive  cycles,  which   are
+deøned   according     to  a particular   software  development      process.    Such   as Waterfall    [2],  or
+Scrum   [3].
+
+                                                                                                               4
+
+
+                                                                        2. Visual     testing     of   software
+    Testing  of  software   has  an  immense     role  in this release  process.   While    automated     tests are
+often  executed    continuously,    as  they  are  quicker   to  run  than   manual    tests,  which   are  carried
+out  at a speciøc    stage  of the   release  process.
+                                     1                                 2
+    For  example    in RichFaces       Quality   Engineering     team     visual  testing   was  done   manually,
+before  releasing   the   particular    version   of  RichFaces    library   to  a community.       In practice   it
+involves  building    all example     applications    with   new   RichFaces     libraries,  and   to  go through
+its use  cases with   a particular    set  of web   browsers.
+    To  be  more    speciøc,  consider    please   a  web   page  with   a chart   elements    showing    a  sector
+composition    of  gross  domestic    product    in the   USA   (as  øgure   2.1 demonstrates).      To  verify  its
+visual  state is  not  broken,   would    involve   e.g.:
+
+    1.  Checking     the size,  overÆowing     and   transparency     of all  elements    in charts.
+
+    2.  Checking     colors, margins     between    bars.
+
+    3.  Putting    a mouse    cursor    over  a  speciøc    places  in  the  chart,  and    verifying   whether   a
+        popup    with  more    detailed   info  is rendered    in a correct   place.
+                                                    3                                                           4
+    4.  Repeat    this for  all major    browsers    , and   with  all supported    application     containers   .
+
+
+2.2     Need     for   automation
+
+The  chapter   2.1  tried  to outline   how   tedious   and   error  prone   might  manual     visual  testing  be.
+From   our  experience     in the   RichFaces     QE    team,   any  activity   which    needs   to  be  repeated,
+and  does   not  challenge   tester’s   intellect  enough,    become    a  mundane     activity.   The   more  one
+repeats   the mundane      activity,   the  more    likely  an  mistake    is introduced:     one  forgets   to try
+some   use cases   of an  application,    overlooks    some   minor   errors,   etc.
+    Automated      visual  testing   addresses     this shortcomings,      as it would    unburden     human    re-
+sources   from   mundane     activities    such   as  manual    testing,   and   would    allow   spending    their
+time   on  intellectually   more    demanding       problems.    However,     it introduces     another    kind  of
+challenges,   and   needs   to  be  implemented       wisely.  Following    are  minimal     requirements     for a
+successful  deployment      of an   automated     visual   testing.
+
+1.  RichFaces  is a component   based  library for Java  Server Faces, owned   and developed   by  Red Hat
+2.  Quality Engineering   team  is among   the other  things responsible for assuring a  quality of a product
+3.  Major  browsers  in the  time  of writing  of this thesis are according   to the [4]: Google   Chrome,  Mozilla
+Firefox, Internet Explorer, Safari,  Opera
+4.  Application  containers  are  special programs    dedicated  to provide  a runtime   environment   for complex
+enterprise web applications, e.g.  JBoss  AS, WildÆy,   Apache  Tomcat
+
+                                                                                                                  5
+
+
+                                                               2. Visual    testing   of  software
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           Figure  2.1: RichFaces   chart  component    shown   in Showcase   application
+
+
+2.3    Requirements        for  automation
+
+An  overall cost of the automation    has  to be taken  into consideration.  It is necessary  to take
+into account  higher initial cost of automation,    and  consequences   it brings: such  as increased
+time to process  relatively  huge results  of testing, cost of test suite maintenance.
+   Therefore,  to foster  an eœectiveness   in quality assurance   teams,  while keeping  the cost of
+automation   reasonable  low,  automated    visual testing would   require:
+                                                                                                    6
+
+
+                                                                        2. Visual     testing    of   software
+    1.  A  low  cost  of a test  suite  maintenance;
+
+    2.  a low  percentage    of  false negative   or  false  positive   tests  results;
+    3.  a reasonable    time  to  execute   the  test  suite;
+    4.  a concise   yet useful   test suite  output;
+                                                                  5
+    5.  a support    for Continuous     Integration    systems     .
+
+2.3.1   Low    cost  of  test  suite    maintenance
+A test suite   needs  to reÆect   a development      of an  application     under   test. Therefore,   with   each
+change  in  the  application,   it is usual  that   the  test  suite  has  to  be  changed   as  well.  Making    a
+change  in  the  test suite  can   often  introduce    a  bug,  and   cause   false  negative   or false  positive
+tests results.
+    To keep   this cost as  low  as possible,  the  test  suite  script  has  to be  readable  and   meaningful,
+so when   the  change   is about    to be  introduced,     it is clear  where   and   how  it should   be  done.
+    A test  framework    in  which   the test  suite  is developed     should   provide   high  enough   abstrac-
+tion. That   would   enable   better   re-usability   for  various   parts  of  the  test suite,  while  lowering
+the overall  cost  of maintenance.
+    Speciøcally   for visual   testing,  when   done    by  comparing     screen   captures,   it is very  impor-
+tant how   well  a repository   of  screen  captures    is maintainable.      Secondly,   how   reference   (those
+correct  ones,  other  screen   captures   will  be  compared      with)  screen   captures   are  made.
+
+2.3.2   Low    percentage      of  false  negative      or  false   positive     results
+False negative    test results  incorrectly   indicate    a bug   in  an  application    under   test, while   it is
+a bug  in  the  test suite  itself. They   are  unwanted       phenomenon       as  they  take  time   to process
+and  assess  correctly.
+    False  positive  tests  results  hide  actual   bugs   in  an  application.    They   provide   an  incorrect
+feedback   by  showing   the  tests  as  passing,   even   when    there  is a bug   in the  application.
+    Speciøcally   for visual  testing,   when   it is done   by  comparison      of screen  captures,   it is very
+easily to  be  broken   by  small   changes    on  a page.    For  example     if the  page  outputs    a current
+date,  then   it would   break   with   every   diœerent    date.   There    has   to exist  techniques,    which
+would  prevent    these  situations.
+
+2.3.3   Reasonable       time   to   execute    a  test   suite
+Reasonable    time   is quite  subjective    matter,    but  in  general,   it depends    on  how    many    times
+e.g. per day   one  needs   to run   whole   test suite.   Nowadays      trend   is a Continuous     Integration,
+
+5.  Continuous   Integration (CI)  system  is software  to  facilitate a practice  of CI, which  in short  is about
+merging all developer copies with  a shared  mainline  several times  a day  [5].
+                                                                                                                  7
+
+
+                                                                   2. Visual   testing     of  software
+when   a developer   or a tester   commits   changes    of an  application  several  times   per  day  to a
+shared  source  code  mainline.   Each   such  commit    should   trigger the  test suite,  which   veriøes
+whether   the change   did  not introduced    an  error  to the application.
+   According    to  creators   of Continuous    Integration    practice,  the  whole   point   of CI  is to
+provide  a rapid  feedback.   A  reasonable   time   for them  is 10  minutes.  If the  build  takes  more
+time, every  minute   less is a huge  improvement     (considering   a developer/tester    runs  test suite
+several times  a day).
+
+2.3.4   Concise    yet  useful   test  suite  output
+One  of  drawbacks   of  automated     testing is  its ability to  produce   huge  amount     of logs,  test
+results etc. The  output   therefore   needs  to  be  as concise  as possible,  while  still providing   an
+useful information.   A  tester  needs  to be  able   to quickly  recognize  where   the  issue  might  be.
+The  best  situation would   be  if the tester does   not need  to  run the  test again  in  order  to spot
+the issue. The   output  should   give  him  a clear  message   where   the issue is.
+   For   visual  testing  speciøcally,  this  can   be  achieved   by  providing   a  tester  with   screen
+captures  together  with  diœerence    of old and   new   version.
+
+2.3.5   Support    for  Continuous      Integration      systems
+This  is quite easily  to be  achieved,   but  still, a developer   of a tool for  visual  testing  should
+have this  in mind  beforehand.    Todays  CI  systems   support   variety of build  systems,   for various
+platforms,  and  languages.   For  example   Jenkins   supports   build systems   like Maven    or Gradle,
+but it can  run  also shell scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                          8
+
+
+3   Analysis        of   existing       solutions
+
+As  we  introduced   in 2.3,  there  are  many   aspects  which   need   to be  taken   into consideration
+when  automating     visual  testing.  Following   analysis is going   to compare    existing  solutions   to
+automated    testing  with  those   requirements    in mind,   while  introducing    diœerent   approaches
+to visual  testing.
+    The  representative    list of tools  for comparison    was  made    also according    to an  ability  to
+be used   in  enterprise  context.  In   an  enterprise  company,    there  is a  stress  on  stability  and
+reliability of employed    solutions.  It is quite vague   requirement,    and  it is usually  hard   to ønd
+out which   tools  are a good   øt  for enterprise  companies,    however,    some   indicators,  which   we
+used  as well,  might  be  helpful:
+ •      Is a project  actively  developed?     When   was  the  last release  of the  project,  or  how   old
+        is the last commit    to a source   code  mainline?
+
+ •      How   many   opened    issues the  project  has?  When    was  the  last activity
+        with  those  issues ?
+ •      What    is the quality   of the   source  code?  Is it  well  structured?    Does  it employ     best
+        development    practices?
+
+ •      Does   the project  have  a  user  forum?   How   active are  the  users?
+ •      Is a big  enterprise  company     behind  the  solution,  or otherwise   sponsoring    it ?
+ •      What    are the references   if the  project is commercialized     ?
+
+    For each   tool  in following  sections   we  are going  to show    an example     usage  and   its main
+drawbacks    together  with   some  basic   description.
+
+3.1     Mogo
+Mogo   [6] approach   to  visual  testing  can  be in short  described   like:
+    1.  One   provides  set of  URLs   of  an  application  under   test to a  cloud  based   system.
+
+    2.  Application   URLs    are  loaded   in various  browsers,  detection   of broken   links  is done.
+    3.  Screenshots   are  made   and   are  compared    with  older  screenshots    from  the  same    URL
+        to avoid  CSS   regressions.
+
+    There   is no programming      script  required,  therefore  it can  be  used   by less skilled  human
+resources.  It can  be conøgured    in  shorter  time,  and  thus  is less expensive.
+                                                                                                            9
+
+
+                                                                      3.  Analysis      of  existing      solutions
+3.1.1   Mogo     drawbacks
+
+Drawbacks    of  this  approach    are  evident   when    testing   dynamic     pages,  which   content    is changed
+easily. Applications     which    provide   rich   interaction     options    to  an  end   user, and    which   state
+changes   by  interacting     with   various   web     components       (calendar     widget,   table   with   sorting
+mechanism    etc.),   require   more   subtle  way    of  conøguring      what   actions   need  to  be  done   before
+the testing   itself.  Mogo     is suitable   for  testing    static   web    applications,    not  modern      AJAX
+enabled  applications      full of CSS   transitions.
+   Above    mentioned      drawbacks      might   lead   to  a  bigger   number     of false  negative    test results
+when   used  with    real data   (any   change,    e.g.  showing     actual   date   may   break   testing),   or to  a
+                                                                                                                    1
+bigger  number    of  false  positive   tests results    when    such   a  tool  is used  to  test mocked     data    .
+
+3.2     BBC      Wraith
+Wraith   is a screenshot      comparison     tool,  created     by  developers      at BBC    News    [7].  Their  ap-
+proach  to  visual   testing   can  be  described    like:
+
+    1.  Take   screenshots     of  two   versions   of   web   application      by  scripting   either   PhantomJS
+                               2
+        3.2.1,  or SlimerJS      by  another    JavaScript      framework      called  CasperJS     3.2.2  [20].
+                                                                                                 3
+    2.  One   version    is the  one  currently    developed      (which     run  on  localhost   ),  and   the  other
+        one  is a  live site.
+
+    3.  Once   screenshots      of web   page   from    these   two    diœerent    environments     are   captured    a
+        command       line tool  imagemagic       is executed     to  compare     screenshots.
+    4.  Any   diœerence     is marked     with  blue    color   in a   created   picture,   which   is  the  result  of
+        comparing      two  pictures   (It  can  be  seen    at Figure    3.1).
+
+    5.  All pictures    can   be  seen  in a  gallery,   which    is a  generated    HTML      site (It  can  be  seen
+        at Figure    3.2).
+   To   instruct   BBC     Wraith    tool  to  take   screenshots      from    the  web   application,    one   has  to
+ørstly script   PhantomJS       or  SlimerJS    to  interact    with   the  page,   and   secondly,   creates   a con-
+øguration   øle,  which    will  tell the   PhantomJS        instance    which    URLs    need   to  be  loaded    and
+tested. PhantomJS        script   is one  source   of   distrust   to   this  tool,  and  therefore    is introduced
+furthermore.
+
+1. Mocked   data  is made   up data  for purpose  of testing,  so it is consistent  and does  not change  over  time
+2. SlimerJS  is very  similar to PhantomJS   3.2.1, it just runs  on  top of Gecko  engine, which e.g. Mozilla  Firefox
+runs on top of. [10]
+3. In computer   networking,    localhost   means  this  computer.    [11]
+
+                                                                                                                    10
+
+
+                                                                   3.  Analysis     of   existing      solutions
+3.2.1   PhantomJS
+                                                                              4            5
+PhantomJS      [8]  is stack  of  web   technologies    based   on  headless    WebKit       engine,    which   can
+be interacted    with   by  using  of  its JavaScript    API.
+    For  the   sake   of simplicity    we   can   say  that  it is  a  browser    which    does   not   make    any
+graphical   output,    which    makes    testing   with   such  a  engine   a  bit  faster  and    less  computer
+resources   demanding.
+    One   can  instruct   PhantomJS       to take   a screenshot   of  a web   page   with   following    script:
+         var   page   =  require(’webpage’).create();
+         page.open(’http://google.com/’,                 function(status)          –
+           if(status       ===   ’success’)       –
+               window.setTimeout(function()                –
+                  console.log(’Taking            screenshot’);
+                  page.render(’google.png’);
+                  phantom.exit();
+               ",  3000);
+           "   else   –
+               console.log(’Error           with    page   ’);
+               phantom.exit();
+           "
+         ");
+
+    When    executing    such  a script  it will  eœectively  load  http://google.com/           web   page,  waits
+3000  milliseconds,    and   after  that,  creates   a screenshot   to  the  øle google.png.
+    In most   environments      it will be  suŒcient    to  wait those   3000  milliseconds     in  order   to have
+the  www.google.com        fully  loaded.   However,    in  some  resource    limited   environments,      such   as
+                     6
+virtual  machines     , it does   not  have   to  be  enough.   It  will result  in  massive    number      of false
+negative   tests.  There   is a  need   for  more   deterministic    way   of ønding    out   whether     the  page
+was  loaded   fully  in given   time,  and   taking   of the  screenshots    itself can  take   place.
+    Another    problem     we  noted   in the   previous   script, is its readability.    It is written    in a too
+low  level way   (one  has  to control   HTTP     status  when   loading   a page).  Secondly,    there   is a need
+to explicitly   call page.render(’google.png’);              in  order  to  take  a  screenshot.    Script   which
+would   test  a  complex    web   application     would   be  full of such   calls.  Together    with    poor   way
+of naming    created   screenshots    (a  user  has  to  choose  name    wisely),  it might    lead   to problems
+when   maintaining     such   a test  suite.
+    PhantomJS       API   is wrapped    by   CasperJS,    which   is furthermore     described    below.
+
+4.  Headless  software  do not require graphical   environment  (such as X  Windows    system)  for its execution.
+5.  WebKit   is a layout engine software  component    for rendering web  pages in web   browsers,  such  as Apple’s
+Safari or previously a Google  Chrome    [9]
+6.  Virtual machines   are created  to act as real computer  systems,  run on top  of a real hardware
+
+                                                                                                                 11
+
+
+                                                              3.  Analysis    of  existing    solutions
+3.2.2  CasperJS
+
+CasperJS  is navigation   scripting  and   testing utility written   in JavaScript   for the PhantomJS
+and SlimerJS   headless  browsers.   It eases the  process  of deøning   a full navigation  scenario   and
+provides useful  high-level  functions   for doing  common     tasks  [20].
+   Following   code  snippet  shows   a simple  navigation   on   Google  search  web  page.  It will load
+http://google.com   in a browser    session, will type  into  the  query  input  string  MUNI,    and  will
+submit  it.
+     casper.start(’http://google.com/’,               function()      –
+       //  search    for   ’MUNI’    from   google    form
+       this.fill(’form[action=”/search”]’,                –  q:   ’MUNI’   ",   true);
+     ");
+
+     casper.run(function()         –
+       this.exit();
+     ");
+
+   The  problem   with  this script, which  we  identiøed,  is its low-level abstraction   of the browser
+interactions. It makes   tests less readable,  and  thus  more   error  prone  when  a  change  is needed
+to be introduced.
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 3.1:  BBC   Wraith   picture   showing   diœerence   in  comparison    of two  web  page   versions
+[12]
+
+
+                                                                                                         12
+
+
+                                                           3. Analysis    of  existing  solutions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          Figure 3.2:  BBC   Wraith  gallery  example  [13]
+
+
+3.2.3   BBC    Wraith    drawbacks
+
+Two  of the  drawback   were  described  in the previous  sections, 3.2.1 and  3.2.2.
+    Another   problem   which  might   occur  when   testing with  BBC    Wraith, is cross browser
+compatibility.  As  it supports  only  PhantomJS,    and   therefore, one  can not assure  that the
+page  will be  looking  the same   in all major   browsers.  The  incompatibility  comes  from  the
+fact, that browsers  interpret CSS  rules  diœerently, and  because  they have diœerent  JavaScript
+engines.  Thus  for example   web page   might  look diœerently  in Google  Chrome   and  Microsoft
+Internet  Explorer,  and  PhantomJS    will not catch  this issues.
+
+                                                                                                 13
+
+
+                                                                3. Analysis     of  existing     solutions
+3.3    Facebook       Huxley
+
+Another   visual testing   tool [15], supported   by  a big company     Facebook,    Inc. [14], uses similar
+approach   in  terms   of  comparing     taken  screenshots.    The  process   of  taking   them,   and   the
+process  of reviewing   results  is diœerent  though.
+    1. One   creates   a script  which   would   instruct  Huxley    tool,  what   web  pages   screenshots
+       should   be  taken  from.   Such  a  script might  look   like:
+
+                [test-page1]
+                url=http://localhost:8000/page1.html
+                [test-page2]
+                url=http://localhost:8000/page2.html
+
+                [test-page3]
+                url=http://localhost:8000/page3.html
+
+    2. One   runs  Huxley    in the  Record   mode.  That   is the  mode   when   Huxley    loads the  pages
+       automatically     in a fresh browser   session, and  a  tester by  hitting Enter   keyboard    button
+       instructs  Huxley    to take  a screenshot.  Screenshots    are stored  in a  folder with  test name
+                                                                                                        7
+       (one  given   in the  square   brackets  in  the example    above),   together   with   a JSON     øle
+       describing    mainly   how   long   should  Huxley    wait,  when    doing   visual  comparison,    to
+       have  a  tested  web   page  fully loaded.  Time   is measured     during   this record   mode.
+
+    3. To  start  visual  testing, one  has  to run  Huxley   in the  Playback   mode.    Huxley   will start
+       fresh  browser    session,  and   will playback   loading    of the  pages,   with  waiting   for  the
+       pages   to be  fully loaded.
+    4. When    there  is a change    in an application,   Huxley   will log  a warning,   and   takes  a new
+       screenshot    automatically.     In continuous    integration   environments,     one   can  instruct
+       Huxley   to  ønish  with  error,  in case screenshots    are diœerent.   In that  case,  one  can  run
+       Huxley    again  with  an  option   to take  new  screenshots    (if the change   is desired,  and   is
+       not  an  error).
+
+   Main   drawback    of  Facebook    Huxley   we  can  see, is similar  to BBC    Wraith,   and  that  is its
+non  deterministic   approach    to waiting  for a fully loaded   web   page.  It is again  a øxed   amount
+of time, which   can   be  diœerent   from  environment    to  environment.     The   time  to  wait  can  be
+7. JSON   stands  for JavaScript Object  Notation,  a standard  format that  uses human   readable  format  to
+transmit data objects [16]
+
+                                                                                                           14
+
+
+                                                                    3. Analysis     of   existing     solutions
+conøgured,   however,     it is  still quite  error  prone,   as  for ørst  visual  testing   run   e.g 4  seconds
+can be  would   be  enough,     and   for another    run  would    not.
+   Secondly    it lacks   a  proper    way   of viewing    results  of comparisons,     leaving    with  only   one
+option  to check   the  command        line output,   together   with   manual    opening    of the  screenshots.
+This would   degrade    cooperation      among    various   QA   team   members,    and   it is harder   to deploy
+                                                   8
+in a software   as a  service   cloud   solutions   , where    such  a cooperation     might    take  a place.
+
+3.4    Rusheye
+
+Rusheye   [18] is a command       line tool, which   is focused   on  automated     bulk  or  on-the-Æy   inspect-
+ing of browser   screenshots     and   comparison     with  predeøned     image   suite. It  enables   automated
+visual testing  when    used    together   with   Selenium    1  project  [19].
+   The   process   has  subtle    diœerences   in  comparison     with  previous   solutions.    It consists   from
+these steps:
+    1. Screenshots     are   generated,    for  example     by  Selenium    1 tool,  while   functional    tests  of
+       web   application     are  executed.
+
+    2. First  screenshots      are  claimed   to  be  correct   (are  controlled   manually),     they  are  called
+       patterns.
+    3. After  a  change    in web   application    under   test, another   run  of Selenium     1 tests  generates
+       new   screenshots.     They    are  called  samples.
+
+    4. Patterns    and   samples    are  compared,     its visual  diœerence   is created,   and   result  is saved
+       in an  XML     øle.
+    5. The   results   can   be  viewed   in  a desktop    application,   Rusheye    manager      [22].
+
+   Rusheye    has  one  very   important     feature,  which   another   tools  lack. It is a  possibility  to  add
+masks  on  particular    parts   of  the  screenshots.    Those   parts  are  ignored    when    two  screenshots
+are compared.     It is a huge    improvement      to  protect   from   false negative   tests,  as  some   all  the
+time  changing    parts   (such    as  actual  date,   etc.)  can  be  masked    from   comparison,      and   thus
+their change   will  not  break    testing.
+3.4.1  Rusheye       drawbacks
+
+Core  of the Rusheye     is  only   able  to compare     screenshots    generated   by   some   other   tool.  Inte-
+gration with  Selenium     1  is advised,   however,    functional   tests written   in Selenium     1 suœer   from
+
+8. Software  as a service is on  demand   software, centrally hosted, accessed typically by  using  a thin client via
+web browser [17].
+                                                                                                                  15
+
+
+                                                               3.  Analysis    of   existing     solutions
+the same   problems    [21] as scripts written   for BBC    Wraith   3.2.2. And   that   is bad  readability
+caused  by  their  low level  coupling  with   HTML    and   lack of higher   abstraction.
+    Another    problem   we   can  see  is only  a  desktop   version   of the  tool   for  viewing   results
+(Rusheye   Manager).    Cooperation    on some   test suite  among   QE  team   members      and developers
+would   be more    diŒcult.  As   they  would   need  to  solve  persistence   of  patterns,   samples    and
+descriptor  of the  test suite.
+
+3.5     Conclusion       of  analysis
+
+All previously   listed tools have  some   useful  features,  which  we  would   like to  be  inspired  with.
+However,   all of the  solutions  lack something,    what   we  suppose   to be  an  inevitable   part  of an
+eœective  automated     visual testing.
+    Figure  3.3 summarizes    requirements    we  have  for a visual  testing tool,  and   the fact  whether
+the tool  satisøes  the particular   requirement.
+    Tests  readability   is a  problem   we   discussed   with   a particular   tool   description.   It  is a
+level of abstraction   over  underlaying    HTML,     in which   the  application   is written.   It is quite
+subjective  matter,   however,    there are  some   clues  by  which   it can  be  made    more    objective.
+For  example   the  way  how   tests are  coupled  with   the  HTML    or  CSS   code.   Because   the  more
+they  are, the  less they  are readable   [21]. A  scale we   used for evaluation    supposes    insuŒcient
+as lowest  readability,  which   in long  term  run  of the  test suite  might   cause   lot of issues.
+    By  tests  robustness   we  suppose    a level of  stability  running   of the   tests  with  particular
+tool has.  It means    how   likely there  are  false positive  and   false negative    tests,  whether    are
+caused  by  not  fully loaded  page,  or  by dynamic    data   rendered  on  the  page.   If the robustness
+is low, you  can  ønd  a  red mark   in a  particular  cell. Green   one  otherwise.
+    Cross  browser    compatibility    issue deals  with   ability  to test  web   application     across  all
+major  browsers    3.
+    By  cloud  ready  features   we  suppose   whether   tool  has web   based  system    for  reviewing   re-
+sults, and thus  enables   cooperation   across  QA   team   members   and   developers    of the particular
+software.
+    Continuous    Integration   friendliness  in this context  means   the  fact whether     tool is suitable
+for usage  in such  systems.   It actually  means   whether    output  of  the tool  is clear  enough,    how
+much   work   a tester  would   be required   to do  manually    to deploy   such   a tool   in a test  suite.
+Whether    testers  would   need  to  review  just  logs to  ønd   visual testing   failure,  or whether     it
+will be somehow     visible, e.g. whole  test  would   fail.
+    As  Figure  3.3  shows,  none  of the  tools  met  our  requirements    fully. Therefore,    we  decided
+to proceed   with  developing    of a new   tool, which   would   address   all issues,  and   which   would
+integrate  existing   parts  of the  solutions   when   it is  reasonable.   Creation    of  a new    process
+which  would   enable  eœective   usage  of such  tool by  QA   team  members     is inevitable.   Following
+chapters  describe   this new   tool and  the  new  process.
+
+                                                                                                            16
+
+
+                                 3. Analysis  of existing solutions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 3.3: Existing solutions features comparison
+
+
+
+
+
+
+                                                                 17
+
+
+4   New      approach
+
+Each   tool by   its  deønition     introduces    a  process   for a visual  testing.  While   we  recognized
+shortcomings    (described     in  the   chapter   3.5),  we  realized  a need  for  a diœerent  approach    to
+the visual  testing.   The   approach      came   from  2  and  half years  of developing   and   maintaining
+                               1                             2
+the functional   test   suite    for  RichFaces    project    .
+
+
+4.1     Hypothesis
+It should  be  enough     to have    just  a functional   test suite  for a end  to  end testing  of an  appli-
+cation.  Scripts   from   functional     testing  interacts   with  the  application   suŒciently,  therefore,
+another  script   which   during    such   interactions   take  screenshots   is redundant.
+    This  redundancy       is expensive,     because   quality   assurance  teams    need  to maintain    more
+test suites. A  change     in the  application    needs   to be  introduced   on  more  places,  which  allows
+errors to sneak    in test  suites.
+    In the  same    time   we   do  believe,   that  script  for  functional  testing  should  be  abstracted
+from  a visual  testing   as  much    as possible.   Meaning    that, explicit calls  to methods   which  take
+screenshots,  should    be  optional.    Functional    test script  should  take  screenshots  automatically
+during  testing,   in  each   important      state  of  an  application.   By  this,  we  will achieve  better
+readability  of  the  functional    tests’  scripts.
+    For  sure  there   should    be   an  option   to  make    screenshots  explicitly,  however,   a  need  to
+facilitate such  option    should    be  sporadic.   This  will be  achieved  by  øne-grained   conøguration
+options.  A  tester   should    be  able   to  to conøgure    on  global  level, meaning    for all tests from
+one place,  as  well  as  on  test  level,  in what   situations   a screenshot   should  be taken.
+    The  base   of  screenshots      which   will  serve  as  a  reference  for a  correct  state  of the  web
+application,   will  be   made     automatically     during   ørst  run  of  the  created  tool.  Screenshots
+should  be  made    available    automatically     for all interested  parties  (developers,  testers,  etc.).
+    A  viable  solution    seems     to  be  introducing    a  web   interface,  as a  system   for managing
+results of visual   testing   comparison.      In  this system   (called  a manager    in this thesis), a  user
+should  be  able   to decide    about    results  of visual  testing. More   particularly   asses the  results,
+whether   there  is a bug  in  application    or not. This   web  interface will foster cooperation   between
+interested  parties.
+    By  following   above   mentioned      principles,  we  will achieve  a better  eœectiveness  of a quality
+assurance   team.    More   particularly     we  will  massively   decrease  amount     of time they   need  to
+spend  with  manual     testing.
+
+
+1.  The RichFaces   test suite is available at https://github.com/richfaces/richfaces-qa
+2.  RichFaces is component    library  for Java Server Faces  web framework  [23]
+                                                                                                             18
+
+
+                                                                                       4.  New    approach
+4.2     Process
+
+The  whole   solution  for  visual testing  would   need   to include   reaction   on  these  problems:
+    1.  Executing    a visual  test  suite  for the  ørst  time   to  generate    patterns,  which   are new
+        screenshots   in subsequent    tests  executions   will be   compared     with.
+
+    2.  Executing   the  visual test  suite for second   and  more   times,   to generate  new  screenshots,
+        which  are  called  samples   in this  thesis, for comparison     with   patterns  generated   in the
+        øst run.
+    3.  Review   results,  and  take  an  action  when   there  is a  false negative   result, or bug  in the
+        application.
+    4.  Executing   the  visual test  suite when   a new  test is added,    deleted, or  otherwise  changed.
+
+   For  simplicity,  in the  ørst stage  of development,    we  suppose    the  third problem    to be solved
+with  re-executing   the  whole   test  suite  again,  as it is done   in  the  ørst  run  of the  test suite.
+Overall  process   can  be  described   with  following  subprocesses.
+4.2.1   First  execution      of functional     tests
+
+Figure  4.1 denotes   steps  needed  to  generate  patterns.   It is a prerequisite   for the visual testing.
+   Screenshots    are  generated   during   execution   of the  tests.  If all functional   tests pass, those
+screenshots   can  be claimed   as patterns,   and  are uploaded     to a  storage.  Screenshots   generated
+in tests which   failed, are ignored,   they  are not  included    in the  visual  testing. Such   functional
+test need  to be  øxed,   made   to be  passing,   to include  it  to visual   testing.
+   An   optional   part  is reviewing   of the  screenshots.   If there  is any  issue  with  patterns,  they
+should  be  thrown   away,   and  tests  will be rerun.
+   If patterns   are correct,  a tester  can  proceed   with  subsequent     runs  of the test suite to start
+the actual  visual  testing.
+4.2.2   Subsequent      execution      of visual   testing
+
+Figure  4.2 shows   how   subsequent    execution   of visual  testing   together   with  functional  testing
+would   look like. The   ørst  step  is same   as in previous   process,    functional   tests are executed,
+and  screenshots    are taken.   Secondly,   patterns   are  downloaded       from  the  storage,  and   after
+that  actual visual  testing  can  start.
+   Newly    created  screenshots,   called  in  this thesis samples,    are  pixel to  pixel compared    with
+downloaded    patterns.   Result  is stored   in a descriptor   øle,  and  diœerences    between   particular
+pattern  and  sample    are visually  stored   in a generated    picture.
+   If  there are  found   some  diœerences,    generated   pictures   together    with  their corresponding
+samples,  and   patterns   are uploaded    to a  remote   storage.
+                                                                                                           19
+
+
+                                                                                  4. New    approach
+   Users  should   be able to  review  the results  from  now  on,  where  he will ønd  the  particular
+run according   to a time  stamp   when   the run  was  executed.  They   should  be able  to asses the
+results, with displayed  triplet,  consisting of patter,  sample   and  their diœerence.  They  should
+be able  to say  whether  it is false negative   test result, in which   case they  should  be  able to
+take an  action  to  prevent  such   results in the  future.  One  of  such actions  can   be applying
+masks,  which  is more  described   in chapter  3.4.
+   The   tool should  be conøgurable,   so such  false negative  results are rather sporadic,  instead,
+failed visual comparison   tests  should  reveal  a bug  in the application  under   test. In that case
+it is in user responsibility   to  øle such  a  bug  in  a corresponding    issue  tracker. Generated
+pattern,  sample   and diœerence   can  be  used  as a  useful attachment    to a issue  report, which
+would  better  describe actual   and  expected   result.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                     20
+
+
+                                                                            4. New   approach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     Figure 4.1: Process  to generate patterns  during ørst execution  of functional  tests.
+
+4.3    Analysis    of useful   tool output
+
+To create a tool, which  is widely accepted  by a community   of testers, who  are  interested in
+a visual testing, we have  to take usefulness of the tool as a priority. Such  tool has to show
+                                                                                              21
+
+
+                                                                               4.  New   approach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      Figure  4.2: Subsequent  execution  of visual  testing together  with  functional  tests.
+
+results of the visual comparison  in a way, that it is a pleasure  to use it. In the end  of the day,
+the amount   of time  spent with  using of the  tool  has to  be dramatically   less than  doing the
+manual   visual testing.
+   Therefore,  we  conducted  a research among   IT  experts, which  took  a form  of brainstorming
+
+                                                                                                  22
+
+
+                                                                                         4. New     approach
+on the  visual   testing  web   application   user  interface.  Purpose    of such   a web   application   is to
+show  results   and   allow  a tester  to take  an  immediate    action   over  them.
+    The   brainstorming     took   place  on Arquillian   developer    forum   [24], which   is daily  accessed
+by  hundreds    of  users. By   the  time  of writing   of this thesis,  it has  more   than   355  views,  and
+11 replies.   We   can  say  that  there  are  users  interested   in such   a tool,  and  we   have  gained   a
+valuable   feed  back,  together   with  many   interesting  ideas  what   features  such   a web  application
+for reviewing    results  should   have.
+    We  started    with description    of tool together   with proposals    for graphical   user  interface  de-
+sign (mockups),     and  asked   IT  community    for their  opinions,  what   they   miss  on  such  interface,
+what  is  on  the  other  hand   redundant.
+    You   can  see  created  mockups     in appendix   A.  The  web   application   is logically  divided   into
+three screens.    First one  (can  be seen  in appendix    A.1) is showing    front page   of the  application.
+Its purpose   is to show   test suites,  which  are groups   of tests written   for a particular   application
+under  test.  Together    with   a web   browser  they   are tested   on, represent    a test  suite for visual
+comparison     testing.
+    Second    screen  (can  be  seen  at  A.2)  shows   a particular   executions   of  the  test suite. These
+test suite  runs   are unambiguously       named   according    to a  time  and  date,   they  were  executed.
+    Third    created   mockup     shows   comparison     results  for  a  particular    tests  suite  run.  The
+comparison     result  consists  from   three  screenshots.   A  pattern,   created   during   ørst  run of  the
+test suite.   A  sample,   which    was  taken   during   this particular   test  execution,    and   a picture
+called diœ,   which   denotes   diœerences    between   the  pattern   and  the  sample.
+    On   the  third  mockup    you   can  also  see two  buttons.   They    purpose   is to  allow  a tester  to
+take  an  immediate     action   upon    results. Pattern   is correct   button,   is  used  when    the  result
+of the  comparison     is a  false  negative,  or  when   the  result  denotes    a bug   in the   application.
+Sample   is  correct  button,  is used  when   there  is an anticipated   change   in  the application    under
+test. In that   case  the new   created   sample  should   be  used  as  the pattern    in next  comparisons.
+    Based   on  users  insight, we  complemented      the  ønal web   application   with   following  features:
+
+ •      Indicate    number   of  failures  versus total  number     of tests.
+                                                                                  3
+ •      Revision    number    of application    under  test. For   example    Git   commit    id.
+ •      Display    together  with   screenshots   also  the name    of the  functional   test,  and  a name   of
+        the  test  class the  test  resides  in.
+ •      The    triple pattern,   sample,    diœ should   be  displayed    in a  way   that  it is not  hard   to
+        spot   the  actual  diœerence.   Putting   them   side  by  side is not  a good   option.   We   had  to
+        think   out  some   diœerent   approach.
+ •      Together    with  time   stamp   of the run,  we  should   also show   an  order  number    of the run.
+
+
+3.  Git is source  code version system, http://git-scm.com/
+                                                                                                              23
+
+
+5   Implemented             tool
+
+To support  our   hypothesis   and  the  process we  øgured   out, a set of tools needed   to be created.
+As we  did  not  want   to reinvent   a  wheel, where   it is feasible  we  used  already  existing tool,
+and integrated   it to  the ønal  result.
+   Figure   5.1  depicts  component     diagram   of  implemented     solution.  It is only  a high  level
+picture of overall  solution. Particular   components    are described  in detail  in following chapters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         Figure   5.1: Component      diagram   of implemented     solution  for visual  testing.
+
+5.1    Arquillian
+           1
+Arquillian   is a testing framework,    which  facilitates integration  testing. It automatizes   various
+parts of the  integration   testing, which   allows  testers to  develop  actual  tests.
+
+1. More  information  about Arquillian at http://arquillian.org/
+
+                                                                                                       24
+
+
+                                                                                      5.  Implemented         tool
+    It can   for example:     start  application    container    before   testing,   and  to  stop   it after  tests
+execution    is done,   can   deploy   application     under   test  to  that   container,   populate    database
+with  testing   data,   start  web   browsers,    test on   mobile   devices,   and   to provide    useful  output
+with  videos   and   screenshots    from   testing.
+    In other   words,   it manages     life cycle  of  all integration   components      your   application    inte-
+grate  with.
+    It has  very   nice  architecture,    which   resembles    an  event  based    machine.    It is easily  exten-
+sible, as  it supports    Service   provider    interface   pattern   [25]. It  can  cooperate    with   all major
+browsers,   which    makes   it a  cross  browser    solution.
+    All  these  features    made    it a good    candidate    to  integrate   our  solution   with.   We   did  not
+need  to  develop   any   feature   for this  project.
+
+
+5.2     Arquillian       Graphene
+Arquillian   Graphene      is an  extension    to  Arquillian,    thus  fully  supports    its life cycle  of  test.
+Its main   purpose    in  integration    tests  is to control   a web   browser.    By  using   its API,   a tester
+is able to  for  example    click  on  the   button   on  the  web   page,   write  some    characters   into  text
+inputs  or  otherwise    interact   with   a web   application    under   test.
+                                                                                                               2
+    Its core  is a  wrapper     over  well  known    project   Selenium    (also   known    as WebDriver)       . It
+                        3
+is a W3C     standard     , which    guarantees    stability,   making    it a  good    candidate    to build   our
+solution  with.
+                                     4                                                           5
+    Graphene’s     type   safe  API    supports    design   patterns   such   as  Page   Object    or  Page   Frag-
+      6
+ment   .
+    Those   features   form   an API   with   hight  abstraction    level, and   encourage    a tester  to develop
+more   readable    tests. Those    are  attributes,    which   already   existing   solutions   lack  (see  3.5  for
+more   information).
+
+5.3     Graphene         screenshooter
+
+For the  purpose    of visual  testing,  we  needed   to  implement    one  addition    to Arquillian   Graphene.
+A  component      which    would    facilitate   taking   of  screenshots    of  application    under    test  in  a
+uniform   manner.     Developed      addition   implement      a common      interfaces   deøned    in  Arquillian
+
+2.  More  information   about  Selenium  project  at http://www.seleniumhq.org/
+3.  WebDriver   working   draft standard  available at http://www.w3.org/TR/webdriver/
+4.  Type  safe API  in Java  programming    language  enforces obeying  various  rules before compilation  of source
+code, thus decreases  a change  to introduce  an  error.
+5.  Page  Object  pattern  encapsulates  a web  page  into object, makes  tests more  readable  [26].
+6.  Page  Fragments   pattern  divides a  web  page  further into reusable components    which  encapsulates  a web
+widget functionality, making   tests more  reusable  and  readable [27].
+
+                                                                                                                 25
+
+
+                                                                                    5. Implemented          tool
+                        7
+Recorder   extension     .
+    We  had   two  main   requirements     on  this screenshots    taking   extension,   which    came   directly
+from  the  analysis   of already   existing   solutions  (see  chapter   3):
+
+    1.  A  tester should   be  able  to conøgure   this  extension  so  it takes screenshots     automatically.
+        A  script  for functional    test should   be  unaware    of such   screenshots   taking    behavior.   It
+        will stay  clean  and   more   readable   (see chapter   3.5 to  see more   background      information
+        for this requirement).     The   conøguration    should  be  done   on a global  level,  in other  words
+        for the  whole   test  suite.
+    2.  The   tester  on the   other  hand   should   be  able to  explicitly  enforce   taking   of  screenshot
+        at any   place in  the  functional   test script.  This  should   be just  an  optional   feature,   used
+        rather  sporadically.
+
+    Second    point  is developed      in all existing   solutions,  to  enhance    readability     we  required
+from  our  solution   to have   implemented      also point   number    one.
+    The   global  conøguration      is done  where   all conøguration      take place   for Arquillian    frame-
+work.  It is in arquillian.xml         øle.
+              Listing  5.1:  Example     of screenshooter    conøguration     in  arquillian.xml
+¡extension        qualifier=”         screenshooter        ”¿
+   ¡property        name=”     takeBeforeTest         ”¿true¡/property¿
+   ¡property        name=”     takeAfterTest         ”¿true¡/property¿
+   ¡property        name=”screenshotType”¿PNG¡/property¿
+¡/extension¿
+
+    In the  example    conøguration      5.1,  you  can  see,  that  screenshots    are  automatically      made
+after two  events:   before   test, which   is eœectively   just after  the  web  application     is loaded   in a
+browser,   and  after  the  test.
+    We   also started   with   an  experimental    feature,  which   is not  fully  available,   and  that   is an
+                                                                                            8
+option  to  take  screenshots    after  every  action  made    by  Selenium    in browser    .
+5.4     Rusheye
+
+We  have   already  described     some   of the Rusheye    features  in  chapter   3.4. Its  important    that   it
+is only  a command      line  tool,  so integration   with   such  a  tool  would   require   either   executing
+
+7.  Arquillian Recorder  is an extension  which among   the other things deønes interfaces for screenshot  taking,
+and video  recording from   tests executions. We  have cooperated  on  deøning  this common    interfaces  as well.
+More  information at https://github.com/arquillian/arquillian-recorder
+8.  See   more    information     about   takeOnEveryAction      at   https://github.com/arquillian/arquillian-
+graphene/tree/master/extension/screenshooter
+
+                                                                                                                26
+
+
+                                                                                      5.  Implemented      tool
+                                                                    9
+its binary,  packaged      in a .jar   øle,  or  calling  its main    method.     That  is not a good   software
+design,  because    it is hardly   extensible,   and   error  prone,  when    there  is a change  introduced  in
+either  of the  integrated     parts.
+    Therefore,   we   decided   to  introduce   an  integration   layer  in Rusheye,    which  would  cooperate
+                                                                                                   10
+with  Arquillian    event   based   system.    It is mostly   realization   of Observer    pattern   .
+    Rusheye    observes    to events   like: StartCrawlingEvent,         or StartParsingEvent,       and   reacts
+according    to it. It  starts  crawling    of  patterns,   and  creates   a test  suite  descriptor  (XML    øle
+which   describes   where    are  the particular    screenshoots    for a particular    functional test stored).
+This  is done   after  ørst   run  only  (see  chapter   4.2.1).  In subsequent     runs  StartParsingEvent
+is øred,  and  Rusheye      starts  actual   visual  comparison,     it compares    patterns   with samples   on
+pixel  to pixel  basis.
+    After   crawling    or   parsing   is  done,   it øres   CrawlingDoneEvent          or  ParsingDoneEvent
+events   respectfully,   so  other  integrated    modules    can  wire   up.
+    In  result, such   event   based    architecture,   makes    a loosely   coupled    system,  which  is easily
+extensible.
+                          Listing   5.2: Example     of StartParsingEvent        observer
+public      void     parse    (@Observes         StartParsingEvent              event)      –
+         //   Initialization             code    ommited
+         parser    . parseFile       ( suiteDescriptor           ,  event    . getFailedTestsCollection           ());
+         parsingDoneEvent            . fire   (new    ParsingDoneEvent            ());
+"
+
+
+5.5     Graphene         visual     testing
+It is a project,  which     has  two  purposes.
+ •      to  integrate   and   control   Rusheye    with   Arquillian;
+
+ •      and   to provide     a way   for reviewing    results  of visual  comparison.
+    For  those  two   purposes,     two  sub-projects    were   created,   and   are described   bellow.
+
+5.5.1   Arquillian      extension
+As  it was  written   previously,    this  extension   is focused   on  controlling   Rusheye,   and  storing or
+retrieving   of created    screenshots.
+    As  listings 5.3  shows,    it wires  up  to Arquillian    life-cycle, as it listens to  AfterSuite    event.
+If it is a ørst  execution     of test  suite,  then  it just  øres  StartCrawlingEvent         event,  which  is
+
+9.  Java  main method    is an entry point  to the program.
+10. Observer  pattern  - http://en.wikipedia.org/wiki/Observer˙pattern
+                                                                                                              27
+
+
+                                                                                      5. Implemented       tool
+observed    by Rusheye.   After    crawling   is done,  it stores  created  suite descriptor,  and   screenshots
+to a Java    Content   Repository      (JCR    - see  chapter  5.6).
+    If it is not  a ørst  run,   it ørstly   downloads     screenshots   and   the suite  descriptor,  and  then
+øres  a StartParsingEvent,           which   is again  observed    by  Rusheye.
+    The   result of  parsing   (XML     øle  describing   what   patterns   and  what   samples  were  diœerent,
+and  a  path   to created   diœs)   are   also uploaded    to a  JCR.
+
+                         Listing    5.3:  AfterSuite   observer    to controll  Rusheye
+        public       void    listenToAfterSuite              (@Observes         AfterSuite        event)     –
+              String      samplesPath          =   scrConf     . get  ().  getRootDir      ().  getAbsolutePath    ();
+
+              if   ( visualTestingConfiguration                    . get  (). isFirstRun      ())    –
+                     crawlEvent         . fire  (new    StartCrawlinglEvent             (samplesPath       ));
+              "  else    –
+                     String      descAndPtrDir           =   serviceLoader         . get  ()
+                                    . onlyOne(DescriptorAndPatternsHandler                        . class  )
+                                    . retrieveDescriptorAndPatterns                    ();
+
+                     startParsingEvent              . fire  (new     StartParsingEvent(
+                                       descAndPtrDir          ,
+                                       samplesPath        ,   failedTestsCollection             . get  ())
+                                        );
+              "
+        "
+    A  communication       between      this extension    and  a JCR    is done  via  JCR   Rest  API.  To  issue
+                                                                              11
+a http  request,   we  are  using    Apache    HttpComponents         project   .
+5.5.2   Web     application       to  view    results
+
+It is a web   application    for  reviewing    for  reviewing   results,  but  also  for an active   changing  of
+the visual   testing  conøguration.
+                                                                                                 12
+    The   application    back-end     is developed    with   use  of Java  Enterprise   Edition     stack. It in-
+                                                                     13                     14
+cludes  using   of technologies     like: Java   Persistence   API      plus  PostgreSQL      for  a persistence
+                                     15                                                                   16
+layer.  Enterprise    Java  Beans        for controllers    code  (Model-Viewer-Controller        pattern    ). It
+11. Apache   HttpComponents     - http://hc.apache.org/
+12. Java  Enterprise Edition  - http://www.oracle.com/technetwork/java/javaee/overview/index.html
+13. JPA  - http://en.wikipedia.org/wiki/Java˙Persistence˙API
+14. PostgreSQL   database  - http://www.postgresql.org/
+15. Enterprise  Java Beans  - http://en.wikipedia.org/wiki/Enterprise˙JavaBeans
+16. Model-Viewer-Controller    - http://en.wikipedia.org/wiki/Model-view-controller
+
+                                                                                                               28
+
+
+                                                                                  5.  Implemented       tool
+                                                            17
+exposes  Java   API   for  RESTful     Services  (JAX-RS      ) endpoints    to communicate      enable  com-
+munication    with   Arquillian     extension   (see chapter   5.5.1),  and   with  its client part   (HTML
+front end)   in a RESTful      way.
+                                                                                18
+    The   application    is  deployed    on  a  WildFly    application    server   . We   chose  this  server,
+because   of its an  open    source   software,  backed   with  huge   community     of users,  and  by  a big
+                        19
+enterprise,  Red   Hat     . Very   important    for us  was  also its fastness   and  availability  in cloud
+environments     (see chapter     6.4).
+    The  front  end  is developed    with  use  of AngularJS,    which  is a MVC    framework    for creating
+                                         20
+a Single  Page   Applications      (SPA    . It is complemented      with  Twitter   Bootstrap    framework,
+to provide   a visually   pleasant   UI.
+    The  design   of particular     screens  are in accordance    with  the  analysis  described   in  section
+4.3. You  can   ønd  screenshots     from  the  application   in the  [DOPLNIT      APPENDIX].
+    For better    convenience,     and  to  verify possibility  to  deploy   application   on  the  cloud, we
+                                                                                          21
+have  deployed    it on   Platform     as a  Service,   OpenShift    by  RedHat    cloud    . Application   is
+available  at  URL:
+http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp.
+Please  see chapter    6.4  for  more  information    about   the deployment     (how   to log in, etc.).
+    Following    øgure  5.2   depicts  possible   use cases  with  the  web   application,  to  give a better
+picture what    can  be  achieved    with  this  application.
+    The   most   important      here  are  Reject    Pattern    and   Reject    Sample    functionalities,  as
+they  allow  a  tester   to  react  on  results.  Reject    Pattern    will  change   in the  storage  for all
+screenshots   the  pattern     with  sample.   This   functionality   is used  when   there  is an  expected
+change  in  the  application,    and  we  want  to  use  the new  sample    as pattern  in subsequent    runs.
+    Reject    sample    is used   when   the results  is either false negative   (in which  case  the  sample
+is just deleted,   or when     there  is a bug   in the  application   under   test, in which   case  a tester
+is supposed    to create   a  bug   report. Created    sample   and  diœ  will serve  as  a good   help when
+describing   the  bug.
+    There   are  planned    extensions   to  this basic  functionality,  described   in section  7.
+
+5.6    Storage      for   images
+As  we  had   to think   wisely    when   developing   UI  for Web    Manager,    to enable   successful  em-
+ploying  of the  tool  among     community     of testers, the  same  we   had  to think  beforehand    about
+storage  for created   images     (screenshots).
+    We  have   these  requirements      for storing  of the  images:
+
+17. JAX-RS   - https://jax-rs-spec.java.net/
+18. WildFly  application  server - http://www.wildfly.org/
+19. Red Hat  - http://www.redhat.com/en
+20. SPA - http://en.wikipedia.org/wiki/Single-page˙application
+21. OpenShift  by RedHat    - https://www.openshift.com/
+
+                                                                                                           29
+
+
+                                                                           5. Implemented       tool
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               Figure  5.2: Use  case diagram  for Web   Manager    web  application.
+
+ •     The   chosen solution has  to provide way  for storing large amount   (hundreds)  of pictures;
+ •     it should  be a scalable  solution;
+
+ •     it should  provide  a solid performance   when   uploading  and  downloading    of stored pic-
+       tures;
+ •     it should  be capable   to ensure  a security  for data, authentication    and  authorization
+       when   accessing pictures;
+ •     it should  be a cloud  friendly solution.
+   We   were  choosing  from  these options,  which  we  choose  by  a careful analysis of patterns:
+                                                              22
+    1. Store  screenshots  as Binary  large objects  (BLOBs     ) in a relational database,   such as
+
+22. BLOB  - http://en.wikipedia.org/wiki/Binary˙large˙object
+
+                                                                                                   30
+
+
+                                                                                    5. Implemented       tool
+        PostgreSQL.
+
+                                                                               23                     24
+    2.  Store  screenshots     in a  øle hosting   service  such as  Dropbox     , or  Google   Drive   . Store
+        just URLs     to  relational   database.
+                                                                         25
+    3.  Store  screenshots     in a Java  Content    Repository   (JCR     ). Store  just URLs    to relational
+        database.
+    The  number      one  option,   has  some  obvious    advantages.   Databases    are  a superior  solution
+where   transactional     integrity   between    the  image   and  metadata     are  important.    Because,   it
+is more  complex     to  manage     integrity  between    database   metadata    and   øle  system  data,  and
+within  context    of a  web   application,   it is diŒcult  to guarantee    that  data  has  been  Æushed   to
+disk on  the  øle  system    [28].
+    However,    the   way   to  store  pictures  in  database   as BLOBs,     has  some   disadvantages    too:
+database   storage    is usually   more  expensive    than  øle system   storage;   database   access  can  not
+be accelerated    for  example    by   conøguring    a web   server to use  system    call to asynchronously
+send  a øle  directly   a network    interface,  as  it can  be done  for øle  system    access  [28].
+    Option   number     two   seems   to be a  viable  solution  for smaller  test  suites. It does  not suœer
+from  the  problems     which   database   does.   In a later stage  of development     of our  tool we  would
+like to provide   this  option   to users  of our  tool. For  now, we  would   like to  provide  more  Æexible
+solution,  which    does  not   vendor   lock in  to some   providers.  Which    is  free of charge  when   big
+storage  space   is required.
+    Therefore,    we   chose  option   number     three  as pilot  way  for  storing  screenshots.   JCR   is a
+speciøcation,    and   also  a  Java  API,   thus  a  best  øt for our  Java   based   application.  We   liked
+what  kind   of data   and   access   patterns  JCR    are  very good   at handling    [29]:
+
+ •      Hierarchical     data;
+ •      øles;
+ •      navigation-based       access;
+
+ •      Æexible   data   structure;
+ •      and  transactions,     versioning,   locking.
+
+    Data   we   need   to  store  is naturally   hierarchical.   See  øgure   5.3 to  see  in what   hierarchy
+we  need   to store   generated     screenshots,    XML    suite descriptor,   and   XML     result descriptor
+(conøguration     øles  for  Rusheye    module).
+
+23. Dropbox  - available  at https://www.dropbox.com/
+24. Google  Drive  - available at https://www.google.com/drive/
+25. JCR  - speciøcation  available at https://jcp.org/en/jsr/detail?id=283
+                                                                                                             31
+
+
+                                                                                 5.  Implemented        tool
+   JCR    are good   at  storing   øles,  this  is exactly what   we  are looking  for,  as pictures  will be
+the main   artifacts  which    we  need   to persist.
+   Navigation     based   access   is  often  used   for application   dealing with  hierarchical    data.  In
+our application   we  need    to work   often  only  with  subset  of the hierarchy  - for  example   display
+triplet pattern,  sample,    and   diœ  for  a particular  test  suite run.
+   We   wanted    to  provide   Æexible    data  structure.   By  this tool stays  extensible   to other  ap-
+proaches  and   new   features   for  later  development    (see  section 7).
+   Transactions,     versioning,    and   locking   are sweet  points  which  will be  used   in later devel-
+                                                                                                26
+opment.   They   are  important,      as  we  want   our  solution  to be  scalable (scale   out   ), and  we
+want  to  allow  cooperation     of  testers  on  a  particular  test suite (their  actions  on  results  will
+need  to be  transactional).
+                                                          27
+   We   chose   JCR   implementation        ModeShape       . There   are number   of  advantages    we  saw,
+when   comparing     this  implementation        with  reference   implementation    of  JCR,   the   Apache
+            28
+Jackrabbit    : The   development       is backed   by  Red   Hat,  the same  company      we chose   the ap-
+plication server   from   (see  5.5.2).  They   cooperate   well  with  each other, and   there  is plenty  of
+documentation     on  how    to integrate   those   two  systems.  ModeShape     also by  default  exposes   a
+RESTful    API  for  accessing   and   modifying     the content  of the repository.  We   are utilizing  this
+feature  in the  Web    Manager     (see   5.5.2),  when  screenshots   we  want  to  display  in  the  client
+browser,  do not  have   to  be ørstly   streamed    to the WildFly   application  server,  and  then  served
+to the  client, but  they    are directly   streamed    to the  client browser,  as  it knows   the  URL    of
+the screenshot.
+                                                                                      29
+   For  the  future  development       we  like its support  for WebDAV     protocol    , and  possibility  to
+cluster multiple   ModeShape       instances.
+
+
+
+
+
+
+
+
+
+
+
+
+26. Horizontal scaling (scale out) - http://en.wikipedia.org/wiki/Scalability
+27. JBoss ModeShape    by  Red  Hat  - http://modeshape.jboss.org
+28. Apache Jackrabbit   - http://jackrabbit.apache.org
+29. WebDAV   protocol  - http://en.wikipedia.org/wiki/WebDAV
+                                                                                                           32
+
+
+                                                 5. Implemented  tool
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 5.3: The hierarchy of nodes in our JCR deployment.
+
+
+
+                                                                   33
+
+
+6   Deployment              of   tool    and    process
+
+After  implementing      the  tool,  to  prove  or disprove   hypothesis    from  section   4.1  we   need   to
+deploy  the   tool  and   the  process   (see section  4.2) on  a  real application.    Following    chapters
+describe  such   deployment,     real world  use  cases and   best practices   when   using   our  tool.
+    To have   a better  picture,  in what   systems  and  environments,    each  part  of the  visual  testing
+will be executed,    following   sequence   diagram    was  created:
+    There  are  omitted    processes   which  are not  important   for visual testing,  or  processes   which
+describes  how   data   is transported    into the Web   Manager,    already   described    in section   5.6.
+
+6.1     Actual     visual    testing
+                                                  1                     2
+We  chose  RichFaces     Showcase    application   , and its test suite   to try our  tool  and  process   on.
+
+6.2     Results
+
+6.3     Usage     with    CI
+6.4     Cloud     ready
+
+Improvement     of  eœectiveness   of a quality  assurance   team  was  our primary    goal, when    develop-
+ing the tool.  This  include   easy  deployment   of the tool  either in the organization    infrastructure,
+or in a  cloud  environment.      Particularly  its web   par, the  Web   manager    for  reviewing    results
+(see 5.5.2).
+
+
+
+
+
+
+
+
+
+
+1.  RichFaces  Showcase    - Screenshot  from  application is shown  by  øgure 2.1. Source   code  is available
+at https://github.com/richfaces/richfaces/tree/master/examples/showcase.             Application  is hosted  at
+http://showcase.richfaces.org/
+2.  Test suite is written  in Arquillian Graphene  framework,  and  the source code  is available in the  same
+repository as the application itself.
+
+                                                                                                            34
+
+
+                                  6. Deployment     of tool and process
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 6.1: Whole visual testing solution sequence diagram.
+
+
+
+                                                                     35
+
+
+7 Possible extensions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              36
+
+
+8   Conclusion
+
+What  I developed, What I improved, What can be better, Possible ways of extensions: Open-
+shift cartridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                         37
+
+
+A Appendix     A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     Figure A.1: GUI mockup for result viewer web application - front page.
+
+
+
+                                                                            38
+
+
+                                                                      A.  Appendix   A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure A.2: GUI mockup for result viewer web application - particular test suite run.
+
+
+
+
+                                                                                     39
+
+
+                                                                      A. Appendix   A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure A.3: GUI mockup for result viewer web application - actual comparison results.
+
+
+
+
+                                                                                    40
+
+
+B  Appendix         B
+
+Co som ja spravil, odkazy na JIRA issues, git repozitare, etc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   41
+
+
+C   Appendix      C
+
+Screenshoty z web manazera.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     42
+
+
+D  Appendix      D
+
+CD attachment popis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              43
+
+
+E   Appendix       E
+
+Tutorial ako deploynut web manazera na OpenShift.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        44
+
+
+F  Appendix       F
+
+Ako spustit samotne vizualne testovanie.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 45
+
+
+Bibliography
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                       46
+
+
