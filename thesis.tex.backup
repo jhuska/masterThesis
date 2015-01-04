@@ -130,28 +130,28 @@ assurance of quality.
 In the testing process for an application with a user interface, one of the last steps is to ensure that all 
 of the promised functionality is delivered, and the design of the user interface is not broken.
 
-Many software developing companies are ensure this by manually checking all possible use cases provided by their developed software's UI. This tedious activity is very time consuming and error prone,
-thus also quite expensive.
+Many software developing companies are ensure this by manually checking all possible use cases provided by their developed software's UI. 
+This tedious activity is very time consuming and error prone, thus also quite expensive.
 
 The focus of this thesis is to mitigate the need for manual testing of user interfaces by introducing a tool
 which would automate the major part of it. This would enable the so called automated visual testing. 
 The goal of such a tool is to increase the effectiveness of the quality assurance team.
 
-The thesis consists of five main parts: the first one being a broad introduction to automated visual testing - 
+The thesis consists of five main parts: the first one being a broad introduction to automated visual testing
 and an explanation of the  a motivation behind it.
 
 The second part analyses the already existing solutions, summarizes their drawbacks as well as advantages.
 
-The third part formulates the hypothesis - which we are trying to prove or disprove by deploying the tool on
-a particular web application. It also introduces a process, which is inevitable to adhere in order to
-be effective with the created tool.
+The third part formulates the hypothesis which we are trying to prove or disprove by deploying the tool on
+a particular web application. It also introduces a process which is necessary to adhere to in order for
+the created tool to be effective.
 
-Fourth part describes implementation details of developed tool, list of components we reused
-or developed to obtain a final result, as well as a reasoning why we choose particular component 
+The fourth part describes the implementation details of the developed tool, provides a list of components we reused
+or developed to obtain the final result, as well as a justification of why we chose a particular component 
 to integrate with.
 
-The last part deals with particular deployment of the tool on a real web application, its example usage
-within Continuous Integration systems, and within cloud environment.
+The last part deals with the particular deployment of the tool on a real web application, its example usage
+within Continuous Integration systems, and within the cloud environment.
 
 \chapter{Definition of terms}
 Here we would like to define some of the important terms used in the whole thesis.
@@ -172,55 +172,55 @@ Here we would like to define some of the important terms used in the whole thesi
 
 \chapter{Visual testing of software}    
     Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
-    It can be done either manually by actual using of an application, or automatically by executing testing scripts.
+    It can be done either manually by the actual use of an application, or automatically by executing testing scripts.
     
-    If the application under test has also a graphical user interface (GUI), then one has to verify whether it is not broken. 
-    Visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing a graphical state of the application under test.
+    If the application under test also has a graphical user interface (GUI), then one has to verify whether it is not broken. 
+    The visual testing of an application is an effort to find out its non-functional errors, which expose themselves by changing the graphical state of the application under test.
     
-    Typical example can be a web application, which GUI is programmed usually with combination of HyperText Markup Language (HTML) and Cascading Style Sheets (CSS). 
-    HTML is often used to define a content of the web application (such as page contains table, pictures, etc.), while CSS defines a structure and appearance of the 
+    A typical example can be a web application in which GUI is programmed usually with a combination of HyperText Markup Language (HTML) and Cascading Style Sheets (CSS). 
+    HTML is often used to define the content of the web application (such as page contains table, pictures, etc.), while CSS defines the structure and appearance of the 
     web application (such as color of the font, absolute positioning of web page elements, and so on).
     
     The resulting web application is a set of rules (CSS and HTML) applied to a static content (e.g. pictures, videos, text). The combination of rules is crucial, and a minor change
-    can completely change the visual state of the web application. Such changes are very difficult, sometimes even not possible to find out by functional tests of the application. 
-    It is because functional tests verify a desired functionality of the web application, and do not consider web page characteristics such as red color of heading, 
+    can completely change the visual state of the web application. Such changes are very difficult, sometimes even impossible to discover by automated functional testing of the application. 
+    It is because functional tests verify the desired functionality of the web application, and disregard web page characteristics such as red color of heading, 
     space between two paragraphs, and similar.
     
-    That is why a visual testing has to take a place. Again, it is done either manually, when a tester by working with an application, is going through all of its use cases, and verifies, that
-    the application has not broken visually. Or automatically, by executing scripts which assert a visual state of an application.
+    That is why a visual testing has to take place. Again, it is done either manually, when a tester goes through all of web application's use cases, and verifies that
+    the application has not broken visually. Or it is performed automatically, by executing scripts which assert the visual state of an application.
     
-    In this thesis we are going to focus on the visual testing of web applications only. As we mentioned above, the way how web page looks like is mainly determined by CSS script.
+    In this thesis we are going to focus on the visual testing of web applications only. As we mentioned above, the way a web page looks like is mainly determined by CSS script.
     There are two ways of automated testing used:
     \begin{enumerate}
       \item asserting the CSS script
-      \item or comparing screen captures (also known as screenshots) of new and older versions of the application.
+      \item comparing screen captures (also known as screenshots) of new and older versions of the application.
     \end{enumerate}
     
-    In this thesis we are going to work with comparing of screenshots only, as it is a method, which more likely reveals a bug
-    in a visual state of an application under test.
+    In this thesis we are going to work with comparing screenshots only, as it is a method which is more likely to reveal a bug
+    in the visual state of an application under test.
      
   \section{Visual testing in release testing process}
   \label{sec:visual-testing-in-release-process}
-  Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process. 
-  Such as Waterfall [2], or Scrum [3].
+  Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process
+  such as Waterfall [2], or Scrum [3].
   
-  Testing of software has an immense role in this release process. While automated tests are often executed continuously, as they are quicker to run than manual tests, 
+  Testing of software has an immense role in this release process. Automated tests are often executed continuously, as they are quicker to run than manual tests, 
   which are carried out at a specific stage of the release process.
   
   For example in RichFaces\footnote{RichFaces is a component based library for Java Server Faces, owned and developed by Red Hat} Quality Engineering 
-  team\footnote{Quality Engineering team is among the other things responsible for assuring a quality of a product} visual testing was done manually, before releasing 
-  the particular version of RichFaces library to a community. In practice it involves building all example applications with new RichFaces libraries, and to go 
-  through its use cases with a particular set of web browsers. 
+  team\footnote{Quality Engineering team, is among other things, responsible for assuring the quality of a product} visual testing was done manually, before releasing 
+  the particular version of RichFaces library to a community. In practice it involves building all example applications with new RichFaces libraries, and going
+  through the use cases with a particular set of web browsers. 
   
-  To be more specific, consider please a web page with a chart elements showing a sector composition of gross domestic product in the USA (as figure \ref{fig:richfaces_chart} demonstrates).
-  To verify its visual state is not broken, would involve e.g.:
+  To be more specific, consider a web page with chart elements showing a sector composition of gross domestic product in the USA (as figure \ref{fig:richfaces_chart} demonstrates).
+  To verify its visual state is not broken, it would involve e.g.:
   \begin{enumerate}
    \item Checking the size, overflowing and transparency of all elements in charts.
    \item Checking colors, margins between bars.
-   \item Putting a mouse cursor over a specific places in the chart, and verifying whether a popup with more detailed info is rendered in a correct place.
-   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera}, 
+   \item Putting a mouse cursor over specific places in the chart and verifying whether a popup with more detailed info is rendered in the correct place.
+   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera} 
    and with all supported application containers\footnote{Application containers are special programs 
-   dedicated to provide a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
+   dedicated to providing a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
   \end{enumerate}
   
   \begin{figure*}[!htb]
@@ -234,94 +234,94 @@ Here we would like to define some of the important terms used in the whole thesi
   
   \section{Need for automation}
   The chapter \ref{sec:visual-testing-in-release-process} tried to outline how tedious and error prone might manual visual testing be. From our experience in the RichFaces QE team, any activity
-  which needs to be repeated, and does not challenge tester's intellect enough, become a mundane activity. The more one repeats the mundane activity, the more likely an mistake is introduced:
+  which needs to be repeated, and does not challenge the tester's intellect enough, becomes a mundane activity. The more one repeats the mundane activity, the more likely a mistake is introduced:
   one forgets to try some use cases of an application, overlooks some minor errors, etc.
   
-  Automated visual testing addresses this shortcomings, as it would unburden human resources from mundane activities such as manual testing, and would allow spending their
-  time on intellectually more demanding problems. However, it introduces another kind of challenges, and needs to be implemented wisely. Following are minimal requirements 
+  Automated visual testing addresses these shortcomings, as it would unburden human resources from mundane activities such as manual testing, and would allow spending their
+  time on more intellectually demanding problems. However, it introduces other kinds of challenges and needs to be implemented wisely. The following are minimal requirements 
   for a successful deployment of an automated visual testing.
       
   \section{Requirements for automation}
   \label{sec:requirementsForAutomation}
-  An overall cost of the automation has to be taken into consideration. It is necessary to take into account higher initial cost of automation, and consequences it brings: 
-  such as increased time to process relatively huge results of testing, cost of test suite maintenance.
+  The overall cost of the automation has to be taken into consideration. It is necessary to take into account higher initial cost of automation, and the consequences it brings, 
+  such as an increased time to process relatively huge results of testing and the cost of test suite maintenance.
   
-  Therefore, to foster an effectiveness in quality assurance teams, while keeping the cost of automation reasonable low, automated visual testing would require:
+  Therefore, to foster effectiveness in quality assurance teams while keeping the cost of automation reasonably low, automated visual testing would require:
   \begin{enumerate}
-   \item A low cost of a test suite maintenance;
+   \item A low cost of the test suite maintenance;
    \item a low percentage of false negative or false positive tests results;
    \item a reasonable time to execute the test suite;
    \item a concise yet useful test suite output;
-   \item a support for Continuous Integration systems\footnote{Continuous Integration (CI) system is software to facilitate a practice of CI, which in short is about merging 
+   \item a support for Continuous Integration systems\footnote{Continuous Integration (CI) system is a software to facilitate a practice of CI, which in short is about merging 
 	  all developer copies with a shared mainline several times a day [5].}.
   \end{enumerate}
   
     \subsection{Low cost of test suite maintenance}
-    A test suite needs to reflect a development of an application under test. Therefore, with each change in the application, it is usual that the test suite has to be changed as well.
-    Making a change in the test suite can often introduce a bug, and cause false negative or false positive tests results.
+    A test suite needs to reflect the development of an application under test. Therefore, with each change in the application, the test suite usually has to be changed as well.
+    Making a change in the test suite can often introduce a bug and cause false negative or false positive tests results.
     
-    To keep this cost as low as possible, the test suite script has to be readable and meaningful, so when the change is about to be introduced, it is clear where and how it should be done.
+    To keep this cost as low as possible, the test suite script has to be readable and meaningful, so that when the change is about to be introduced, it is clear where and how it should be done.
     
-    A test framework in which the test suite is developed should provide high enough abstraction. That would enable better re-usability for various parts of the test suite, 
+    A test framework in which the test suite is developed should provide high enough abstraction. This would enable better re-usability for various parts of the test suite, 
     while lowering the overall cost of maintenance.
     
     Specifically for visual testing, when done by comparing screen captures, it is very important how well a repository of screen captures is maintainable. Secondly, 
-    how reference (those correct ones, other screen captures will be compared with) screen captures are made.
+    how reference captures (those correct ones, other screen captures will be compared with) are made.
     
     \subsection{Low percentage of false negative or false positive results}
-    False negative test results incorrectly indicate a bug in an application under test, while it is a bug in the test suite itself. They are unwanted phenomenon as they take time to process
+    False negative test results incorrectly indicate a bug in an application under test, while it is a bug in the test suite itself. They are an unwanted phenomenon as they take time to process
     and assess correctly.
     
-    False positive tests results hide actual bugs in an application. They provide an incorrect feedback by showing the tests as passing, even when there is a bug in the application.
+    False positive tests results hide actual bugs in an application. They provide incorrect feedback by showing the tests as passing, even when there is a bug in the application.
     
-    Specifically for visual testing, when it is done by comparison of screen captures, it is very easily to be broken by small changes on a page. For example if the page outputs a current
-    date, then it would break with every different date. There has to exist techniques, which would prevent these situations.
+    Specifically for visual testing, when it is done by comparison of screen captures, it is very easily broken by small changes on a page. For example, if the page outputs a current
+    date, then it breaks with any date which is different. There have to exist techniques which would prevent these situations.
     
     \subsection{Reasonable time to execute a test suite}
-    Reasonable time is quite subjective matter, but in general, it depends on how many times e.g. per day one needs to run whole test suite. Nowadays trend is a Continuous Integration,
-    when a developer or a tester commits changes of an application several times per day to a shared source code mainline. Each such commit should trigger the test suite, which verifies 
-    whether the change did not introduced an error to the application.
+    A reasonable time is quite a subjective matter, but in general, it depends on how many times e.g. per day one needs to run the whole test suite. Nowadays, the trend is a Continuous Integration,
+    in which a developer or a tester commits changes of an application several times per day to a shared source code mainline. Each such commit should trigger the test suite, which verifies 
+    whether the change did not introduce an error to the application.
     
     According to creators of Continuous Integration practice, the whole point of CI is to provide a rapid feedback. A reasonable time for them is 10 minutes. If the build
-    takes more time, every minute less is a huge improvement (considering a developer/tester runs test suite several times a day).
+    takes more time, every minute less is a huge improvement (considering that a developer/tester runs the test suite several times a day).
     
     \subsection{Concise yet useful test suite output}
-    One of drawbacks of automated testing is its ability to produce huge amount of logs, test results etc. The output therefore needs to be as concise as possible, while still providing
-    an useful information. A tester needs to be able to quickly recognize where the issue might be. The best situation would be if the tester does not need to run the test again in order
+    One of the drawbacks of automated testing is its ability to produce a huge amount of logs, test results etc. The output therefore needs to be as concise as possible, while still providing
+    useful information. A tester needs to be able to quickly recognize where the issue might be. The best situation would be if the tester did not need to run the test again in order
     to spot the issue. The output should give him a clear message where the issue is.
     
-    For visual testing specifically, this can be achieved by providing a tester with screen captures together with difference of old and new version.
+    For visual testing specifically, this can be achieved by providing a tester with screen captures together with the difference between the old version and the new one.
     
     \subsection{Support for Continuous Integration systems}
-    This is quite easily to be achieved, but still, a developer of a tool for visual testing should have this in mind beforehand. Todays CI systems support variety of build systems, for
-    various platforms, and languages. For example Jenkins supports build systems like Maven or Gradle, but it can run also shell scripts.
+    This is quite easy to achieve, but still, a developer of a tool for visual testing should have this in mind beforehand. Current CI systems support a variety of build systems, for
+    various platforms and languages. For example, Jenkins supports build systems like Maven or Gradle, but it can also run shell scripts.
     
     
 \chapter{Analysis of existing solutions}
 \label{chap:analysis}
 As we introduced in \ref{sec:requirementsForAutomation}, there are many aspects which need to be taken into consideration when automating visual
-testing. Following analysis is going to compare existing solutions to automated testing with those requirements in mind, while introducing
+testing. The following analysis is going to compare existing solutions to automated testing with those requirements in mind, while introducing
 different approaches to visual testing.
 
-The representative list of tools for comparison was made also according to an ability to be used in enterprise context. In an enterprise company, there
-is a stress on stability and reliability of employed solutions. It is quite vague requirement, and it is usually hard to find out which tools
+The representative list of tools for comparison was made also according to the ability to be used in enterprise context. In an enterprise company, there
+is a stress on stability and reliability of the employed solutions. It is quite a vague requirement, and it is usually hard to determine which tools
 are a good fit for enterprise companies, however, some indicators, which we used as well, might be helpful:
 \begin{itemize}
  \item Is a project actively developed? When was the last release of the project, or how old is the last commit to a source code mainline?
- \item How many opened issues the project has? When was the last activity \\* with those issues ?
- \item What is the quality of the source code? Is it well structured? Does it employ best development practices?
+ \item How many opened issues does the project have? When was the last activity \\* with those issues ?
+ \item What is the quality of the source code? Is it well structured? Does it employ the best development practices?
  \item Does the project have a user forum? How active are the users?
  \item Is a big enterprise company behind the solution, or otherwise sponsoring it ?
  \item What are the references if the project is commercialized ?
 \end{itemize}
 
-For each tool in following sections we are going to show an example usage and its main drawbacks together with some basic description.
+For each tool in the following sections we are going to show an example usage and its main drawbacks together with some basic description.
   
   \section{Mogo}
-  Mogo [6] approach to visual testing can be in short described like: 
+  Mogo [6] approach to visual testing can be in short described as: 
   \begin{enumerate}
-   \item One provides set of URLs of an application under test to a cloud based system.
-   \item Application URLs are loaded in various browsers, detection of broken links is done.
+   \item Set of URLs of an application under test is provided to a cloud based system.
+   \item Application URLs are loaded into various browsers, detection of broken links is done.
    \item Screenshots are made and are compared with older screenshots from the same URL to avoid CSS regressions.
   \end{enumerate}
   
@@ -329,40 +329,40 @@ For each tool in following sections we are going to show an example usage and it
   
   \subsection{Mogo drawbacks}
   
-  Drawbacks of this approach are evident when testing dynamic pages, which content is changed easily. Applications which provide rich interaction options to an end user, and which state
-  changes by interacting with various web components (calendar widget, table with sorting mechanism etc.), require more subtle way of configuring what actions need to be done before the
+  The drawbacks of this approach are evident when testing dynamic pages, whose content is easy to change. Applications which provide rich interaction options to the end user, and which state
+  changes by interacting with various web components (calendar widget, table with sorting mechanism etc.), require a more subtle way of configuring what actions need to be done before the
   testing itself. Mogo is suitable for testing static web applications, not modern AJAX enabled applications full of CSS transitions.
   
-  Above mentioned drawbacks might lead to a bigger number of false negative test results when used with real data (any change, e.g. showing actual date may break testing), or to a bigger 
-  number of false positive tests results when such a tool is used to test mocked data \footnote{Mocked data is made up data for purpose of testing, so it is consistent and does not 
+  The above mentioned drawbacks might lead to a bigger number of false negative test results when used with real data (any change, e.g. showing actual date may break testing), or to a bigger 
+  number of false positive test results when such a tool is used to test mocked data \footnote{Mocked data is data made up for the purpose of testing, so it is consistent and does not 
   change over time}.
   
   \section{BBC Wraith}
-  Wraith is a screenshot comparison tool, created by developers at BBC News [7]. Their approach to visual testing can be described like:
+  Wraith is a screenshot comparison tool created by developers at BBC News [7]. Their approach to visual testing can be described as:
   \begin{enumerate}
    \item Take screenshots of two versions of web application by scripting either PhantomJS \ref{subsec:phantomJS}, or SlimerJS\footnote{SlimerJS is 
    very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]} by another JavaScript framework called 
    CasperJS \ref{subsec:casperJS} [20].
-   \item One version is the one currently developed (which run on localhost\footnote{In computer networking, \texttt{localhost} means this computer. [11]}), and the other one is a live site.
-   \item Once screenshots of web page from these two different environments are captured a command line tool \texttt{imagemagic} is executed to compare screenshots.
-   \item Any difference is marked with blue color in a created picture, which is the result of comparing two pictures (It can be seen at Figure \ref{fig:bbcWraithDiff}).
-   \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen at Figure \ref{fig:bbcGallery}).
+   \item One version is the one currently developed (which runs on localhost\footnote{In computer networking, \texttt{localhost} means this computer. [11]}), and the other one is a live site.
+   \item Once screenshots of web page from these two different environments are captured, a command line tool \texttt{imagemagic} is executed to compare screenshots.
+   \item Any difference is marked with blue color in the created picture, which is the result of comparing two pictures (It can be seen in Figure \ref{fig:bbcWraithDiff}).
+   \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen in Figure \ref{fig:bbcGallery}).
   \end{enumerate}
   
-  To instruct BBC Wraith tool to take screenshots from the web application, one has to firstly script PhantomJS or SlimerJS to interact with the page, and secondly, creates a 
-  configuration file, which will tell the PhantomJS instance which URLs need to be loaded and tested. PhantomJS script is one source of distrust to this tool, and therefore is
-  introduced furthermore.
+  To instruct the BBC Wraith tool to take screenshots from the web application, one has to firstly script PhantomJS or SlimerJS to interact with the page, and secondly, create a 
+  configuration file, which will tell the PhantomJS instance which URLs need to be loaded and tested. PhantomJS script is one source of distrust for this tool, and therefore is
+  introduced further.
   
     \subsection{PhantomJS}
     \label{subsec:phantomJS}
-    PhantomJS [8] is stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
+    PhantomJS [8] is a stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
     WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
-    interacted with by using of its JavaScript API.
+    interacted with by using its JavaScript API.
     
-    For the sake of simplicity we can say that it is a browser which does not make any graphical output, which makes testing with such a engine a bit faster and less computer resources 
+    For the sake of simplicity we can say that it is a browser which does not make any graphical output, which makes testing with such an engine a bit faster and less computer resources 
     demanding.
     
-    One can instruct PhantomJS to take a screenshot of a web page with following script:
+    One can instruct PhantomJS to take a screenshot of a web page with the following script:
   
     \begin{verbatim}
       var page = require('webpage').create();
@@ -383,23 +383,23 @@ For each tool in following sections we are going to show an example usage and it
     When executing such a script it will effectively load \texttt{http://google.com/} web page, waits 3000 milliseconds, and after that, creates a screenshot to the file \texttt{google.png}.
     
     In most environments it will be sufficient to wait those 3000 milliseconds in order to have the \texttt{www.google.com} fully loaded. However, in some resource limited environments, 
-    such as virtual machines\footnote{Virtual machines are created to act as real computer systems, run on top of a real hardware}, it does not have to be enough. 
-    It will result in massive number of false negative tests. There is a need for more deterministic way of finding out whether the page was loaded fully in given time, and 
+    such as virtual machines\footnote{Virtual machines are created to act as real computer systems, run on top of a real hardware}, it is not necessarily enough. 
+    It will result in massive number of false negative tests. There is a need for a more deterministic way of finding out whether the page was loaded fully at a given time and 
     taking of the screenshots itself can take place.
     
-    Another problem we noted in the previous script, is its readability. It is written in a too low level way (one has to control HTTP status when loading a page). Secondly, there is a need
-    to explicitly call \texttt{page.render('google.png');} in order to take a screenshot. Script which would test a complex web application would be full of such calls. Together with poor
-    way of naming created screenshots (a user has to choose name wisely), it might lead to problems when maintaining such a test suite.
+    Another problem we noted in the previous script is its readability. It is written in a too low level way (one has to control HTTP status when loading a page). Secondly, there is a need
+    to explicitly call \texttt{page.render('google.png');} in order to take a screenshot. Script which would test a complex web application would be full of such calls. Together with a poor
+    choice of naming created screenshots (a user has to choose a name wisely), it might lead to problems when maintaining such a test suite.
     
-    PhantomJS API is wrapped by CasperJS, which is furthermore described below.
+    PhantomJS API is wrapped by CasperJS, which is further described below.
     
     \subsection{CasperJS}
     \label{subsec:casperJS}
-    CasperJS is navigation scripting and testing utility written in JavaScript for the PhantomJS and SlimerJS headless browsers. It eases the process of defining a full navigation scenario 
+    CasperJS is a navigation scripting and testing utility written in JavaScript for the PhantomJS and SlimerJS headless browsers. It eases the process of defining a full navigation scenario 
     and provides useful high-level functions for doing common tasks [20].
     
-    Following code snippet shows a simple navigation on Google search web page. It will load \textit{http://google.com} in a browser session, 
-    will type into the query input string \textit{MUNI}, and will submit it.
+    The following code snippet shows a simple navigation on a Google search web page. It will load \textit{http://google.com} in a browser session, 
+    type into the query input string \textit{MUNI}, and submit it.
     
     \begin{verbatim}
     casper.start('http://google.com/', function() {
@@ -413,7 +413,7 @@ For each tool in following sections we are going to show an example usage and it
     \end{verbatim}
     
     The problem with this script, which we identified, is its low-level abstraction of the browser interactions. It makes tests less readable, and thus more error prone when a change
-    is needed to be introduced.
+    needs to be introduced.
     
     \begin{figure*}[!htb]
     \begin{center}
@@ -435,18 +435,18 @@ For each tool in following sections we are going to show an example usage and it
   \end{figure*}
 
     \subsection{BBC Wraith drawbacks}
-    Two of the drawback were described in the previous sections, \ref{subsec:phantomJS} and \ref{subsec:casperJS}.
+    Two of the drawbacks were described in the previous sections, \ref{subsec:phantomJS} and \ref{subsec:casperJS}.
     
-    Another problem which might occur when testing with BBC Wraith, is cross browser compatibility. As it supports only PhantomJS, and therefore, one can not assure that the page will be 
-    looking the same in all major browsers. The incompatibility comes from the fact, that browsers interpret CSS rules differently, and because they have different JavaScript engines. 
-    Thus for example web page might look differently in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not catch this issues.
+    Another problem which might occur when testing with BBC Wraith is cross browser compatibility. As it supports only PhantomJS, one cannot assure that the page will be 
+    looking the same in all major browsers. The incompatibility comes from the fact that browsers interpret CSS rules differently, and because they have different JavaScript engines. 
+    Thus for example, a web page might look different in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not register these issues.
 
   \section{Facebook Huxley}
-  Another visual testing tool [15], supported by a big company Facebook, Inc. [14], uses similar approach in terms of comparing taken screenshots. The process of taking them, and the process
-  of reviewing results is different though.
+  Another visual testing tool [15], supported by Facebook, Inc. [14], uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
+  of reviewing results are different, though.
   
   \begin{enumerate}
-   \item One creates a script which would instruct Huxley tool, what web pages screenshots should be taken from. Such a script might look like:
+   \item One creates a script which would instruct Huxley tool, which web pages screenshots should be taken from. Such a script might look like:
   
     \begin{verbatim}
       [test-page1]
@@ -459,72 +459,72 @@ For each tool in following sections we are going to show an example usage and it
       url=http://localhost:8000/page3.html
     \end{verbatim}
     
-    \item One runs Huxley in the Record mode. That is the mode when Huxley loads the pages automatically in a fresh browser session, and a tester by hitting Enter keyboard button instructs 
-    Huxley to take a screenshot. Screenshots are stored in a folder with test name (one given in the square brackets in the example above), together with a 
+    \item One runs Huxley in the Record mode. This is the mode where Huxley loads the pages automatically in a fresh browser session, and a tester by hitting the Enter key instructs 
+    Huxley to take a screenshot. Screenshots are stored in a folder with a test name (one given in the square brackets in the example above), together with a 
     JSON\footnote{JSON stands for JavaScript Object Notation, a standard format that uses human readable format to transmit data objects [16]} file describing mainly how long should 
     Huxley wait, when doing visual comparison, to have a tested web page fully loaded. Time is measured during this record mode.
     
-    \item To start visual testing, one has to run Huxley in the Playback mode. Huxley will start fresh browser session, and will playback loading of the pages, with waiting for the pages
+    \item To start visual testing, one has to run Huxley in the Playback mode. Huxley will start a fresh browser session, and will playback loading of the pages, with waiting for the pages
     to be fully loaded.
     
     \item When there is a change in an application, Huxley will log a warning, and takes a new screenshot automatically. In continuous integration environments, one can instruct Huxley
     to finish with error, in case screenshots are different. In that case, one can run Huxley again with an option to take new screenshots (if the change is desired, and is not an error).
    \end{enumerate}
     
-   Main drawback of Facebook Huxley we can see, is similar to BBC Wraith, and that is its non deterministic approach to waiting for a fully loaded web page. It is again a fixed amount of time,
-   which can be different from environment to environment. The time to wait can be configured, however, it is still quite error prone, as for first visual testing run
-   e.g 4 seconds can be would be enough, and for another run would not.
+   The main drawback of Facebook Huxley we can see is similar to BBC Wraith and that is its non-deterministic approach to waiting for a fully loaded web page. It is again a fixed amount of time,
+   which can be different from environment to environment. The waiting time can be configured, however, it is still quite error prone, as for the first visual testing run
+   4 seconds would be enough, and for another run would not.
     
-   Secondly it lacks a proper way of viewing results of comparisons, leaving with only one option to check the command line output, together with manual opening of the screenshots. This would degrade
-   cooperation among various QA team members, and it is harder to deploy in a software as a service cloud solutions\footnote{Software as a service is on demand software, centrally hosted, 
-   accessed typically by using a thin client via web browser [17].}, where such a cooperation might take a place.
+   Secondly, it lacks a proper way of viewing results of comparisons, leaving only one option to check the command line output, together with manual opening of the screenshots. This would degrade
+   cooperation among various QA team members, and it is harder to deploy in a software as a service cloud solution\footnote{Software as a service is on demand software, centrally hosted, 
+   accessed typically by using a thin client via web browser [17].}, where such a cooperation might take place.
 
   \section{Rusheye}
   \label{sec:rusheye}
-  Rusheye [18] is a command line tool, which is focused on automated bulk or on-the-fly inspecting of browser screenshots and comparison with predefined image suite. It enables automated
+  Rusheye [18] is a command line tool, which is focused on automated bulk or on-the-fly inspection of browser screenshots and comparison with a predefined image suite. It enables automated
   visual testing when used together with Selenium 1 project [19].
   
-  The process has subtle differences in comparison with previous solutions. It consists from these steps:
+  The process has subtle differences in comparison with the previous solutions. It consists of these steps:
   
   \begin{enumerate}
    \item Screenshots are generated, for example by Selenium 1 tool, while functional tests of web application are executed.
-   \item First screenshots are claimed to be correct (are controlled manually), they are called patterns.
-   \item After a change in web application under test, another run of Selenium 1 tests generates new screenshots. They are called samples.
-   \item Patterns and samples are compared, its visual difference is created, and result is saved in an XML file.
+   \item First screenshots are claimed to be correct (are controlled manually). They are called patterns.
+   \item After a change the web application under test, another run of Selenium 1 tests generates new screenshots. They are called samples.
+   \item Patterns and samples are compared, their visual difference is created, and the result is saved in an XML file.
    \item The results can be viewed in a desktop application, Rusheye manager [22].
   \end{enumerate}
   
-  Rusheye has one very important feature, which another tools lack. It is a possibility to add masks on particular parts of the screenshots. Those parts are ignored when two screenshots are
-  compared. It is a huge improvement to protect from false negative tests, as some all the time changing parts (such as actual date, etc.) can be masked from comparison, and thus their change
-  will not break testing.
+  Rusheye has one very important feature, which other tools lack. It is the possibility to add masks on particular parts of the screenshots. Those parts are ignored when two screenshots are
+  compared. It is a huge improvement to prevent false negative tests, as some variable parts (such as actual date, etc.) can be masked from comparison, and thus their change
+  will not break the testing.
   
   \subsection{Rusheye drawbacks}
-  Core of the Rusheye is only able to compare screenshots generated by some other tool. Integration with Selenium 1 is advised, however, functional tests written in Selenium 1 suffer
-  from the same problems [21] as scripts written for BBC Wraith \ref{subsec:casperJS}. And that is bad readability caused by their low level coupling with HTML and lack of higher abstraction.
+  The core of the Rusheye is only able to compare screenshots generated by some other tool. Integration with Selenium 1 is advised, however, functional tests written in Selenium 1 suffer
+  from the same problems [21] as scripts written for BBC Wraith \ref{subsec:casperJS}, and that is bad readability caused by their low level coupling with HTML and lack of higher abstraction.
   
-  Another problem we can see is only a desktop version of the tool for viewing results (Rusheye Manager). Cooperation on some test suite among QE team members and developers would be 
-  more difficult. As they would need to solve persistence of patterns, samples and descriptor of the test suite.
+  Another problem we can see is only a desktop version of the tool for viewing results (Rusheye Manager). A cooperation on some test suite among QE team members and developers would be 
+  more difficult as they would need to solve persistence of patterns, samples and descriptor of the test suite.
   
   \section{Conclusion of analysis}
   \label{chap:conclusion}
-  All previously listed tools have some useful features, which we would like to be inspired with. However, all of the solutions lack something, what we suppose to be an inevitable part of 
+  All previously listed tools have some useful features, which we would like to be inspired with. However, all of the solutions lack something that we suppose to be an inevitable part of 
   an effective automated visual testing.
   
-  Figure \ref{fig:existingSolutionComparison} summarizes requirements we have for a visual testing tool, and the fact whether the tool satisfies the particular requirement.
+  Figure \ref{fig:existingSolutionComparison} summarizes the requirements we have for a visual testing tool, and the fact whether the tool satisfies the particular requirement.
   
-  Tests readability is a problem we discussed with a particular tool description. It is a level of abstraction over underlaying HTML, in which the application is written. It is quite subjective
-  matter, however, there are some clues by which it can be made more objective. For example the way how tests are coupled with the HTML or CSS code. Because the more they are, the less they 
-  are readable [21]. A scale we used for evaluation supposes insufficient as lowest readability, which in long term run of the test suite might cause lot of issues.
+  Tests readability is a problem we discussed with a particular tool description. It is a level of abstraction over underlaying HTML, in which the application is written. It is quite a subjective
+  matter, however, there are some clues by which it can be made more objective. For example, the way how tests are coupled with the HTML or CSS code. Because the more they are, the less they 
+  are readable [21]. A scale we used for evaluation supposes insufficient as lowest readability, which in the long term run of the test suite might cause a lot of issues.
   
-  By tests robustness we suppose a level of stability running of the tests with particular tool has. 
-  It means how likely there are false positive and false negative tests, whether are caused by not fully loaded page, or by dynamic data rendered on the page. If the robustness is low,
-  you can find a red mark in a particular cell. Green one otherwise.
+  By tests robustness we suppose a level of stability which have tests, when are executed with a particular tool. 
+  It means how likely there are false positive and false negative tests, whether they are caused by a not fully loaded page, or by dynamic data rendered on the page. If the robustness is low,
+  one can find a red mark in a particular cell, a green one otherwise.
   
-  Cross browser compatibility issue deals with ability to test web application across all major browsers \ref{footnote:majorBrowsers}.
+  Cross browser compatibility issue deals with the ability to test web application across all major browsers \ref{footnote:majorBrowsers}.
   
-  By cloud ready features we suppose whether tool has web based system for reviewing results, and thus enables cooperation across QA team members and developers of the particular software.
+  By cloud ready features we mean whether a tool has a web based system for reviewing results, and thus enables cooperation across QA team members and developers of the particular software.
   
-  Continuous Integration friendliness in this context means the fact whether tool is suitable for usage in such systems. It actually means whether output of the tool is clear enough,
+  Continuous Integration friendliness in this context means the fact whether a tool is suitable for usage in such systems. It actually means whether output of the tool is clear enough,
   how much work a tester would be required to do manually to deploy such a tool in a test suite. Whether testers would need to review just logs to find visual testing failure, or
   whether it will be somehow visible, e.g. whole test would fail.
   
@@ -537,61 +537,61 @@ For each tool in following sections we are going to show an example usage and it
     \label{fig:existingSolutionComparison} 
   \end{figure*}
   
-  As Figure \ref{fig:existingSolutionComparison} shows, none of the tools met our requirements fully. Therefore, we decided to proceed with developing of a new tool, which would address
-  all issues, and which would integrate existing parts of the solutions when it is reasonable. Creation of a new process which would enable effective usage of such
-  tool by QA team members is inevitable. Following chapters describe this new tool and the new process.
+  As Figure \ref{fig:existingSolutionComparison} shows, none of the tools met our requirements fully. Therefore, we decided to proceed with developing a new tool, which would address
+  all issues, and which would integrate existing parts of the solutions when it is reasonable. The creation of a new process which would enable effective usage of such a
+  tool by QA team members is inevitable. The following chapters describe this new tool and the new process.
   
 \chapter{New approach}
-  Each tool by its definition introduces a process for a visual testing. While we recognized shortcomings (described in the chapter \ref{chap:conclusion}), we realized a need for a different 
-  approach to the visual testing. The approach came from 2 and half years of developing and maintaining the functional test suite \footnote{The RichFaces test suite is available at 
-  https://github.com/richfaces/richfaces-qa} for RichFaces project \footnote{RichFaces is component library for Java Server Faces web framework [23]}.
+  Each tool by its definition introduces a process for a visual testing. While we recognized shortcomings (described in chapter \ref{chap:conclusion}), we realized a need for a different 
+  approach to visual testing. The approach came from two and a half years of developing and maintaining the functional test suite \footnote{The RichFaces test suite is available at 
+  https://github.com/richfaces/richfaces-qa} for RichFaces project \footnote{RichFaces is a component library for Java Server Faces web framework [23]}.
   
   \section{Hypothesis}
   \label{sec:hypothesis}
-  It should be enough to have just a functional test suite for a end to end testing of an application. Scripts from functional testing interacts with the application sufficiently, 
-  therefore, another script which during such interactions take screenshots is redundant.
+  It should be enough to have just a functional test suite for an end to end testing of an application. Scripts from functional testing interact with the application sufficiently, 
+  therefore, another script taking screenshots during such interactions is redundant.
   
-  This redundancy is expensive, because quality assurance teams need to maintain more test suites. A change in the application needs to be introduced on more places, which allows errors to
+  This redundancy is expensive because quality assurance teams need to maintain more test suites. A change in the application needs to be introduced in more places, which allows errors to
   sneak in test suites.
   
-  In the same time we do believe, that script for functional testing should be abstracted from a visual testing as much as possible. Meaning that, explicit calls to methods which 
-  take screenshots, should be optional. Functional test script should take screenshots automatically during testing, in each important state of an application. By this, we will achieve better
+  At the same time we do believe that a script for functional testing should be abstracted from a visual testing as much as possible. This means that explicit calls to methods which 
+  take screenshots should be optional. A functional test script should take screenshots automatically during testing, in each important state of an application. By this, we will achieve better
   readability of the functional tests' scripts.
   
-  For sure there should be an option to make screenshots explicitly, however, a need to facilitate such option should be sporadic. This will be achieved by fine-grained configuration options.
-  A tester should be able to to configure on global level, meaning for all tests from one place, as well as on test level, in what situations a screenshot should be taken.
+  There should certainly be an option to make screenshots explicitly, however, a need to facilitate such option should be sporadic. This will be achieved by fine-grained configuration options.
+  A tester should be able to configure on a global level, meaning for all tests from one place, as well as on test level, in which situations a screenshot should be taken.
   
-  The base of screenshots which will serve as a reference for a correct state of the web application, will be made automatically during first run of the created tool. 
+  The base of screenshots, which will serve as a reference for a correct state of the web application, will be made automatically during the first run of the created tool. 
   Screenshots should be made available automatically for all interested parties (developers, testers, etc.).
   
-  A viable solution seems to be introducing a web interface, as a system for managing results of visual testing comparison. In this system (called a manager in this thesis), a user should be
-  able to decide about results of visual testing. More particularly asses the results, whether there is a bug in application or not. 
+  A viable solution seems to be introducing a web interface as a system for managing results of visual testing comparison. In this system (called a manager in this thesis), a user should be
+  able to decide about the results of visual testing. More particularly assess the results, whether there is a bug in application or not. 
   This web interface will foster cooperation between interested parties.
   
-  By following above mentioned principles, we will achieve a better effectiveness of a quality assurance team. More particularly we will massively decrease amount of time they need to spend 
-  with manual testing.
+  By following the above mentioned principles, we will achieve greater effectiveness of a quality assurance team. More particularly, we will massively decrease the amount of time they need to spend 
+  on manual testing.
   
   \section{Process}
   \label{sec:process}
-  The whole solution for visual testing would need to include reaction on these problems:
+  The whole solution for visual testing would need to include a reaction to these problems:
   \begin{enumerate}
-   \item Executing a visual test suite for the first time to generate patterns, which are new screenshots in subsequent tests executions will be compared with.
-   \item Executing the visual test suite for second and more times, to generate new screenshots, which are called samples in this thesis, for comparison with patterns generated in the fist run.
+   \item Executing a visual test suite for the first time to generate patterns, which new screenshots in subsequent tests executions will be compared with.
+   \item Executing the visual test suite for the second and more times, to generate new screenshots, which are called samples in this thesis, for comparison with patterns generated in the fist run.
    \item Review results, and take an action when there is a false negative result, or bug in the application.
    \item Executing the visual test suite when a new test is added, deleted, or otherwise changed.
   \end{enumerate}
 
-  For simplicity, in the first stage of development, we suppose the third problem to be solved with re-executing the whole test suite
-  again, as it is done in the first run of the test suite. Overall process can be described with following subprocesses.
+  For simplicity, in the first stage of the development, we suppose the third problem will be solved by re-executing the whole test suite
+  again, as it is done in the first run of the test suite. The overall process can be described with the following subprocesses.
   
   \subsection{First execution of functional tests}
   \label{chap:firstRunProc}
   
   Figure \ref{fig:FirstTestsRunBMPN} denotes steps needed to generate patterns. It is a prerequisite for the visual testing.
   
-  Screenshots are generated during execution of the tests. If all functional tests pass, those screenshots
-  can be claimed as patterns, and are uploaded to a storage. Screenshots generated in tests which failed, are ignored, they are
-  not included in the visual testing. Such functional test need to be fixed, made to be passing, to include it to visual testing.
+  Screenshots are generated during the execution of the tests. If all functional tests pass, those screenshots
+  can be claimed as patterns, and are uploaded to a storage. Screenshots generated in tests which failed are ignored: they are
+  not included in the visual testing. Such functional tests need to be fixed, made to be passing, to include them to visual testing.
   
   An optional part is reviewing of the screenshots. If there is any issue with patterns, they should be thrown away, and tests will be rerun.
   
@@ -599,28 +599,28 @@ For each tool in following sections we are going to show an example usage and it
   
   \subsection{Subsequent execution of visual testing}
   
-  Figure \ref{fig:NextTestsRunsBMPN} shows how subsequent execution of visual testing together with functional testing would look like. The first step is same as in previous process,
-  functional tests are executed, and screenshots are taken. Secondly, patterns are downloaded from the storage, and after that actual visual testing can start.
+  Figure \ref{fig:NextTestsRunsBMPN} shows how subsequent execution of visual testing together with functional testing would look like. The first step is the same as in the previous process,
+  functional tests are executed, and screenshots are taken. Secondly, patterns are downloaded from the storage, and after that the actual visual testing can start.
   
-  Newly created screenshots, called in this thesis samples, are pixel to pixel compared with downloaded patterns. Result is stored in a descriptor file, and differences between particular
-  pattern and sample are visually stored in a generated picture.
+  Newly created screenshots, called samples in this thesis, are pixel to pixel compared with downloaded patterns. The result is stored in a descriptor file, and differences between the 
+  particular pattern and sample are visually stored in a generated picture.
   
-  If there are found some differences, generated pictures together with their corresponding samples, and patterns are uploaded to a remote storage.
+  If any differences are found, generated pictures together with their corresponding samples and patterns are uploaded to a remote storage.
   
-  Users should be able to review the results from now on, where he will find the particular run according to a time stamp when the run was executed. They should be able to asses the results,
-  with displayed triplet, consisting of patter, sample and their difference. They should be able to say whether it is false negative test result, in which case they should be able to 
-  take an action to prevent such results in the future. One of such actions can be applying masks, which is more described in chapter \ref{sec:rusheye}.
+  Users should be able to review the results from now on, where they will find the particular run according to a time stamp when the run was executed. They should be able to asses the results,
+  with displayed triplet, consisting of the pattern, sample and their difference. They should be able to say whether it is a false negative test result, in which case they should be able to 
+  take an action to prevent such results in the future. One of such actions can be applying masks, which is further described in chapter \ref{sec:rusheye}.
   
   The tool should be configurable, so such false negative results are rather sporadic, instead, failed visual comparison tests should reveal a bug in the application under test. In that case
-  it is in user responsibility to file such a bug in a corresponding issue tracker. Generated pattern, sample and difference can be used as a useful attachment to a issue report, which
-  would better describe actual and expected result.
+  it is in the user's responsibility to file such a bug in a corresponding issue tracker. The generated pattern, sample and difference can be used as a useful attachment to an issue report, which
+  would better describe the actual and expected result.
   
    \begin{figure*}[!htb]
     \begin{center}
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/FirstTestsRunBMPN.png}}}
     \end{center}
-    \caption{Process to generate patterns during first execution of functional tests.}
+    \caption{Process to generate patterns during the first execution of functional tests.}
     \label{fig:FirstTestsRunBMPN}
   \end{figure*}
   
@@ -636,40 +636,40 @@ For each tool in following sections we are going to show an example usage and it
   \newpage
   \section{Analysis of useful tool output}
   \label{sec:analysisUsefulOutput}
-  To create a tool, which is widely accepted by a community of testers, who are interested in a visual testing, we have to take usefulness of the tool as a priority. Such tool has to show results
-  of the visual comparison in a way, that it is a pleasure to use it. In the end of the day, the amount of time spent with using of the tool has to be dramatically less than doing the manual
+  To create a tool which is widely accepted by a community of testers, who are interested in a visual testing, we have to take usefulness of the tool as a priority. Such a tool has to show results
+  of the visual comparison in such a way that it is a pleasure to use it. At the end of the day, the amount of time spent with using the tool has to be dramatically smaller than doing the manual
   visual testing.
    
-  Therefore, we conducted a research among IT experts, which took a form of brainstorming on the visual testing web application user interface. Purpose of such a web application is to show
+  Therefore, we conducted a research among IT experts, which took a form of brainstorming on the visual testing web application user interface. The purpose of such a web application is to show
   results and allow a tester to take an immediate action over them.
   
-  The brainstorming took place on Arquillian developer forum [24], which is daily accessed by hundreds of users. By the time of writing of this thesis, it has more than 355 views, 
-  and 11 replies. We can say that there are users interested in such a tool, and we have gained a valuable feed back, together with many interesting ideas what features such a web application
+  The brainstorming took place on Arquillian developer forum [24], which is daily accessed by hundreds of users. At the time of writing this thesis, it has more than 355 views 
+  and 11 replies. We can say that there are users interested in such a tool, and we have gained valuable feedback, together with many interesting ideas about what features such a web application
   for reviewing results should have.
   
-  We started with description of tool together with proposals for graphical user interface design (mockups), and asked IT community for their
-  opinions, what they miss on such interface, what is on the other hand redundant.
+  We started with a description of the tool together with proposals for graphical user interface design (mockups), and asked the IT community for their
+  opinions, what they miss on such an interface and what is, on the other hand redundant.
   
   You can see created mockups in appendix \ref{appendeix:a}. The web application is logically divided into
-  three screens. First one (can be seen in appendix \ref{fig:frontPageMock}) is showing front page of the application. Its purpose
+  three screens. The first one (can be seen in appendix \ref{fig:frontPageMock}) shows the front page of the application. Its purpose
   is to show test suites, which are groups of tests written for a particular application under test.
-  Together with a web browser they are tested on, represent a test suite for visual comparison testing.
+  Together with a web browser they are tested on, they represent a test suite for visual comparison testing.
   
-  Second screen (can be seen at \ref{fig:particularRunMock}) shows a particular executions of the test suite. These test
-  suite runs are unambiguously named according to a time and date, they were executed.
+  The second screen (can be seen at \ref{fig:particularRunMock}) shows a particular executions of the test suite. These test
+  suite runs are unambiguously named according to the time and date they were executed.
   
-  Third created mockup shows comparison results for a particular tests suite run. The comparison result
-  consists from three screenshots. A pattern, created during first run of the test suite. A sample, which
+  The third created mockup shows comparison results for a particular test suite run. The comparison result
+  consists of three screenshots. A pattern, created during the first run of the test suite. A sample, which
   was taken during this particular test execution, and a picture called diff, which denotes differences
   between the pattern and the sample.
   
-  On the third mockup you can also see two buttons. They purpose is to allow a tester to take an immediate
-  action upon results. Pattern is correct button, is used when the result of the comparison is
-  a false negative, or when the result denotes a bug in the application. Sample is correct button, is used
+  On the third mockup you can also see two buttons. Their purpose is to allow a tester to take an immediate
+  action upon results. The pattern is correct button is used when the result of the comparison is
+  a false negative, or when the result denotes a bug in the application. The sample is correct button is used
   when there is an anticipated change in the application under test. 
-  In that case the new created sample should be used as the pattern in next comparisons.
+  In that case the newly created sample should be used as the pattern in the following comparisons.
   
-  Based on users insight, we complemented the final web application with following features:
+  Based on users' insight, we complemented the final web application with the following features:
   
   \begin{itemize}
    \item Indicate number of failures versus total number of tests.
