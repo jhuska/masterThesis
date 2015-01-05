@@ -92,24 +92,24 @@ I would like to thank Mgr. Marek Grác, Ph.D., the advisor of my thesis, for his
 
 I am profoundly grateful to Bc. Lukáš Fryč for his guidance and support throughout my work.
 
-My deepest thanks are coming to my parents, who made possible for me to study in this brilliant university. 
+My deepest thanks go to my parents, who made it possible for me to study at this brilliant university. 
 
-I would like to say thanks also to Czech Republic, for allowing me to study in the Masaryk University. Similarly, I would like to express
+I would also like to say thanks to the Czech Republic for allowing me to study at the Masaryk University. Similarly, I would like to express
 my thanks to Red Hat company, I cooperated on this thesis with. Particularly to Mgr. Pavol Pitoňák for allowing me to dedicate some of the
 work time to this thesis.
 
-I greatly appreciate support of my girlfriend during writing of this thesis, as well as help of all my close friends.
+I greatly appreciate the support of my girlfriend during writing of this thesis, as well as help of all my close friends.
 
 \end{ThesisThanks}
 
 \begin{ThesisAbstract}
-This diploma thesis describes creation of the tool and defines a process which will enable automated visual testing of a web application. 
+This diploma thesis describes the creation of the tool and defines a process which will enable automated visual testing of a web application. 
 The process improves the effectiveness of the QA team. A research to find out what output of such a tool would be most useful is conducted.
 The visual testing is based on picture comparison. The most effective way of storing and defining 
-the picture base, which all the other pictures will be compared with is found out. 
-Usage of such tool in Continuous Integration environment is described. 
-An analysis of already made solutions is done before the tool creation itself. 
-One of the thesis part consists of deployment of the tool and the process on a particular web application.
+the picture base, which all the other pictures will be compared with is determined. 
+The usage of such a tool in Continuous Integration environment is described. 
+An analysis of the already made solutions is done before the tool creation itself. 
+One of the thesis parts consists of the deployment of the tool and the process on a particular web application.
 \end{ThesisAbstract}
  
 \begin{ThesisKeyWords}
@@ -158,15 +158,15 @@ Here we would like to define some of the important terms used in the whole thesi
 
 \begin{itemize}
  \item Screenshot - a screen capture.
- \item Pattern - a screenshot of a web application, representing a correct state of the application, made in the first execution of 
- a visual testing test suite, all other later screenshots will be compared with them.
+ \item Pattern - a screenshot of a web application, representing the correct state of the application, made in the first execution of 
+ a visual testing test suite, all other later screenshots will be compared with.
  \item Sample - screenshot of the web application, representing a current state of the application.
  \item Diff - a generated picture, which is made when differences are found during picture comparison of pattern and sample. It clearly
  shows these differences by making colorful only those different parts.
- \item Web Manager - a web application made as a part of this thesis to view results of automated visual testing, and for taking an immediate
- action over these results, to change configuration of the visual testing for subsequent runs of test suite.
+ \item Web Manager - a web application made as a part of this thesis to view the results of automated visual testing, and for taking immediate
+ action over these results, to change configuration of the visual testing for subsequent runs of the test suite.
  \item Test suite - a set of automated functional tests for a web application.
- \item Test suite run - a particular execution of test suite in particular time, with a particular browser, etc.
+ \item Test suite run - a particular execution of a test suite at a particular time, with a particular browser, etc.
 \end{itemize}
 
 
@@ -514,7 +514,7 @@ For each tool in the following sections we are going to show an example usage an
   
   Tests readability is a problem we discussed with a particular tool description. It is a level of abstraction over underlaying HTML, in which the application is written. It is quite a subjective
   matter, however, there are some clues by which it can be made more objective. For example, the way how tests are coupled with the HTML or CSS code. Because the more they are, the less they 
-  are readable [21]. A scale we used for evaluation supposes insufficient as lowest readability, which in the long term run of the test suite might cause a lot of issues.
+  are readable [21]. A scale we used for evaluation supposes ``insufficient'' as lowest readability, which in the long term run of the test suite might cause a lot of issues.
   
   By tests robustness we suppose a level of stability which have tests, when are executed with a particular tool. 
   It means how likely there are false positive and false negative tests, whether they are caused by a not fully loaded page, or by dynamic data rendered on the page. If the robustness is low,
@@ -686,18 +686,18 @@ For each tool in the following sections we are going to show an example usage an
   
 \chapter{Implemented tool}
 To support our hypothesis and the process we figured out, a set of tools needed to be created. As we did
-not want to reinvent a wheel, where it is feasible we used already existing tool, and integrated it to the
+not want to reinvent a wheel, where it is feasible we used an already existing tool and integrated it to the
 final result.
 
-Figure \ref{fig:componentDiagramOfImpl} depicts component diagram of implemented solution. It is only a high
-level picture of overall solution. Particular components are described in detail in following chapters.
+Figure \ref{fig:componentDiagramOfImpl} depicts the component diagram of the implemented solution. It is only a high
+level picture of the overall solution. Particular components are described in detail in the following chapters.
 
 \begin{figure*}[!htb]
     \begin{center}
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.7\textwidth]{figures/VisualTestingComponentDiagram.png}}}
     \end{center}
-    \caption{Component diagram of implemented solution for visual testing.}
+    \caption{Component diagram of the implemented solution for visual testing.}
     \label{fig:componentDiagramOfImpl}
 \end{figure*}
   
@@ -705,12 +705,12 @@ level picture of overall solution. Particular components are described in detail
 Arquillian\footnote{More information about Arquillian at http://arquillian.org/} is a testing framework, which facilitates integration testing. It automatizes various parts
 of the integration testing, which allows testers to develop actual tests.
 
-It can for example: start application container before testing, and to stop it after tests execution 
-is done, can deploy application under test to that container, populate database with testing data, 
-start web browsers, test on mobile devices, and to provide useful output with videos and screenshots 
+It can, for example, start an application container before testing and stop it after the test's execution 
+is done, it can deploy the application under test to that container, populate the database with testing data, 
+start web browsers, test on mobile devices, and provide useful output with videos and screenshots 
 from testing.
 
-In other words, it manages life cycle of all integration components your application integrate with.
+In other words, it manages the life cycle of all integration components your application integrates with.
 
 It has very nice architecture, which resembles an event based machine. It is easily extensible, as it
 supports Service provider interface pattern [25]. It can cooperate with all major browsers, which makes
@@ -720,8 +720,8 @@ All these features made it a good candidate to integrate our solution with. We d
 feature for this project.
   
 \section{Arquillian Graphene}
-Arquillian Graphene is an extension to Arquillian, thus fully supports its life cycle of test. Its main
-purpose in integration tests is to control a web browser. By using its API, a tester is able to for example
+Arquillian Graphene is an extension to Arquillian, thus it fully supports its life cycle of test. Its main
+purpose in integration tests is to control a web browser. By using its API, a tester is able to, for example,
 click on the button on the web page, write some characters into text inputs or otherwise interact with
 a web application under test.
 
@@ -736,34 +736,34 @@ such as Page Object\footnote{Page Object pattern encapsulates a web page into ob
 more readable [26].} or Page Fragment\footnote{Page Fragments pattern divides a web page further into reusable 
 components which encapsulates a web widget functionality, making tests more reusable and readable [27].}.
 
-Those features form an API with hight abstraction level, and encourage a tester to develop more readable
-tests. Those are attributes, which already existing solutions lack (see \ref{chap:conclusion} for more
+Those features form an API with a high abstraction level, and encourage a tester to develop more readable
+tests. Those are attributes which the already existing solutions lack (see \ref{chap:conclusion} for more
 information).
 
 \section{Graphene screenshooter}
 For the purpose of visual testing, we needed to implement one addition to Arquillian Graphene. 
-A component which would facilitate taking of screenshots of application under test in a uniform manner.
+A component which would facilitate taking of screenshots of the application under test in a uniform manner.
 Developed addition implement a common interfaces defined in Arquillian Recorder extension
 \footnote{Arquillian Recorder is an extension which among the other things defines interfaces 
-for screenshot taking, and video recording from tests executions. We have cooperated on defining this
-common interfaces as well. More information at https://github.com/arquillian/arquillian-recorder}.
+for screenshot taking, and video recording from test executions. We have cooperated on defining this
+common interface as well. More information at https://github.com/arquillian/arquillian-recorder}.
 
 We had two main requirements on this screenshots taking extension, which came directly from the analysis of
 already existing solutions (see chapter \ref{chap:analysis}):
 
 \begin{enumerate}
  \item A tester should be able to configure this extension so it takes screenshots automatically. A script
- for functional test should be unaware of such screenshots taking behavior. It will stay clean and more 
+ for a functional test should be unaware of such screenshots taking behavior. It will stay clean and more 
  readable (see chapter \ref{chap:conclusion} to see more background information for this requirement).
  The configuration should be done on a global level, in other words for the whole test suite.
- \item The tester on the other hand should be able to explicitly enforce taking of screenshot at any place
+ \item The tester, on the other hand, should be able to explicitly enforce taking of a screenshot at any place
  in the functional test script. This should be just an optional feature, used rather sporadically.
 \end{enumerate}
 
-Second point is developed in all existing solutions, to enhance readability we required from our solution
+The second point is developed in all the existing solutions. To enhance readability we required from our solution
 to have implemented also point number one.
 
-The global configuration is done where all configuration take place for Arquillian framework. 
+The global configuration is done where all configuration takes place for Arquillian framework. 
 It is in \texttt{arquillian.xml} file.
 
 \begin{lstlisting}[caption=Example of screenshooter configuration in arquillian.xml,label=lis:screenshooterconf,language=xml]
@@ -774,8 +774,8 @@ It is in \texttt{arquillian.xml} file.
 </extension>
 \end{lstlisting}
 
-In the example configuration \ref{lis:screenshooterconf}, you can see, that screenshots are automatically 
-made after two events: before test, which is effectively just after the web application is loaded in 
+In the example configuration \ref{lis:screenshooterconf}, one can see that screenshots are automatically 
+made after two events: before the test, which is effective just after the web application is loaded in 
 a browser, and after the test. 
 
 We also started with an experimental feature, which is not fully available, and that is an option
@@ -783,24 +783,24 @@ to take screenshots after every action made by Selenium in browser\footnote{See 
 about \texttt{takeOnEveryAction} at https://github.com/arquillian/arquillian-graphene/tree/master/extension/screenshooter}.
   
 \section{Rusheye}
-We have already described some of the Rusheye features in chapter \ref{sec:rusheye}. Its important that it
+We have already described some of the Rusheye features in chapter \ref{sec:rusheye}. It is important that it
 is only a command line tool, so integration with such a tool would require either executing its binary,
 packaged in a \texttt{.jar} file, or calling its main\footnote{Java main method is an entry point
-to the program.} method. That is not a good software design, because it is hardly extensible, and error prone,
+to the program.} method. This is not a good software design because it is hardly extensible and error prone
 when there is a change introduced in either of the integrated parts.
 
 Therefore, we decided to introduce an integration layer in Rusheye, which would cooperate with Arquillian event based system.
-It is mostly realization of Observer pattern\footnote{Observer pattern - \url{http://en.wikipedia.org/wiki/Observer_pattern}}.
+It is mostly a realization of the Observer pattern\footnote{Observer pattern - \url{http://en.wikipedia.org/wiki/Observer_pattern}}.
 
-Rusheye observes to events like: \texttt{StartCrawlingEvent}, or \texttt{StartParsingEvent}, and reacts according to it. It starts
-crawling of patterns, and creates a test suite descriptor (XML file which describes where are the particular screenshoots for a particular
-functional test stored). This is done after first run only (see chapter \ref{chap:firstRunProc}). In subsequent runs \texttt{StartParsingEvent}
-is fired, and Rusheye starts actual visual comparison, it compares patterns with samples on pixel to pixel basis.
+Rusheye observes events such as: \texttt{StartCrawlingEvent}, or \texttt{StartParsingEvent}, and reacts according to them. It starts
+crawling of patterns and creates a test suite descriptor (XML file which describes where the particular screenshoots for a particular
+functional test are stored). This is done after the first run only (see chapter \ref{chap:firstRunProc}). In subsequent runs \texttt{StartParsingEvent}
+is fired, and Rusheye starts the actual visual comparison, it compares patterns with samples on a pixel to pixel basis.
 
-After crawling or parsing is done, it fires \texttt{CrawlingDoneEvent} or \texttt{ParsingDoneEvent} events respectfully, so other integrated
+After crawling or parsing is done, it fires \texttt{CrawlingDoneEvent} or \texttt{ParsingDoneEvent} events respectfully, so that other integrated
 modules can wire up.
 
-In result, such event based architecture, makes a loosely coupled system, which is easily extensible.
+In result, such event based architecture makes a loosely coupled system, which is easily extensible.
 
 \begin{lstlisting}[caption=Example of StartParsingEvent observer,label=lis:startParsingObserver,language=java, breaklines=true]
 public void parse(@Observes StartParsingEvent event) {
@@ -811,7 +811,7 @@ public void parse(@Observes StartParsingEvent event) {
 \end{lstlisting}
   
 \section{Graphene visual testing}
-    It is a project, which has two purposes.
+    It is a project which has two purposes.
     \begin{itemize}
      \item to integrate and control Rusheye with Arquillian;
      \item and to provide a way for reviewing results of visual comparison.
@@ -821,17 +821,17 @@ public void parse(@Observes StartParsingEvent event) {
     
     \subsection{Arquillian extension}
     \label{sec:arqExt}
-    As it was written previously, this extension is focused on controlling Rusheye, and storing or retrieving of created screenshots.
+    As it was written previously, this extension is focused on controlling Rusheye and storing or retrieving created screenshots.
     
-    As listings \ref{lis:afterSuiteObserverObserver} shows, it wires up to Arquillian life-cycle, as it listens to \texttt{AfterSuite} event. 
-    If it is a first execution of test suite, then it just fires \texttt{StartCrawlingEvent} event, which is observed by Rusheye. 
-    After crawling is done, it stores created suite descriptor, and screenshots to a Java Content Repository 
+    As the \ref{lis:afterSuiteObserverObserver} listing shows, it wires up to Arquillian life-cycle, as it listens to the \texttt{AfterSuite} event. 
+    If it is a first execution of the test suite, then it just fires the \texttt{StartCrawlingEvent} event, which is observed by Rusheye. 
+    After crawling is done, it stores the created suite descriptor and screenshots to a Java Content Repository 
     (JCR - see chapter \ref{chap:storage}).
     
     If it is not a first run, it firstly downloads screenshots and the suite descriptor, and then fires a \texttt{StartParsingEvent}, 
     which is again observed by Rusheye.
     
-    The result of parsing (XML file describing what patterns and what samples were different, and a path to created diffs) are also uploaded
+    The result of parsing (XML file describing which patterns and which samples were different, and a path to the created diffs) are also uploaded
     to a JCR.
     
     \begin{lstlisting}[caption=AfterSuite observer to controll Rusheye,label=lis:afterSuiteObserverObserver,language=java, breaklines=true]
@@ -855,51 +855,51 @@ public void parse(@Observes StartParsingEvent event) {
      }
     \end{lstlisting}
     
-    A communication between this extension and a JCR is done via JCR Rest API. To issue a http request, we are using Apache HttpComponents
+    A communication between this extension and a JCR is done via JCR Rest API. To issue a http request, we use Apache HttpComponents
     project\footnote{Apache HttpComponents - \url{http://hc.apache.org/}}.
  
     \subsection{Web application to view results}
     \label{sec:webManagerAppDesc}
-    It is a web application for reviewing for reviewing results, but also for an active changing
+    It is a web application for reviewing results, but also for an active change
     of the visual testing configuration.
     
-    The application back-end is developed with use of Java Enterprise Edition\footnote{Java Enterprise Edition - 
+    The application back-end is developed with the use of Java Enterprise Edition\footnote{Java Enterprise Edition - 
     \url{http://www.oracle.com/technetwork/java/javaee/overview/index.html}} stack.
-    It includes using of technologies like: Java Persistence API 
+    It includes using technologies like: Java Persistence API 
     \footnote{JPA - \url{http://en.wikipedia.org/wiki/Java_Persistence_API}} plus 
     PostgreSQL\footnote{PostgreSQL database - \url{http://www.postgresql.org/}} for a persistence
     layer. Enterprise Java Beans\footnote{Enterprise Java Beans - \url{http://en.wikipedia.org/wiki/Enterprise_JavaBeans}} 
     for controllers code (Model-Viewer-Controller 
     pattern\footnote{Model-Viewer-Controller - \url{http://en.wikipedia.org/wiki/Model-view-controller}}).
-    It exposes Java API for RESTful Services (JAX-RS\footnote{JAX-RS - \url{https://jax-rs-spec.java.net/}}) endpoints to communicate
-    enable communication with Arquillian extension (see chapter \ref{sec:arqExt}), and with its client part (HTML front end) in a
+    It exposes Java API for RESTful Services (JAX-RS\footnote{JAX-RS - \url{https://jax-rs-spec.java.net/}}) endpoints to
+    enable communication with the Arquillian extension (see chapter \ref{sec:arqExt}), and with its client part (HTML front end) in a
     RESTful way.
     
     The application is deployed on a WildFly application server\footnote{WildFly application server - \url{http://www.wildfly.org/}}.
-    We chose this server, because of its an open source software, backed with huge community of users, and by a big enterprise,
-    Red Hat\footnote{Red Hat - \url{http://www.redhat.com/en}}. Very important for us was also its fastness and availability in
+    We chose this server because it is an open source software, backed by a huge community of users, and by a big enterprise,
+    Red Hat\footnote{Red Hat - \url{http://www.redhat.com/en}}. Another very important thing for us was its speed and availability in
     cloud environments (see chapter \ref{sec:cloudReady}).
     
-    The front end is developed with use of AngularJS, which is a MVC framework for creating a Single Page Applications 
+    The front end is developed with the use of AngularJS, which is a MVC framework for creating a Single Page Applications 
     (SPA\footnote{SPA - \url{http://en.wikipedia.org/wiki/Single-page_application}}. It is complemented with Twitter Bootstrap
     framework, to provide a visually pleasant UI.
     
-    The design of particular screens are in accordance with the analysis described in section \ref{sec:analysisUsefulOutput}.
+    The design of particular screens is in accordance with the analysis described in section \ref{sec:analysisUsefulOutput}.
     You can find screenshots from the application in the [DOPLNIT APPENDIX].
     
-    For better convenience, and to verify possibility to deploy application on the cloud, we have
+    For better convenience, and to verify the possibility to deploy the application on the cloud, we have
     deployed it on Platform as a Service, OpenShift by RedHat cloud\footnote{OpenShift by RedHat - \url{https://www.openshift.com/}}.
     \\* Please see chapter \ref{sec:cloudReady} for more information about the deployment (how to log in, etc.).
     
-    Following figure \ref{fig:useCaseDiagramWebManApp} depicts possible use cases with the web application, to give a better picture what can be achieved
+    The following figure \ref{fig:useCaseDiagramWebManApp} depicts the possible use cases with the web application, to give a better picture of what can be achieved
     with this application.
     
     The most important here are \texttt{Reject Pattern} and \texttt{Reject Sample} functionalities, as they allow a tester to react
-    on results. \texttt{Reject Pattern} will change in the storage for all screenshots the pattern with sample. This functionality is
-    used when there is an expected change in the application, and we want to use the new sample as pattern in subsequent runs.
+    to results. \texttt{Reject Pattern} will change in the storage for all screenshots the pattern with sample. This functionality is
+    used when there is an expected change in the application, and we want to use the new sample as a pattern in the subsequent runs.
     
-    \texttt{Reject sample} is used when the results is either false negative (in which case the sample is just deleted, or when
-    there is a bug in the application under test, in which case a tester is supposed to create a bug report. Created sample and diff
+    \texttt{Reject sample} is used when the results is either a false negative (in which case the sample is just deleted, or when
+    there is a bug in the application under test, in which case a tester is supposed to create a bug report. The created sample and diff
     will serve as a good help when describing the bug. 
     
     There are planned extensions to this basic functionality, described in section \ref{sec:plannedExtensions}.
@@ -915,20 +915,20 @@ public void parse(@Observes StartParsingEvent event) {
         
 \section{Storage for images}
 \label{chap:storage}
-    As we had to think wisely when developing UI for Web Manager, to enable successful employing of the tool among community of 
-    testers, the same we had to think beforehand about storage for created images (screenshots). 
+    As we had to think wisely when developing UI for Web Manager, to enable successful emplyment of the tool among a community of 
+    testers; in the same way, we had to think beforehand about storage for created images (screenshots). 
     
-    We have these requirements for storing of the images:
+    We have these requirements for storing the images:
     
     \begin{itemize}
-     \item The chosen solution has to provide way for storing large amount (hundreds) of pictures;
+     \item The chosen solution has to provide a way for storing a large amount (hundreds) of pictures;
      \item it should be a scalable solution;
-     \item it should provide a solid performance when uploading and downloading of stored pictures;
-     \item it should be capable to ensure a security for data, authentication and authorization when accessing pictures;
+     \item it should provide a solid performance when uploading and downloading stored pictures;
+     \item it should be capable to ensure security for data, authentication and authorization when accessing pictures;
      \item it should be a cloud friendly solution.
     \end{itemize}
  
-    We were choosing from these options, which we choose by a careful analysis of patterns:
+    We were choosing from these options, which we chose by a careful analysis of patterns:
     \begin{enumerate}
      \item Store screenshots as Binary large objects (BLOBs 
 	   \footnote{BLOB - \url{http://en.wikipedia.org/wiki/Binary_large_object}}) in a relational
@@ -936,23 +936,23 @@ public void parse(@Observes StartParsingEvent event) {
      \item Store screenshots in a file hosting service such as Dropbox\footnote{Dropbox - available at \url{https://www.dropbox.com/}}, 
      or Google Drive\footnote{Google Drive - available at \url{https://www.google.com/drive/}}. Store just URLs to relational database.
      \item Store screenshots in a Java Content Repository (JCR\footnote{JCR - specification available at 
-	   \url{https://jcp.org/en/jsr/detail?id=283}}). Store just URLs to relational database.
+	   \url{https://jcp.org/en/jsr/detail?id=283}}). Store just URLs to a relational database.
     \end{enumerate}
 
-    The number one option, has some obvious advantages. Databases are a superior solution where transactional integrity between the
-    image and metadata are important. Because, it is more complex to manage integrity between database metadata and file system data, 
-    and within context of a web application, it is difficult to guarantee that data has been flushed to disk on the file system [28].
+    The number one option has some obvious advantages. Databases are a superior solution where transactional integrity between the
+    image and metadata are important. Because it is more complex to manage integrity between database metadata and file system data, 
+    and within the context of a web application, it is difficult to guarantee that data has been flushed to disk on the file system [28].
     
-    However, the way to store pictures in database as BLOBs, has some disadvantages too: database storage is usually more expensive
-    than file system storage; database access can not be accelerated for example by configuring a web server to use system call to
-    asynchronously send a file directly a network interface, as it can be done for file system access [28].
+    However, the way to store pictures in database as BLOBs has some disadvantages too. Database storage is usually more expensive
+    than file system storage; database access cannot be accelerated for example by configuring a web server to use the system call to
+    asynchronously send a file directly to a network interface, as it can be done for file system access [28].
     
-    Option number two seems to be a viable solution for smaller test suites. It does not suffer from the problems which database does.
-    In a later stage of development of our tool we would like to provide this option to users of our tool. For now, we would like to
-    provide more flexible solution, which does not vendor lock in to some providers. Which is free of charge when big storage
+    Option number two seems to be a viable solution for smaller test suites. It does not suffer from the problems which a database suffers from.
+    In a the later stage of development of our tool we would like to provide this option to users of our tool. For now, we would like to
+    provide a more flexible solution, which does not vendor lock in to some providers, a solution which is free of charge when big storage
     space is required.
     
-    Therefore, we chose option number three as pilot way for storing screenshots. JCR is a specification, and also a Java
+    Therefore, we chose option number three as the pilot way for storing screenshots. JCR is a specification and also a Java
     API, thus a best fit for our Java based application. We liked what kind of data and access
     patterns JCR are very good at handling [29]:
     
@@ -961,20 +961,20 @@ public void parse(@Observes StartParsingEvent event) {
      \item files;
      \item navigation-based access;
      \item flexible data structure;
-     \item and transactions, versioning, locking.
+     \item transactions, versioning, locking.
     \end{itemize}
     
     Data we need to store is naturally hierarchical. See figure \ref{fig:ourJCRHierarchy} to 
     see in what hierarchy we need to store generated screenshots, XML suite descriptor, and XML result descriptor (configuration
     files for Rusheye module).
     
-    JCR are good at storing files, this is exactly what we are looking for, as pictures will be the main artifacts which we need to
+    JCR are good at storing files, which is exactly what we are looking for, as pictures will be the main artifacts which we need to
     persist.
     
-    Navigation based access is often used for application dealing with hierarchical data. In our application we need to work often 
-    only with subset of the hierarchy - for example display triplet pattern, sample, and diff for a particular test suite run.
+    Navigation based access is often used for application dealing with hierarchical data. In our application we often need to work
+    only with subset of the hierarchy - for example to display triplet pattern, sample, and diff for a particular test suite run.
     
-    We wanted to provide flexible data structure. By this tool stays extensible to other approaches and new features for later
+    We wanted to provide a flexible data structure. By this tool stays extensible to other approaches and new features for later
     development (see section \ref{sec:plannedExtensions}).
     
     Transactions, versioning, and locking are sweet points which will be used in later development. They are important, as we want
@@ -998,7 +998,7 @@ public void parse(@Observes StartParsingEvent event) {
     company we chose the application server from (see \ref{sec:webManagerAppDesc}). 
     They cooperate well with each other, and there is plenty of documentation on how to integrate those two systems.
     ModeShape also by default exposes a RESTful API for accessing and modifying the content of the repository. We are utilizing 
-    this feature in the Web Manager (see \ref{sec:webManagerAppDesc}), when screenshots we want to display in the client browser,
+    this feature in the Web Manager (see \ref{sec:webManagerAppDesc}), when screenshots which we want to display in the client browser,
     do not have to be firstly streamed to the WildFly application server, and then served to the client, but they are directly
     streamed to the client browser, as it knows the URL of the screenshot.
     
@@ -1008,10 +1008,10 @@ public void parse(@Observes StartParsingEvent event) {
     
 \chapter{Deployment of tool and process}
 After implementing the tool, to prove or disprove hypothesis from section \ref{sec:hypothesis} we need to deploy the tool and the
-process (see section \ref{sec:process}) on a real application. Following chapters describe such deployment, real world use cases
+process (see section \ref{sec:process}) on a real application. The following chapters describe such deployment, real world use cases
 and best practices when using our tool.
 
-To have a better picture, in what systems and environments, each part of the visual testing will be executed, following
+To have a better picture about the systems and environments in which each part of the visual testing will be executed, the following
 sequence diagram was created:
 
 \begin{figure*}[!htb]
@@ -1023,14 +1023,14 @@ sequence diagram was created:
       \label{fig:wholeSolutionSequenceDiagram}
 \end{figure*}
 
-There are omitted processes which are not important for visual testing, or processes which describes how data is transported into
+There are omitted processes which are not important for visual testing, or processes which describe how data is transported into
 the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   
   \section{Actual visual testing}
   We chose RichFaces Showcase 
-  application\footnote{RichFaces Showcase - Screenshot from application is shown by figure \ref{fig:richfaces_chart}. 
+  application\footnote{RichFaces Showcase - Screenshot from application is shown in figure \ref{fig:richfaces_chart}. 
   Source code is available at \url{https://github.com/richfaces/richfaces/tree/master/examples/showcase}. 
-  Application is hosted at \url{http://showcase.richfaces.org/}}, 
+  Application is hosted at \url{http://showcase.richfaces.org/}} 
   and its functional test suite\footnote{Test suite is written in Arquillian Graphene framework, and the source code is 
   available in the same repository as the application itself.} to try our tool and process on. It is a Java EE application, with
   many libraries needed to be deployed alongside with the application. One of them is RichFaces core library.
@@ -1039,38 +1039,38 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   the core RichFaces library, from version 4.5.0.Final to 4.5.1.Final. We proceed as follows:
   
   \begin{enumerate}
-   \item Web Manager were deployed to OpenShift cloud on a WildFly 8.2.0.Final cartridge (see chapter \ref{sec:cloudReady}).
+   \item Web Manager was deployed to OpenShift cloud on a WildFly 8.2.0.Final cartridge (see chapter \ref{sec:cloudReady}).
    \item Functional test suite was run. It tested RichFaces Showcase application with core libraries of 4.5.0.Final version.
    \item During first execution of tests, patterns were created and uploaded to the cloud.
    \item Test suite was run several times to stabilize visual testing.
    \item When the visual testing was stable enough (there were no more than 4 differences), the test suite was run in a way that it
-   tested RichFaces Showcase with core libraries of version 4.5.1.Final.
+   tested RichFaces Showcase with core libraries of the 4.5.1.Final version.
    \item Results were analyzed.
   \end{enumerate}
   
-  We deployed Web Manager to the cloud, as that would be its the most probable environment. It made conditions for testing more
-  difficult, because we run the test suite from Europe, and the servers where the Web Manager was deployed on, are located in the US.
-  Moreover, we chose servers with low RAM (512MB), and with reduced CPU performance. The speed of Internet was 1,1 Mbit/s
-  for download, and 0,6 Mbit/s for upload. These limited conditions were chosen on purpose, because if the tool would work 
-  sufficiently in such conditions, it would have even better performance on better conditions.
+  We deployed the Web Manager to the cloud, as that would be its most probable environment. It made conditions for testing more
+  difficult because we ran the test suite from Europe, and the servers where the Web Manager was deployed, are located in the US.
+  Moreover, we chose servers with low RAM (512MB) and with reduced CPU performance. The speed of the Internet was 1,1 Mbit/s
+  for download, and 0,6 Mbit/s for upload. These limited conditions were chosen on purpose because if the tool would work 
+  sufficiently in such conditions, it would have even better performance in better conditions.
   
-  After test suite was run first time, and patterns were created, we run it several times (10) to stabilize results. Initially, there
+  After the test suite was run for the first time and patterns were created, we ran it several times (10) to stabilize results. Initially, there
   were many differences (about 30 out of about 400 visual comparisons) found by our tool. All of them were false negative results. 
-  The reason we got lot of false negative results, was hidden mainly in random data, by which was the application filled. 
-  Particularly, rows for tables consists from random data in the application (with each deployment on the server there is 
-  different data shown in tables 
+  The reason why we got lot of false negative results was hidden mainly in random data by which the application was filled. 
+  Particularly, rows for tables consist of random data in the application (with each deployment on the server there is 
+  different data shown in table 
   components\footnote{RichFaces table component in Showcase - 
   \url{http://showcase.richfaces.org/richfaces/component-sample.jsf?demo=dataTable&sample=arrangeableModel&skin=blueSky}}). 
-  Secondly, there were unstable tests results because of timing issues. For example there is a slightly different delay for RichFaces
+  Secondly, there were unstable test results because of timing issues. For example, there is a slightly different delay for RichFaces
   tooltip\footnote{RichFaces tooltip component - 
   \url{http://showcase.richfaces.org/richfaces/component-sample.jsf?demo=tooltip&skin=blueSky}} component to be shown.
   
-  Therefore, we have decided to improve the stability of visual testing by introducing a way how to exclude some tests, or whole
-  test classes from visual testing (they are still run in functional tests, as there they are stable enough). We introduced
+  Therefore, we have decided to improve the stability of visual testing by introducing a way to exclude some tests or whole
+  test classes from visual testing (they are still run in functional tests, as they are stable enough there). We introduced
   a JAVA annotation \texttt{@VisuallyUnstable} to the Graphene visual testing extension API (see \ref{sec:arqExt}). 
   Listing \ref{lis:excludedTest} depicts how one particular test can be excluded from visual testing, 
-  and listing \ref{lis:excludedWholeTestClass} shows how whole test class, and all its testing methods can be excluded at once
-  from visual testing.
+  and listing \ref{lis:excludedWholeTestClass} shows how a whole test class, and all its testing methods can be excluded
+  from visual testing at once.
   
   \begin{lstlisting}[caption=Exclude functional test from visual testing by annotating it with @VisuallyUnstable,label=lis:excludedTest,language=java]
   @Test
@@ -1096,45 +1096,45 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   }
   \end{lstlisting}
   
-  The main part of the real world use case, we wanted to test, was upgrading of the RichFaces core library to 4.5.1.Final version.
-  We chose this use case, because it was mainly in release testing process (see chapter \ref{sec:visual-testing-in-release-process}),
-  when manual testing was conducted. When there was a new version of RichFaces core library available.
+  The main part of the real world use case we wanted to test was upgrading of the RichFaces core library to the 4.5.1.Final version.
+  We chose this use case, because it was mainly in release testing process (see chapter \ref{sec:visual-testing-in-release-process})
+  when manual testing was conducted and there was a new version of RichFaces core library available.
   
-  The test suite was run in a way, that it tested RichFaces application with 4.5.1.Final libraries. Initially as we expected we
-  got many differences (more than 200). The reason was that Showcase application shows on the bottom, in footer its version. 
+  The test suite was run in a way that it tested the RichFaces application with 4.5.1.Final libraries. Initially as we expected we
+  got many differences (more than 200). The reason was that the Showcase application shows on the bottom, in footer its version. 
   The version is visible on all screens, thus there were so many differences. Secondly, there were some expected changes, due to
   fixes in the application\footnote{These changes are available in an online repository:\\*
   1. \url{https://github.com/richfaces/richfaces/commit/203a7421f7daa594ce8d16c810a379a75dafa805}\\* 
   2. \url{https://github.com/richfaces/richfaces/commit/715607080a4c15bff90af6546353e4b21a8391ee}}.
   
   Figures \ref{fig:chartComponentRenamed}, \ref{fig:rfVersionChanged} show generated diffs for these expected changes. Because they
-  affect lot of visual comparisons, we had to do something to decrease the number of false negative tests. We used Arquillian Rusheye 
-  (see section \ref{sec:rusheye}) feature of masks to do it. It is a way, how to make arbitrary parts of the web page excluded from
-  visual comparison. Currently, Rusheye support so called selective alpha masks, which are pictures with a transitive (alpha) layer,
-  and also with non transitive parts which covers the parts of the patterns and samples, we would like to exclude from pixel to
-  pixed comparison [30]. Our tool is not currently supporting feature of masks, as we did not recognized as a inevitable part of
+  affect a lot of visual comparisons, we had to do something to decrease the number of false negative tests. We used the Arquillian Rusheye 
+  (see section \ref{sec:rusheye}) feature of masks to do it. It is a way to make arbitrary parts of the web page excluded from
+  visual comparison. Currently, Rusheye supports the so called selective alpha masks, which are pictures with a transitive (alpha) layer
+  and also with non transitive parts which cover the parts of the patterns and samples we would like to exclude from pixel to
+  pixel comparison [30]. Our tool is currently not supporting the feature of masks, as we did not recognize it as an inevitable part of
   proving/disproving of our hypothesis (see chapter \ref{sec:hypothesis}). It is indeed a very useful feature, which we will
-  add to the tool in next development stages (see section \ref{sec:plannedExtensions}).
+  add to the tool in the next developmental stages (see section \ref{sec:plannedExtensions}).
   
   \subsection{Results}
   
-  Finally, after applying all previously mentioned methods for decreasing number of false negative test results, we came to acceptable
-  number of generated diffs (4). Reviewing of such results would take minimum time (5 min maximum) for a tester which is familiar with the application.
+  Finally, after applying all the previously mentioned methods for decreasing the number of false negative test results, we came to an acceptable
+  number of generated diffs (4). Reviewing such results would take minimum time (5 min maximum) for a tester familiar with the application.
   
-  Indeed we had to add to the final result the time which we spend with applying masks, and excluding unstable tests from visual
-  testing (30 min). However, this most of these activities need to be done only once for the test suite. It can be reused in subsequent
-  releases of the RichFaces framework (mask to cover changing version of RichFaces will remain same, the same for mask for covering
-  menu with components).
+  Indeed, we had to add to the final result the time which we spent with applying masks, and excluding unstable tests from visual
+  testing (30 min). However, most of these activities needs to be done only once for the test suite. It can be reused in subsequent
+  releases of the RichFaces framework (the mask to cover the changing version of RichFaces will remain the same, the same for the mask for covering
+  the menu with components).
   
-  It is a very good result when taking into consideration following facts:
+  It is a very good result when taking into consideration the following facts:
   
   \begin{itemize}
    \item Visual testing was done automatically, so during this time the human resources (testers) were able to do some more 
-   intellectually demanding testing, than just exploratory manual testing, which means clicking through the application.
+   intellectually demanding testing than just exploratory manual testing, which means clicking through the application.
    \item This manual testing needs to be done for all major browsers separately. Each manual testing takes approximately 30 min.
-         If there is 5 major browsers currently used (see section \ref{footnote:majorBrowsers}), it is about 150 min of manual testing.
-   \item If we suppose that reviewing of automatized jobs would take 25 min (5 min for each), we can say that we have safe
-	 125 min of time for a quality assurance team human resources. It is improvement for about 83.33 \%.
+         If there are 5 major browsers currently used (see section \ref{footnote:majorBrowsers}), it is about 150 min of manual testing.
+   \item If we suppose that reviewing of automatized jobs would take 25 min (5 min for each), we can say that we save
+	 125 min of time for quality assurance team human resources. It is about 83.33 \% improvement.
   \end{itemize}
 
   
@@ -1157,21 +1157,21 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   \end{figure*}
 
   \section{Usage with CI}
-  One of our requirement for the tool is, that it can be used with in Continuous Integration systems. This is quite easy condition to meet.
-  Only requirement is that process of visual testing need to be automatized, that it will not need user interaction.
+  One of our requirements for the tool is that it can be used within Continuous Integration systems. This is quite an easy condition to meet.
+  The only requirement is that the process of visual testing needs to be automatized, so that it will not need user interaction.
   
-  As we build our solution as a integration with Arquillian Graphene, this requirement is fulfilled automatically. The required way of running
+  As we built our solution as an integration with Arquillian Graphene, this requirement is fulfilled automatically. The required way of running
   Arquillian Graphene tests is via Apache Maven\footnote{Apache Maven - \url{http://maven.apache.org/}} build.
   
   Functional tests are executed in Continuous Integration environment (see figure \ref{fig:wholeSolutionSequenceDiagram}). During this testing,
-  screenshots are made. After testing, pixed to pixel comparison take place (in the same CI environment). When visual testing is done, created
-  diffs, and samples are uploaded into the JCR, and can be reviewed later via Web Manager. The tester is able to take an immediate action
-  over results. He can reject pattern or sample (it will change configuration files on server), which effectively change next executions of 
+  screenshots are made. After testing, pixed to pixel comparison takes place (in the same CI environment). When visual testing is done, created
+  diffs and samples are uploaded into the JCR and can be reviewed later via Web Manager. The tester is able to take an immediate action
+  over the results. He can reject the pattern or sample (it will change the configuration files on the server), which effectively changes the next executions of 
   visual testing in CI environment, as all configuration files are downloaded before each execution of tests.
   
-  Test suite and Web Manager are wired via Arquillian configuration file. Listing \ref{lis:arqConfVisTesting} shows what information is needed 
-  to be set, in order to pair your test suite and the web manager (description of all configuration values is included in the documentation
-  of source code, attached in CD attachment, see \ref{appendix:d}).
+  Test suite and Web Manager are wired via the Arquillian configuration file. Listing \ref{lis:arqConfVisTesting} shows what information is needed 
+  to be set in order to pair your test suite and the web manager (the description of all configuration values is included in the documentation
+  of the source code, attached in CD attachment, see \ref{appendix:d}).
   
   \begin{lstlisting}[caption=Example of configuration for Graphene Visual Testing Extension,label=lis:arqConfVisTesting,breaklines=true, language=xml]
   <extension qualifier="visual-testing">
@@ -1185,50 +1185,50 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   </extension>
   \end{lstlisting}
   
-  Following text describes current setting for visual testing form listing \ref{lis:arqConfVisTesting}. 
-  On line number 2 is an unique value to distinguish this particular configuration in Web Manager (JCR and PostgreSQL data).
-  On line number 3, when visual testing is done first time this has to be true, patterns are created. In subsequent runs it should be set to
+  The following text describes the current setting for visual testing form listing \ref{lis:arqConfVisTesting}. 
+  On line number 2, there is a unique value to distinguish this particular configuration in Web Manager (JCR and PostgreSQL data).
+  On line number 3, when visual testing is done for the first time, this has to be true, patterns are created. In subsequent runs it should be set to
   false. 
   
-  On line 4, when visual testing fail, whole Maven build fails if this is true. This is a very important feature, because it enables
-  CI to indicate to the tester that visual testing has failed. Otherwise a tester would need to find it out from logs (very time consuming),
-  or to check Web Manager. For example Jenkins CI\footnote{Jenkins CI - \url{http://jenkins-ci.org/}}, when build fail, it is indicated to the
-  tester with red sign. When build passes it is blue. This provides instant information about build status, and save testers time.
+  On line 4, when visual testing fails, the whole Maven build fails if this is true. This is a very important feature, because it enables
+  CI to indicate to the tester that the visual testing has failed. Otherwise a tester would need to find it out from logs (very time consuming),
+  or to check the Web Manager. For example Jenkins CI\footnote{Jenkins CI - \url{http://jenkins-ci.org/}}, when build fails, it is indicated to the
+  tester with a red sign. When build passes, it is blue. This provides instant information about build status, and saves tester's time.
   
-  Line 5, 6, 7, 8 are information needed to wire test suite and JCR, as well as to wire it with Web Manager (see attachment \ref{appendix:e}
-  for more information how to obtain these values).
+  Line 5, 6, 7, 8 are the information needed to wire the test suite and JCR, as well as to wire it with the Web Manager (see attachment \ref{appendix:e}
+  for more information on how to obtain these values).
   
   \section{Cloud ready}
   \label{sec:cloudReady}
-  Improvement of effectiveness of a quality assurance team was our primary goal, when developing the tool. This include easy 
-  deployment of the tool either in the organization infrastructure, or in a cloud environment. Particularly its web part, the
+  The improvement of the effectiveness of a quality assurance team was our primary goal when developing the tool. This includes easy 
+  deployment of the tool either in the organization infrastructure or in a cloud environment, particularly its web part, the
   Web manager for reviewing results (see \ref{sec:webManagerAppDesc}).
   
-  We chose OpenShift open hybrid cloud by Red Hat, to proof the concept, that our solution is deployable to a cloud. One of the
+  We chose OpenShift open hybrid cloud by Red Hat to prove the concept that our solution is deployable to a cloud. One of the
   reasons is that it supports WildFly application server, which integrates well with ModeShape JCR repository \ref{chap:storage}.
   
-  To login into the application\footnote{Application is available at 
+  To login to the application\footnote{Application is available at 
   \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}} one has to 
   use \texttt{msuser}, and password \texttt{CAus6Vj6QsX-}.
   
-  Whole process of deploying Web Manager to OpenShift is described in Appendix \ref{appendix:e}. By following it, it is very easy
+  The whole process of deploying Web Manager to OpenShift is described in Appendix \ref{appendix:e}. By following it, it is very easy
   to deploy the Web Manager application.
   
 \chapter{Known issues and future plans}
-We supposed created tools mainly as a proof of concept, which prove our hypothesis (see \ref{sec:hypothesis}). Therefore, we chose those features
-to the tool to implement as first, which were inevitable for proving or disproving the hypothesis.
+We supposed created tools mainly as a proof of concept, which proves our hypothesis (see \ref{sec:hypothesis}). Therefore, we chose those features
+to the tool to be implemented first, which were essential for proving or disproving the hypothesis.
 
-We are aware of the fact that there are lot of features missing to have a production ready tool. Implementation of such, however, is out
-of scope of this thesis. In the same time we do believe, that tools can be used right now to increase effectiveness of the quality assurance
-team. Following known issues (or in other words future plans to extend the tool) need to be in mind:
+We are aware of the fact that there are a lot of features missing to have a production ready tool. The implementation of such, however, is out
+of the scope of this thesis. At the same time we do believe that the tools can be used right now to increase the effectiveness of the quality assurance
+team. The following known issues (or in other words future plans to extend the tool) need to be kept in mind:
 
 \begin{enumerate}
  \item Support for Rusheye feature of masking those parts of the web site, which need to be excluded from visual testing, has to be applied
- right now manually. In the future developments, it will be able to be done from Web Manager during reviewing of results.
- \item Web Manager application security need to be improved. Right now there is only Basic authentication employed. So in order to work
- with the application securely, one has to work with it via SSL channels. REST API calls are not secured neither.
+ manually at the moment. In future developments, it will be possible to do this from the Web Manager during the reviewing of results.
+ \item Web Manager application security needs to be improved. Right now there is only Basic authentication employed. So in order to work
+ with the application securely, one has to work with it via SSL channels. REST API calls are not secured either.
  \item Performance of the application can be improved. Right now we are using eager fetches from databases, and we also do not optimize
- client side of the Web Manager anyhow.
+ the client side of the Web Manager in any way.
  \item Small Web Manager UI improvements, such as identification of the particular runs with source code management ids (e.g. Git commit id of
  particular commit in the application, which is tested).
 \end{enumerate}
@@ -1237,29 +1237,29 @@ team. Following known issues (or in other words future plans to extend the tool)
 \label{sec:plannedExtensions}
   
 \chapter{Conclusion}
-The aim of this thesis was to create a tool and a process for a visual testing of web application, to improve the effectiveness of a 
+The aim of this thesis was to create a tool and a process for a visual testing of a web application, to improve the effectiveness of a 
 quality assurance team. We were obliged to do a research, to find out what output of such a tool would be most useful. Before implementing
-of the tool, an analysis of already existing solutions for visual testing based on picture comparisons was supposed to be carried out.
-Based on this analysis and research, we were supposed to design the best way for storing of created screenshots, intended for visual comparison.
-Last but not least we had to keep in mind, when designing the tool and process, its cooperation with Continuous Integration systems.
-The improvement of effectiveness for quality assurance team, was supposed to be proved on a actual deployment of the tool and the 
+the tool, an analysis of the already existing solutions for visual testing based on picture comparisons was supposed to be carried out.
+Based on this analysis and research, we were supposed to design the best way for storing created screenshots, intended for visual comparison.
+Last but not least, we had to keep in mind, when designing the tool and process, its cooperation with Continuous Integration systems.
+The improvement of effectiveness of the quality assurance team was supposed to be proved on an actual deployment of the tool and the 
 process to a real world web application.
 
-We can conclude that all of thesis targets were met. We have created the tool, and the process, which can demonstrably improve effectiveness
-of a quality assurance team in some cases for 83\%.
+We can conclude that all of the thesis targets were met. We have created the tool, and the process, which can demonstrably improve the effectiveness
+of a quality assurance team in some cases by 83\%.
 
-The major contribution of this thesis is the created tool and the process itself. It introduces a new approach to visual testing, when
+The major contribution of this thesis is the created tool and the process itself. It introduces a new approach to visual testing, where
 visual testing is carried out alongside functional testing of an application. Because of this, testers can develop and maintain only one
 script, which controls and assert various states of the application under test.
 
-By a careful picking of frameworks (Arquillian, Graphene, Rusheye), and technologies which we have built the final solution on, we have 
-achieved that the test suite for a visual testing (the same as for functional testing) is well maintainable, thus better ready for reacting 
-on constantly changing application under test.
+By a careful picking of frameworks (Arquillian, Graphene, Rusheye) and technologies which the final solution was built on, we have 
+achieved that the test suite for a visual testing (the same as for functional testing) is well maintainable, and thus better prepared for reacting 
+to the constantly changing application under test.
 
-We have conducted a research among IT experts, what output of the tool for reviewing results of visual testing would be the most useful. Based
-on the research results, we have designed a web application called Web Manager. With this application a tester can take an immediate action
+We have conducted a research among IT experts on what output of the tool for reviewing results of visual testing would be the most useful. Based
+on the research results, we have designed a web application called the Web Manager. With this application a tester can take an immediate action
 over particular results. We have proved that this web application is easily deployable in cloud environment (OpenShift by Red Hat). Last but
-not least we have proved its usages in Continuous Integration systems as for example Jenkins.
+not least, we have proved its usages in Continuous Integration systems as for example Jenkins.
 
 We have learned a lot of new technologies during developing of the tool. We have deepen our knowledge of Java EE and JavaScript. 
 We have learned AngularJS framework, Arquillian extensions mechanism, Twitter Bootstrap. We have successfully integrated our solution with
