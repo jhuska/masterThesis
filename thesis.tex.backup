@@ -171,7 +171,7 @@ Here we would like to define some of the important terms used in the whole thesi
 
 
 \chapter{Visual testing of software}    
-    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
+    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results~\citep{Hetzel}. 
     It can be done either manually by the actual use of an application, or automatically by executing testing scripts.
     
     If the application under test also has a graphical user interface (GUI), then one has to verify whether it is not broken. 
@@ -202,7 +202,7 @@ Here we would like to define some of the important terms used in the whole thesi
   \section{Visual testing in release testing process}
   \label{sec:visual-testing-in-release-process}
   Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process
-  such as Waterfall [2], or Scrum [3].
+  such as Waterfall\footnote{Waterfall - \url{http://en.wikipedia.org/wiki/Waterfall_model}} , or Scrum\footnote{Scrum - \url{http://en.wikipedia.org/wiki/Scrum_(software_development)}}.
   
   Testing of software has an immense role in this release process. Automated tests are often executed continuously, as they are quicker to run than manual tests, 
   which are carried out at a specific stage of the release process.
@@ -218,7 +218,7 @@ Here we would like to define some of the important terms used in the whole thesi
    \item Checking the size, overflowing and transparency of all elements in charts.
    \item Checking colors, margins between bars.
    \item Putting a mouse cursor over specific places in the chart and verifying whether a popup with more detailed info is rendered in the correct place.
-   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera} 
+   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are ~\citep{majorBrowsers}: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera} 
    and with all supported application containers\footnote{Application containers are special programs 
    dedicated to providing a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
   \end{enumerate}
@@ -253,7 +253,7 @@ Here we would like to define some of the important terms used in the whole thesi
    \item a reasonable time to execute the test suite;
    \item a concise yet useful test suite output;
    \item a support for Continuous Integration systems\footnote{Continuous Integration (CI) system is a software to facilitate a practice of CI, which in short is about merging 
-	  all developer copies with a shared mainline several times a day [5].}.
+	  all developer copies with a shared mainline several times a day ~\citep{ci}.}.
   \end{enumerate}
   
     \subsection{Low cost of test suite maintenance}
@@ -318,7 +318,7 @@ are a good fit for enterprise companies, however, some indicators, which we used
 For each tool in the following sections we are going to show an example usage and its main drawbacks together with some basic description.
   
   \section{Mogo}
-  Mogo [6] approach to visual testing can be in short described as: 
+  Mogo \footnote{Mogo - \url{http://mogotest.com/}} approach to visual testing can be in short described as: 
   \begin{enumerate}
    \item Set of URLs of an application under test is provided to a cloud based system.
    \item Application URLs are loaded into various browsers, detection of broken links is done.
@@ -338,12 +338,12 @@ For each tool in the following sections we are going to show an example usage an
   change over time}.
   
   \section{BBC Wraith}
-  Wraith is a screenshot comparison tool created by developers at BBC News [7]. Their approach to visual testing can be described as:
+  Wraith \footnote{BBC Wraith - \url{https://github.com/BBC-News/wraith}} is a screenshot comparison tool created by developers at BBC News. Their approach to visual testing can be described as:
   \begin{enumerate}
    \item Take screenshots of two versions of web application by scripting either PhantomJS \ref{subsec:phantomJS}, or SlimerJS\footnote{SlimerJS is 
-   very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]} by another JavaScript framework called 
-   CasperJS \ref{subsec:casperJS} [20].
-   \item One version is the one currently developed (which runs on localhost\footnote{In computer networking, \texttt{localhost} means this computer. [11]}), and the other one is a live site.
+   very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of - \url{http://slimerjs.org/}} by another JavaScript 
+   framework called CasperJS \ref{subsec:casperJS} [20].
+   \item One version is the one currently developed (which runs on localhost\footnote{In computer networking, \texttt{localhost} means this computer.}), and the other one is a live site.
    \item Once screenshots of web page from these two different environments are captured, a command line tool \texttt{imagemagic} is executed to compare screenshots.
    \item Any difference is marked with blue color in the created picture, which is the result of comparing two pictures (It can be seen in Figure \ref{fig:bbcWraithDiff}).
    \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen in Figure \ref{fig:bbcGallery}).
@@ -355,7 +355,7 @@ For each tool in the following sections we are going to show an example usage an
   
     \subsection{PhantomJS}
     \label{subsec:phantomJS}
-    PhantomJS [8] is a stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
+    PhantomJS \footnote{PhantomJS - \url{http://phantomjs.org/}} is a stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
     WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
     interacted with by using its JavaScript API.
     
@@ -420,7 +420,7 @@ For each tool in the following sections we are going to show an example usage an
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
     \end{center}
-    \caption{BBC Wraith picture showing difference in comparison of two web page versions [12]}
+    \caption{BBC Wraith picture showing difference in comparison of two web page versions~\citep{bbc_wraith_diff}.}
     \label{fig:bbcWraithDiff} 
   \end{figure*}
 
@@ -430,7 +430,7 @@ For each tool in the following sections we are going to show an example usage an
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/wraithGalleryExample.png}}}
     \end{center}
-    \caption{BBC Wraith gallery example [13]}
+    \caption{BBC Wraith gallery example~\citep{bbc_wraith_gallery_example}}
     \label{fig:bbcGallery} 
   \end{figure*}
 
@@ -442,7 +442,7 @@ For each tool in the following sections we are going to show an example usage an
     Thus for example, a web page might look different in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not register these issues.
 
   \section{Facebook Huxley}
-  Another visual testing tool [15], supported by Facebook, Inc. [14], uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
+  Another visual testing tool \footnote{Facebook Huxley - \url{https://github.com/facebook/huxley}}, supported by Facebook, Inc. \footnote{Facebook, Inc. - \url{http://en.wikipedia.org/wiki/Facebook}}, uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
   of reviewing results are different, though.
   
   \begin{enumerate}
@@ -461,7 +461,7 @@ For each tool in the following sections we are going to show an example usage an
     
     \item One runs Huxley in the Record mode. This is the mode where Huxley loads the pages automatically in a fresh browser session, and a tester by hitting the Enter key instructs 
     Huxley to take a screenshot. Screenshots are stored in a folder with a test name (one given in the square brackets in the example above), together with a 
-    JSON\footnote{JSON stands for JavaScript Object Notation, a standard format that uses human readable format to transmit data objects [16]} file describing mainly how long should 
+    JSON\footnote{JSON stands for JavaScript Object Notation - \url{http://en.wikipedia.org/wiki/JSON}} file describing mainly how long should 
     Huxley wait, when doing visual comparison, to have a tested web page fully loaded. Time is measured during this record mode.
     
     \item To start visual testing, one has to run Huxley in the Playback mode. Huxley will start a fresh browser session, and will playback loading of the pages, with waiting for the pages
@@ -477,11 +477,11 @@ For each tool in the following sections we are going to show an example usage an
     
    Secondly, it lacks a proper way of viewing results of comparisons, leaving only one option to check the command line output, together with manual opening of the screenshots. This would degrade
    cooperation among various QA team members, and it is harder to deploy in a software as a service cloud solution\footnote{Software as a service is on demand software, centrally hosted, 
-   accessed typically by using a thin client via web browser [17].}, where such a cooperation might take place.
+   accessed typically by using a thin client via web browser~\citep{sass}.}, where such a cooperation might take place.
 
   \section{Rusheye}
   \label{sec:rusheye}
-  Rusheye [18] is a command line tool, which is focused on automated bulk or on-the-fly inspection of browser screenshots and comparison with a predefined image suite. It enables automated
+  Rusheye\footnote{Rusheye - \url{https://github.com/arquillian/arquillian-rusheye}} is a command line tool, which is focused on automated bulk or on-the-fly inspection of browser screenshots and comparison with a predefined image suite. It enables automated
   visual testing when used together with Selenium 1 project [19].
   
   The process has subtle differences in comparison with the previous solutions. It consists of these steps:
@@ -1035,7 +1035,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   available in the same repository as the application itself.} to try our tool and process on. It is a Java EE application, with
   many libraries needed to be deployed alongside with the application. One of them is RichFaces core library.
   
-  We chose a real world use case to try the tool and the process. Verify visual state of the application after upgrade of 
+  We chose a real world use case to try the tool and the process. It is: to verify visual state of the application after an upgrade of 
   the core RichFaces library, from version 4.5.0.Final to 4.5.1.Final. We proceed as follows:
   
   \begin{enumerate}
@@ -1101,7 +1101,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   when manual testing was conducted and there was a new version of RichFaces core library available.
   
   The test suite was run in a way that it tested the RichFaces application with 4.5.1.Final libraries. Initially as we expected we
-  got many differences (more than 200). The reason was that the Showcase application shows on the bottom, in footer its version. 
+  got many differences (more than 200). The reason was that the Showcase application shows on the bottom, in web application's footer its version. 
   The version is visible on all screens, thus there were so many differences. Secondly, there were some expected changes, due to
   fixes in the application\footnote{These changes are available in an online repository:\\*
   1. \url{https://github.com/richfaces/richfaces/commit/203a7421f7daa594ce8d16c810a379a75dafa805}\\* 
@@ -1261,14 +1261,14 @@ on the research results, we have designed a web application called the Web Manag
 over particular results. We have proved that this web application is easily deployable in cloud environment (OpenShift by Red Hat). Last but
 not least, we have proved its usages in Continuous Integration systems as for example Jenkins.
 
-We have learned a lot of new technologies during developing of the tool. We have deepen our knowledge of Java EE and JavaScript. 
+We have learned a lot of new technologies during the developing of the tool. We have deepened our knowledge of Java EE and JavaScript. 
 We have learned AngularJS framework, Arquillian extensions mechanism, Twitter Bootstrap. We have successfully integrated our solution with
-a Java Content Repository, and deployed whole solution to the cloud. We have contributed to open source projects, which we integrate 
+a Java Content Repository, and deployed the whole solution to the cloud. We have contributed to open source projects, which we integrate 
 with (list of them is available in appendix \ref{appendix:b}).
 
-There are many possible extensions to this thesis. The Web Manager UI can be improved, to display more information about visual testing,
-to even enhance user experience with it. Support for applying Rusheye masks from Web Manager is a very welcomed addition, which we are planning
-to implement, and provide whole solution as open source application.
+There are many possible extensions to this thesis. The Web Manager UI can be improved to display more information about visual testing,
+even to enhance user the experience with it. Support for applying Rusheye masks from the Web Manager is a very welcomed addition, which we are planning
+to implement and provide the whole solution as an open source application.
 
 \appendix
 \chapter{Appendix A - GUI mockups of Web Manager UI}
@@ -1450,23 +1450,32 @@ CD attachment popis
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
     \bibliography{thesis}
-    %[1] Hetzel, William C., The Complete Guide to Software Testing, 2nd ed. Publication info: Wellesley, Mass. : QED Information Sciences, 1988. ISBN: 0894352423.Physical description: ix, 280 p. : ill ; 24 cm.
+    %[1] Hetzel, Bill., The Complete Guide to Software Testing, 2nd ed. Publication info: Wellesley, Mass. : QED Information Sciences, 1988. ISBN: 0894352423.Physical description: ix, 280 p. : ill ; 24 cm.
     %[2] http://en.wikipedia.org/wiki/Waterfall_model
     %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
     %[4] http://www.w3schools.com/browsers/browsers_stats.asp
+    
     %[5] http://en.wikipedia.org/wiki/Continuous_integration
     %[6] http://mogotest.com/
+    
     %[7] https://github.com/BBC-News/wraith 
     %[8] http://phantomjs.org/
+    
     %[9] http://en.wikipedia.org/wiki/WebKit
     %[10] http://slimerjs.org/
-    %[11] http://en.wikipedia.org/wiki/Localhost
+    
     %[12] http://media.tumblr.com/c5bf7caefde043ee7532b641c7f0e157/tumblr_inline_moaf774b5i1qz4rgp.jpg
+    
     %[13] http://hop.ie/images/posts/wraith/example.png
+    
     %[14] http://en.wikipedia.org/wiki/Facebook
+    
     %[15] https://github.com/facebook/huxley
+    
     %[16] http://en.wikipedia.org/wiki/JSON
+    
     %[17] http://en.wikipedia.org/wiki/Software_as_a_service
+    
     %[18] https://github.com/arquillian/arquillian-rusheye
     %[19] http://www.seleniumhq.org/docs/05_selenium_rc.jsp
     %[20] http://casperjs.org/

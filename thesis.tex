@@ -92,13 +92,13 @@ I would like to thank Mgr. Marek Grác, Ph.D., the advisor of my thesis, for his
 
 I am profoundly grateful to Bc. Lukáš Fryč for his guidance and support throughout my work.
 
-My deepest thanks go to my parents, who made it possible for me to study at this brilliant university. 
+My deepest thanks go to my parents, Ľudmila Húsková and Miroslav Húska, who made it possible for me to study at this brilliant university. 
 
 I would also like to say thanks to the Czech Republic for allowing me to study at the Masaryk University. Similarly, I would like to express
 my thanks to Red Hat company, I cooperated on this thesis with. Particularly to Mgr. Pavol Pitoňák for allowing me to dedicate some of the
 work time to this thesis.
 
-I greatly appreciate the support of my girlfriend during writing of this thesis, as well as help of all my close friends.
+I greatly appreciate the support of my girlfriend, Lenka Horáková, during writing of this thesis, as well as help of all my close friends.
 
 \end{ThesisThanks}
 
@@ -171,7 +171,7 @@ Here we would like to define some of the important terms used in the whole thesi
 
 
 \chapter{Visual testing of software}    
-    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results [1]. 
+    Testing of software in general is any activity aimed at evaluating an attribute or capability of a program and determining that it meets its required results~\citep{Hetzel}. 
     It can be done either manually by the actual use of an application, or automatically by executing testing scripts.
     
     If the application under test also has a graphical user interface (GUI), then one has to verify whether it is not broken. 
@@ -202,7 +202,7 @@ Here we would like to define some of the important terms used in the whole thesi
   \section{Visual testing in release testing process}
   \label{sec:visual-testing-in-release-process}
   Nowadays software is often released for a general availability in repetitive cycles, which are defined according to a particular software development process
-  such as Waterfall [2], or Scrum [3].
+  such as Waterfall\footnote{Waterfall - \url{http://en.wikipedia.org/wiki/Waterfall_model}} , or Scrum\footnote{Scrum - \url{http://en.wikipedia.org/wiki/Scrum_(software_development)}}.
   
   Testing of software has an immense role in this release process. Automated tests are often executed continuously, as they are quicker to run than manual tests, 
   which are carried out at a specific stage of the release process.
@@ -218,7 +218,7 @@ Here we would like to define some of the important terms used in the whole thesi
    \item Checking the size, overflowing and transparency of all elements in charts.
    \item Checking colors, margins between bars.
    \item Putting a mouse cursor over specific places in the chart and verifying whether a popup with more detailed info is rendered in the correct place.
-   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are according to the [4]: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera} 
+   \item Repeat this for all major browsers\footnote{\label{footnote:majorBrowsers}Major browsers in the time of writing of this thesis are ~\citep{majorBrowsers}: Google Chrome, Mozilla Firefox, Internet Explorer, Safari, Opera} 
    and with all supported application containers\footnote{Application containers are special programs 
    dedicated to providing a runtime environment for complex enterprise web applications, e.g. JBoss AS, Wildfly, Apache Tomcat}.
   \end{enumerate}
@@ -253,7 +253,7 @@ Here we would like to define some of the important terms used in the whole thesi
    \item a reasonable time to execute the test suite;
    \item a concise yet useful test suite output;
    \item a support for Continuous Integration systems\footnote{Continuous Integration (CI) system is a software to facilitate a practice of CI, which in short is about merging 
-	  all developer copies with a shared mainline several times a day [5].}.
+	  all developer copies with a shared mainline several times a day ~\citep{ci}.}.
   \end{enumerate}
   
     \subsection{Low cost of test suite maintenance}
@@ -318,7 +318,7 @@ are a good fit for enterprise companies, however, some indicators, which we used
 For each tool in the following sections we are going to show an example usage and its main drawbacks together with some basic description.
   
   \section{Mogo}
-  Mogo [6] approach to visual testing can be in short described as: 
+  Mogo \footnote{Mogo - \url{http://mogotest.com/}} approach to visual testing can be in short described as: 
   \begin{enumerate}
    \item Set of URLs of an application under test is provided to a cloud based system.
    \item Application URLs are loaded into various browsers, detection of broken links is done.
@@ -338,12 +338,12 @@ For each tool in the following sections we are going to show an example usage an
   change over time}.
   
   \section{BBC Wraith}
-  Wraith is a screenshot comparison tool created by developers at BBC News [7]. Their approach to visual testing can be described as:
+  Wraith \footnote{BBC Wraith - \url{https://github.com/BBC-News/wraith}} is a screenshot comparison tool created by developers at BBC News. Their approach to visual testing can be described as:
   \begin{enumerate}
    \item Take screenshots of two versions of web application by scripting either PhantomJS \ref{subsec:phantomJS}, or SlimerJS\footnote{SlimerJS is 
-   very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of. [10]} by another JavaScript framework called 
-   CasperJS \ref{subsec:casperJS} [20].
-   \item One version is the one currently developed (which runs on localhost\footnote{In computer networking, \texttt{localhost} means this computer. [11]}), and the other one is a live site.
+   very similar to PhantomJS \ref{subsec:phantomJS}, it just runs on top of Gecko engine, which e.g. Mozilla Firefox runs on top of - \url{http://slimerjs.org/}} by another JavaScript 
+   framework called CasperJS \ref{subsec:casperJS}\footnote{CasperJS - \url{http://casperjs.org/}}.
+   \item One version is the one currently developed (which runs on localhost\footnote{In computer networking, \texttt{localhost} means this computer.}), and the other one is a live site.
    \item Once screenshots of web page from these two different environments are captured, a command line tool \texttt{imagemagic} is executed to compare screenshots.
    \item Any difference is marked with blue color in the created picture, which is the result of comparing two pictures (It can be seen in Figure \ref{fig:bbcWraithDiff}).
    \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen in Figure \ref{fig:bbcGallery}).
@@ -355,7 +355,7 @@ For each tool in the following sections we are going to show an example usage an
   
     \subsection{PhantomJS}
     \label{subsec:phantomJS}
-    PhantomJS [8] is a stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
+    PhantomJS \footnote{PhantomJS - \url{http://phantomjs.org/}} is a stack of web technologies based on headless\footnote{Headless software do not require graphical environment (such as X Windows system) for its execution.} 
     WebKit\footnote{WebKit is a layout engine software component for rendering web pages in web browsers, such as Apple's Safari or previously a Google Chrome [9]} engine, which can be 
     interacted with by using its JavaScript API.
     
@@ -420,7 +420,7 @@ For each tool in the following sections we are going to show an example usage an
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
     \end{center}
-    \caption{BBC Wraith picture showing difference in comparison of two web page versions [12]}
+    \caption{BBC Wraith picture showing difference in comparison of two web page versions~\citep{bbc_wraith_diff}.}
     \label{fig:bbcWraithDiff} 
   \end{figure*}
 
@@ -430,7 +430,7 @@ For each tool in the following sections we are going to show an example usage an
     \leavevmode
     \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/wraithGalleryExample.png}}}
     \end{center}
-    \caption{BBC Wraith gallery example [13]}
+    \caption{BBC Wraith gallery example~\citep{bbc_wraith_gallery_example}}
     \label{fig:bbcGallery} 
   \end{figure*}
 
@@ -442,7 +442,7 @@ For each tool in the following sections we are going to show an example usage an
     Thus for example, a web page might look different in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not register these issues.
 
   \section{Facebook Huxley}
-  Another visual testing tool [15], supported by Facebook, Inc. [14], uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
+  Another visual testing tool \footnote{Facebook Huxley - \url{https://github.com/facebook/huxley}}, supported by Facebook, Inc. \footnote{Facebook, Inc. - \url{http://en.wikipedia.org/wiki/Facebook}}, uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
   of reviewing results are different, though.
   
   \begin{enumerate}
@@ -461,7 +461,7 @@ For each tool in the following sections we are going to show an example usage an
     
     \item One runs Huxley in the Record mode. This is the mode where Huxley loads the pages automatically in a fresh browser session, and a tester by hitting the Enter key instructs 
     Huxley to take a screenshot. Screenshots are stored in a folder with a test name (one given in the square brackets in the example above), together with a 
-    JSON\footnote{JSON stands for JavaScript Object Notation, a standard format that uses human readable format to transmit data objects [16]} file describing mainly how long should 
+    JSON\footnote{JSON stands for JavaScript Object Notation - \url{http://en.wikipedia.org/wiki/JSON}} file describing mainly how long should 
     Huxley wait, when doing visual comparison, to have a tested web page fully loaded. Time is measured during this record mode.
     
     \item To start visual testing, one has to run Huxley in the Playback mode. Huxley will start a fresh browser session, and will playback loading of the pages, with waiting for the pages
@@ -477,12 +477,12 @@ For each tool in the following sections we are going to show an example usage an
     
    Secondly, it lacks a proper way of viewing results of comparisons, leaving only one option to check the command line output, together with manual opening of the screenshots. This would degrade
    cooperation among various QA team members, and it is harder to deploy in a software as a service cloud solution\footnote{Software as a service is on demand software, centrally hosted, 
-   accessed typically by using a thin client via web browser [17].}, where such a cooperation might take place.
+   accessed typically by using a thin client via web browser~\citep{sass}.}, where such a cooperation might take place.
 
   \section{Rusheye}
   \label{sec:rusheye}
-  Rusheye [18] is a command line tool, which is focused on automated bulk or on-the-fly inspection of browser screenshots and comparison with a predefined image suite. It enables automated
-  visual testing when used together with Selenium 1 project [19].
+  Rusheye\footnote{Rusheye - \url{https://github.com/arquillian/arquillian-rusheye}} is a command line tool, which is focused on automated bulk or on-the-fly inspection of browser screenshots and comparison with a predefined image suite. It enables automated
+  visual testing when used together with Selenium 1 project\footnote{Selenium 1 - \url{http://www.seleniumhq.org/docs/05_selenium_rc.jsp}}.
   
   The process has subtle differences in comparison with the previous solutions. It consists of these steps:
   
@@ -491,7 +491,7 @@ For each tool in the following sections we are going to show an example usage an
    \item First screenshots are claimed to be correct (are controlled manually). They are called patterns.
    \item After a change the web application under test, another run of Selenium 1 tests generates new screenshots. They are called samples.
    \item Patterns and samples are compared, their visual difference is created, and the result is saved in an XML file.
-   \item The results can be viewed in a desktop application, Rusheye manager [22].
+   \item The results can be viewed in a desktop application, Rusheye manager \footnote{Rusheye Manager available at \url{https://github.com/jjamrich/arquillian-rusheye}}.
   \end{enumerate}
   
   Rusheye has one very important feature, which other tools lack. It is the possibility to add masks on particular parts of the screenshots. Those parts are ignored when two screenshots are
@@ -514,7 +514,7 @@ For each tool in the following sections we are going to show an example usage an
   
   Tests readability is a problem we discussed with a particular tool description. It is a level of abstraction over underlaying HTML, in which the application is written. It is quite a subjective
   matter, however, there are some clues by which it can be made more objective. For example, the way how tests are coupled with the HTML or CSS code. Because the more they are, the less they 
-  are readable [21]. A scale we used for evaluation supposes ``insufficient'' as lowest readability, which in the long term run of the test suite might cause a lot of issues.
+  are readable. A scale we used for evaluation supposes ``insufficient'' as lowest readability, which in the long term run of the test suite might cause a lot of issues.
   
   By tests robustness we suppose a level of stability which have tests, when are executed with a particular tool. 
   It means how likely there are false positive and false negative tests, whether they are caused by a not fully loaded page, or by dynamic data rendered on the page. If the robustness is low,
@@ -544,7 +544,7 @@ For each tool in the following sections we are going to show an example usage an
 \chapter{New approach}
   Each tool by its definition introduces a process for a visual testing. While we recognized shortcomings (described in chapter \ref{chap:conclusion}), we realized a need for a different 
   approach to visual testing. The approach came from two and a half years of developing and maintaining the functional test suite \footnote{The RichFaces test suite is available at 
-  https://github.com/richfaces/richfaces-qa} for RichFaces project \footnote{RichFaces is a component library for Java Server Faces web framework [23]}.
+  https://github.com/richfaces/richfaces-qa} for RichFaces project \footnote{RichFaces is a component library for Java Server Faces web framework - \url{http://richfaces.jboss.org/}}.
   
   \section{Hypothesis}
   \label{sec:hypothesis}
@@ -643,7 +643,7 @@ For each tool in the following sections we are going to show an example usage an
   Therefore, we conducted a research among IT experts, which took a form of brainstorming on the visual testing web application user interface. The purpose of such a web application is to show
   results and allow a tester to take an immediate action over them.
   
-  The brainstorming took place on Arquillian developer forum [24], which is daily accessed by hundreds of users. At the time of writing this thesis, it has more than 355 views 
+  The brainstorming took place on Arquillian developer forum\footnote{Arquillian developer forum available at \url{https://developer.jboss.org/thread/248301}}, which is daily accessed by hundreds of users. At the time of writing this thesis, it has more than 355 views 
   and 11 replies. We can say that there are users interested in such a tool, and we have gained valuable feedback, together with many interesting ideas about what features such a web application
   for reviewing results should have.
   
@@ -713,7 +713,7 @@ from testing.
 In other words, it manages the life cycle of all integration components your application integrates with.
 
 It has very nice architecture, which resembles an event based machine. It is easily extensible, as it
-supports Service provider interface pattern [25]. It can cooperate with all major browsers, which makes
+supports Service provider interface pattern \footnote{Service provider interface - \url{http://docs.oracle.com/javase/tutorial/sound/SPI-intro.html}}. It can cooperate with all major browsers, which makes
 it a cross browser solution. 
 
 All these features made it a good candidate to integrate our solution with. We did not need to develop any
@@ -732,9 +732,9 @@ which guarantees stability, making it a good candidate to build our solution wit
 
 Graphene's type safe API\footnote{Type safe API in Java programming language enforces obeying various rules
 before compilation of source code, thus decreases a change to introduce an error.} supports design patterns
-such as Page Object\footnote{Page Object pattern encapsulates a web page into object, makes tests
-more readable [26].} or Page Fragment\footnote{Page Fragments pattern divides a web page further into reusable 
-components which encapsulates a web widget functionality, making tests more reusable and readable [27].}.
+such as Page Object\footnote{Page Object pattern\footnote{Page Object patter - \url{https://code.google.com/p/selenium/wiki/PageObjects}} encapsulates a web page into object, makes tests
+more readable.} or Page Fragment\footnote{Page Fragments pattern\footnote{Page Fragments pattern - \url{https://docs.jboss.org/author/display/ARQGRA2/Page+Fragments}} divides a web page further into reusable 
+components which encapsulates a web widget functionality, making tests more reusable and readable.}.
 
 Those features form an API with a high abstraction level, and encourage a tester to develop more readable
 tests. Those are attributes which the already existing solutions lack (see \ref{chap:conclusion} for more
@@ -941,11 +941,11 @@ public void parse(@Observes StartParsingEvent event) {
 
     The number one option has some obvious advantages. Databases are a superior solution where transactional integrity between the
     image and metadata are important. Because it is more complex to manage integrity between database metadata and file system data, 
-    and within the context of a web application, it is difficult to guarantee that data has been flushed to disk on the file system [28].
+    and within the context of a web application, it is difficult to guarantee that data has been flushed to disk on the file system~\citep{storing_images_in_db}.
     
     However, the way to store pictures in database as BLOBs has some disadvantages too. Database storage is usually more expensive
     than file system storage; database access cannot be accelerated for example by configuring a web server to use the system call to
-    asynchronously send a file directly to a network interface, as it can be done for file system access [28].
+    asynchronously send a file directly to a network interface, as it can be done for file system access~\citep{storing_images_in_db}.
     
     Option number two seems to be a viable solution for smaller test suites. It does not suffer from the problems which a database suffers from.
     In a the later stage of development of our tool we would like to provide this option to users of our tool. For now, we would like to
@@ -954,7 +954,7 @@ public void parse(@Observes StartParsingEvent event) {
     
     Therefore, we chose option number three as the pilot way for storing screenshots. JCR is a specification and also a Java
     API, thus a best fit for our Java based application. We liked what kind of data and access
-    patterns JCR are very good at handling [29]:
+    patterns JCR are very good at handling~\citep{why_choose_repository}:
     
     \begin{itemize}
      \item Hierarchical data;
@@ -1112,7 +1112,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   (see section \ref{sec:rusheye}) feature of masks to do it. It is a way to make arbitrary parts of the web page excluded from
   visual comparison. Currently, Rusheye supports the so called selective alpha masks, which are pictures with a transitive (alpha) layer
   and also with non transitive parts which cover the parts of the patterns and samples we would like to exclude from pixel to
-  pixel comparison [30]. Our tool is currently not supporting the feature of masks, as we did not recognize it as an inevitable part of
+  pixel comparison~\citep{lukas_bc_thesis}. Our tool is currently not supporting the feature of masks, as we did not recognize it as an inevitable part of
   proving/disproving of our hypothesis (see chapter \ref{sec:hypothesis}). It is indeed a very useful feature, which we will
   add to the tool in the next developmental stages (see section \ref{sec:plannedExtensions}).
   
@@ -1207,8 +1207,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   We chose OpenShift open hybrid cloud by Red Hat to prove the concept that our solution is deployable to a cloud. One of the
   reasons is that it supports WildFly application server, which integrates well with ModeShape JCR repository \ref{chap:storage}.
   
-  To login to the application\footnote{Application is available at 
-  \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}} one has to 
+  To login to the application, which is available at \url{http://jbosswildfly-jhuska.rhcloud.com/graphene-visual-testing-webapp}, one has to 
   use \texttt{msuser}, and password \texttt{CAus6Vj6QsX-}.
   
   The whole process of deploying Web Manager to OpenShift is described in Appendix \ref{appendix:e}. By following it, it is very easy
@@ -1450,35 +1449,5 @@ CD attachment popis
     \addcontentsline{toc}{chapter}{Bibliography}
     \pagestyle{plain}
     \bibliography{thesis}
-    %[1] Hetzel, William C., The Complete Guide to Software Testing, 2nd ed. Publication info: Wellesley, Mass. : QED Information Sciences, 1988. ISBN: 0894352423.Physical description: ix, 280 p. : ill ; 24 cm.
-    %[2] http://en.wikipedia.org/wiki/Waterfall_model
-    %[3] http://en.wikipedia.org/wiki/Scrum_(software_development)
-    %[4] http://www.w3schools.com/browsers/browsers_stats.asp
-    %[5] http://en.wikipedia.org/wiki/Continuous_integration
-    %[6] http://mogotest.com/
-    %[7] https://github.com/BBC-News/wraith 
-    %[8] http://phantomjs.org/
-    %[9] http://en.wikipedia.org/wiki/WebKit
-    %[10] http://slimerjs.org/
-    %[11] http://en.wikipedia.org/wiki/Localhost
-    %[12] http://media.tumblr.com/c5bf7caefde043ee7532b641c7f0e157/tumblr_inline_moaf774b5i1qz4rgp.jpg
-    %[13] http://hop.ie/images/posts/wraith/example.png
-    %[14] http://en.wikipedia.org/wiki/Facebook
-    %[15] https://github.com/facebook/huxley
-    %[16] http://en.wikipedia.org/wiki/JSON
-    %[17] http://en.wikipedia.org/wiki/Software_as_a_service
-    %[18] https://github.com/arquillian/arquillian-rusheye
-    %[19] http://www.seleniumhq.org/docs/05_selenium_rc.jsp
-    %[20] http://casperjs.org/
-    %[21] https://is.muni.cz/auth/th/359345/fi_b/
-    %[22] https://github.com/jjamrich/arquillian-rusheye
-    %[23] http://richfaces.jboss.org/
-    %[24] https://developer.jboss.org/thread/248301
-    %[25] http://docs.oracle.com/javase/tutorial/sound/SPI-intro.html
-    %[26] https://code.google.com/p/selenium/wiki/PageObjects
-    %[27] https://docs.jboss.org/author/display/ARQGRA2/Page+Fragments
-    %[28] http://stackoverflow.com/a/3751
-    %[29] https://docs.jboss.org/author/display/MODE40/Why+use+a+repository
-    %[30] https://is.muni.cz/auth/th/207442/fi_b/
 
 \end{document}
