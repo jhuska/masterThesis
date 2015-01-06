@@ -349,6 +349,25 @@ For each tool in the following sections we are going to show an example usage an
    \item All pictures can be seen in a gallery, which is a generated HTML site (It can be seen in Figure \ref{fig:bbcGallery}).
   \end{enumerate}
   
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
+    \end{center}
+    \caption{BBC Wraith picture showing difference in comparison of two web page versions~\citep{bbc_wraith_diff}.}
+    \label{fig:bbcWraithDiff} 
+  \end{figure*}
+
+  
+  \begin{figure*}[!htb]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/wraithGalleryExample.png}}}
+    \end{center}
+    \caption{BBC Wraith gallery example~\citep{bbc_wraith_gallery_example}}
+    \label{fig:bbcGallery} 
+  \end{figure*}
+  
   To instruct the BBC Wraith tool to take screenshots from the web application, one has to firstly script PhantomJS or SlimerJS to interact with the page, and secondly, create a 
   configuration file, which will tell the PhantomJS instance which URLs need to be loaded and tested. PhantomJS script is one source of distrust for this tool, and therefore is
   introduced further.
@@ -414,25 +433,6 @@ For each tool in the following sections we are going to show an example usage an
     
     The problem with this script, which we identified, is its low-level abstraction of the browser interactions. It makes tests less readable, and thus more error prone when a change
     needs to be introduced.
-    
-    \begin{figure*}[!htb]
-    \begin{center}
-    \leavevmode
-    \centerline{\scalebox{1.0}{\includegraphics[width=0.4\textwidth]{figures/bbcWraith.jpg}}}
-    \end{center}
-    \caption{BBC Wraith picture showing difference in comparison of two web page versions~\citep{bbc_wraith_diff}.}
-    \label{fig:bbcWraithDiff} 
-  \end{figure*}
-
-  
-  \begin{figure*}[!htb]
-    \begin{center}
-    \leavevmode
-    \centerline{\scalebox{1.0}{\includegraphics[width=0.8\textwidth]{figures/wraithGalleryExample.png}}}
-    \end{center}
-    \caption{BBC Wraith gallery example~\citep{bbc_wraith_gallery_example}}
-    \label{fig:bbcGallery} 
-  \end{figure*}
 
     \subsection{BBC Wraith drawbacks}
     Two of the drawbacks were described in the previous sections, \ref{subsec:phantomJS} and \ref{subsec:casperJS}.
@@ -441,6 +441,7 @@ For each tool in the following sections we are going to show an example usage an
     looking the same in all major browsers. The incompatibility comes from the fact that browsers interpret CSS rules differently, and because they have different JavaScript engines. 
     Thus for example, a web page might look different in Google Chrome and Microsoft Internet Explorer, and PhantomJS will not register these issues.
 
+  \newpage
   \section{Facebook Huxley}
   Another visual testing tool \footnote{Facebook Huxley - \url{https://github.com/facebook/huxley}}, supported by Facebook, Inc. \footnote{Facebook, Inc. - \url{http://en.wikipedia.org/wiki/Facebook}}, uses a similar approach in terms of comparing taken screenshots. The process of taking them and the process
   of reviewing results are different, though.
@@ -587,6 +588,16 @@ For each tool in the following sections we are going to show an example usage an
   \subsection{First execution of functional tests}
   \label{chap:firstRunProc}
   
+  \begin{figure*}[h!]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=0.9\textwidth]{figures/FirstTestsRunBMPN.png}}}
+    \end{center}
+    \caption{Process to generate patterns during the first execution of functional tests.}
+    \label{fig:FirstTestsRunBMPN}
+  \end{figure*}
+  
+  \newpage
   Figure \ref{fig:FirstTestsRunBMPN} denotes steps needed to generate patterns. It is a prerequisite for the visual testing.
   
   Screenshots are generated during the execution of the tests. If all functional tests pass, those screenshots
@@ -598,6 +609,15 @@ For each tool in the following sections we are going to show an example usage an
   If patterns are correct, a tester can proceed with subsequent runs of the test suite to start the actual visual testing.
   
   \subsection{Subsequent execution of visual testing}
+  
+  \begin{figure*}[h!]
+    \begin{center}
+    \leavevmode
+    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/NextTestsRunsBMPN.png}}}
+    \end{center}
+    \caption{Subsequent execution of visual testing together with functional tests.}
+    \label{fig:NextTestsRunsBMPN}
+  \end{figure*}
   
   Figure \ref{fig:NextTestsRunsBMPN} shows how subsequent execution of visual testing together with functional testing would look like. The first step is the same as in the previous process,
   functional tests are executed, and screenshots are taken. Secondly, patterns are downloaded from the storage, and after that the actual visual testing can start.
@@ -614,24 +634,6 @@ For each tool in the following sections we are going to show an example usage an
   The tool should be configurable, so such false negative results are rather sporadic, instead, failed visual comparison tests should reveal a bug in the application under test. In that case
   it is in the user's responsibility to file such a bug in a corresponding issue tracker. The generated pattern, sample and difference can be used as a useful attachment to an issue report, which
   would better describe the actual and expected result.
-  
-   \begin{figure*}[!htb]
-    \begin{center}
-    \leavevmode
-    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/FirstTestsRunBMPN.png}}}
-    \end{center}
-    \caption{Process to generate patterns during the first execution of functional tests.}
-    \label{fig:FirstTestsRunBMPN}
-  \end{figure*}
-  
-  \begin{figure*}[!htb]
-    \begin{center}
-    \leavevmode
-    \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/NextTestsRunsBMPN.png}}}
-    \end{center}
-    \caption{Subsequent execution of visual testing together with functional tests.}
-    \label{fig:NextTestsRunsBMPN}
-  \end{figure*}
   
   \newpage
   \section{Analysis of useful tool output}
@@ -858,6 +860,7 @@ public void parse(@Observes StartParsingEvent event) {
     A communication between this extension and a JCR is done via JCR Rest API. To issue a http request, we use Apache HttpComponents
     project\footnote{Apache HttpComponents - \url{http://hc.apache.org/}}.
  
+    \newpage
     \subsection{Web application to view results}
     \label{sec:webManagerAppDesc}
     It is a web application for reviewing results, but also for an active change
@@ -1116,6 +1119,24 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   proving/disproving of our hypothesis (see chapter \ref{sec:hypothesis}). It is indeed a very useful feature, which we will
   add to the tool in the next developmental stages (see section \ref{sec:plannedExtensions}).
   
+  \begin{figure*}[h!]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=0.7\textwidth]{figures/chartComponentRenamed.png}}}
+      \end{center}
+      \caption{RichFaces chart component renamed in application menu.}
+      \label{fig:chartComponentRenamed}
+  \end{figure*}
+  
+  \begin{figure*}[h!]
+      \begin{center}
+      \leavevmode
+      \centerline{\scalebox{1.0}{\includegraphics[width=0.9\textwidth]{figures/rchFacesVersionChanged.png}}}
+      \end{center}
+      \caption{RichFaces version changed after it was upgraded.}
+      \label{fig:rfVersionChanged}
+  \end{figure*}
+  
   \subsection{Results}
   
   Finally, after applying all the previously mentioned methods for decreasing the number of false negative test results, we came to an acceptable
@@ -1125,7 +1146,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   testing (30 min). However, most of these activities needs to be done only once for the test suite. It can be reused in subsequent
   releases of the RichFaces framework (the mask to cover the changing version of RichFaces will remain the same, the same for the mask for covering
   the menu with components).
-  
+  \newpage
   It is a very good result when taking into consideration the following facts:
   
   \begin{itemize}
@@ -1136,25 +1157,6 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
    \item If we suppose that reviewing of automatized jobs would take 25 min (5 min for each), we can say that we save
 	 125 min of time for quality assurance team human resources. It is about 83.33 \% improvement.
   \end{itemize}
-
-  
-  \begin{figure*}[!htb]
-      \begin{center}
-      \leavevmode
-      \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/chartComponentRenamed.png}}}
-      \end{center}
-      \caption{RichFaces chart component renamed in application menu.}
-      \label{fig:chartComponentRenamed}
-  \end{figure*}
-  
-  \begin{figure*}[!htb]
-      \begin{center}
-      \leavevmode
-      \centerline{\scalebox{1.0}{\includegraphics[width=1.0\textwidth]{figures/rchFacesVersionChanged.png}}}
-      \end{center}
-      \caption{RichFaces version changed after it was upgraded.}
-      \label{fig:rfVersionChanged}
-  \end{figure*}
 
   \section{Usage with CI}
   One of our requirements for the tool is that it can be used within Continuous Integration systems. This is quite an easy condition to meet.
@@ -1172,7 +1174,7 @@ the Web Manager, already described in section \ref{sec:whyWeChooseJCR}.
   Test suite and Web Manager are wired via the Arquillian configuration file. Listing \ref{lis:arqConfVisTesting} shows what information is needed 
   to be set in order to pair your test suite and the web manager (the description of all configuration values is included in the documentation
   of the source code, attached in CD attachment, see \ref{appendix:d}).
-  
+  \newpage
   \begin{lstlisting}[caption=Example of configuration for Graphene Visual Testing Extension,label=lis:arqConfVisTesting,breaklines=true, language=xml]
   <extension qualifier="visual-testing">
         <property name="testSuiteName">richfaces-showcase-firefox-whole</property>      
@@ -1240,7 +1242,7 @@ The aim of this thesis was to create a tool and a process for a visual testing o
 quality assurance team. We were obliged to do a research, to find out what output of such a tool would be most useful. Before implementing
 the tool, an analysis of the already existing solutions for visual testing based on picture comparisons was supposed to be carried out.
 Based on this analysis and research, we were supposed to design the best way for storing created screenshots, intended for visual comparison.
-Last but not least, we had to keep in mind, when designing the tool and process, its cooperation with Continuous Integration systems.
+Last but not least, we had to keep in mind, when designing the tool and process, its cooperation with CI systems.
 The improvement of effectiveness of the quality assurance team was supposed to be proved on an actual deployment of the tool and the 
 process to a real world web application.
 
@@ -1251,18 +1253,18 @@ The major contribution of this thesis is the created tool and the process itself
 visual testing is carried out alongside functional testing of an application. Because of this, testers can develop and maintain only one
 script, which controls and assert various states of the application under test.
 
-By a careful picking of frameworks (Arquillian, Graphene, Rusheye) and technologies which the final solution was built on, we have 
+By a careful picking of frameworks and technologies which the final solution was built on, we have 
 achieved that the test suite for a visual testing (the same as for functional testing) is well maintainable, and thus better prepared for reacting 
 to the constantly changing application under test.
 
 We have conducted a research among IT experts on what output of the tool for reviewing results of visual testing would be the most useful. Based
 on the research results, we have designed a web application called the Web Manager. With this application a tester can take an immediate action
-over particular results. We have proved that this web application is easily deployable in cloud environment (OpenShift by Red Hat). Last but
+over particular results. We have proved that this web application is easily deployable in cloud environment. Last but
 not least, we have proved its usages in Continuous Integration systems as for example Jenkins.
 
 We have learned a lot of new technologies during the developing of the tool. We have deepened our knowledge of Java EE and JavaScript. 
 We have learned AngularJS framework, Arquillian extensions mechanism, Twitter Bootstrap. We have successfully integrated our solution with
-a Java Content Repository, and deployed the whole solution to the cloud. We have contributed to open source projects, which we integrate 
+a JCR, and deployed the whole solution to the cloud. We have contributed to open source projects, which we integrate 
 with (list of them is available in appendix \ref{appendix:b}).
 
 There are many possible extensions to this thesis. The Web Manager UI can be improved to display more information about visual testing,
